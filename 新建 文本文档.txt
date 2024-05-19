@@ -1,0 +1,8 @@
+现在我在做将Github开源项目StarBLog从MVC+Razor向Vue+MVC的前后端分离转移。
+
+
+阅读Github上的开源项目StarBLog
+User
+我正在使用VisualStudio，请你告诉我详细步骤，如何配置vue
+
+将Bootstrap+Razor页面移植为Vue3+ElementPlus页面
