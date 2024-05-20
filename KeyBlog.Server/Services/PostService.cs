@@ -1,7 +1,7 @@
 ﻿using FreeSql;
+using KeyBlog.Data.Models.DTOs;
 using KeyBlog.Data.Models.Entities;
 using KeyBlog.Server.Services.QueryFilters;
-using KeyBlog.Server.Utils;
 
 namespace KeyBlog.Server.Services;
 

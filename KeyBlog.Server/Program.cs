@@ -45,10 +45,10 @@ public class Program
             app.UseDeveloperExceptionPage();
         }
 
-        //��ֹHTTPS
+        // 注释以阻止HTTPS
         //app.UseHttpsRedirection();
 
-        // ʹ�� CORS
+        // 使用 CORS
         app.UseCors("AllowAllOrigins");
 
         app.UseAuthorization();

@@ -4,7 +4,6 @@ using KeyBlog.Markdown;
 using KeyBlog.Markdown.Utils;
 
 const string importDir = @"E:\Code\NEUQ\ACM\";
-// const string importDir = @"D:\blog\";
 
 var assetsPath = Path.GetFullPath("../../../../keyblog.client/src/assets");
 

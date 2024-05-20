@@ -28,6 +28,7 @@ public class BlogController : ControllerBase
         }
         return Ok(pagedList); // 返回 HTTP 200 状态码和数据
     }
+
     [HttpGet("lists")]
     public async Task<IActionResult> List(int categoryId = 0, int page = 1, int pageSize = 6,
              string sortType = "asc", string sortBy = "CreationTime")

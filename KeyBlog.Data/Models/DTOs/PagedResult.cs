@@ -1,4 +1,4 @@
-﻿namespace KeyBlog.Server.Utils;
+﻿namespace KeyBlog.Data.Models.DTOs;
 
 public class PagedResult<T>
 {

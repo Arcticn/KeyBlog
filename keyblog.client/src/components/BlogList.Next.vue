@@ -2,7 +2,7 @@
     <el-container>
         <el-header>
             <h2>Blog</h2>
-            <span> Posts</span>
+            <span>Posts</span>
         </el-header>
         <el-main>
             <el-row :gutter="20">
@@ -73,9 +73,9 @@
                         },
                     });
                     const data = response.data;
-                    categories.value = data.CategoryNodes;
-                    posts.value = data.Posts.items;
-                    total.value = data.Posts.totalCount;
+                    categories.value = data.categoryNodes;
+                    posts.value = data.posts.items;
+                    total.value = data.posts.totalCount;
                     currentPage.value = page;
                 } catch (error) {
                     console.error('Error fetching data:', error);
