@@ -7,21 +7,21 @@ namespace KeyBlog.Server.Services;
 
 public class PostService
 {
-    private readonly IBaseRepository<Post> _postRepo;
+    private readonly IBaseRepository<Article> _postRepo;
     private readonly IBaseRepository<Category> _categoryRepo;
 
-    public PostService(IBaseRepository<Post> postRepo, IBaseRepository<Category> categoryRepo)
+    public PostService(IBaseRepository<Article> postRepo, IBaseRepository<Category> categoryRepo)
     {
         _postRepo = postRepo;
         _categoryRepo = categoryRepo;
     }
 
-    public List<Post> GetAllPosts()
+    public List<Article> GetAllPosts()
     {
         return _postRepo.Select.ToList();
     }
 
-    public async Task<PagedResult<Post>> GetPagedList(PostQueryParameters param, bool adminMode = false)
+    public async Task<PagedResult<Article>> GetPagedList(PostQueryParameters param, bool adminMode = false)
     {
         var querySet = _postRepo.Select;
 
@@ -65,7 +65,7 @@ public class PostService
         var totalCount = await querySet.CountAsync();
         var items = await querySet.Page(param.Page, param.PageSize).Include(a => a.Category).ToListAsync();
 
-        var pagedResult = new PagedResult<Post>
+        var pagedResult = new PagedResult<Article>
         {
             Items = items,
             PageNumber = param.Page,

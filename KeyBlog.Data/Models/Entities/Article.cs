@@ -6,7 +6,7 @@ namespace KeyBlog.Data.Models.Entities;
 /// <summary>
 /// 博客文章
 /// </summary>
-public class Post
+public class Article
 {
     [Column(IsIdentity = false, IsPrimary = true)]
     public string? Id { get; set; }

@@ -14,6 +14,7 @@
     "element-plus": "^2.7.3",
     "sass": "^1.77.2",
     "sass-loader": "^14.2.1",
+    "vditor": "^3.10.4",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
   },

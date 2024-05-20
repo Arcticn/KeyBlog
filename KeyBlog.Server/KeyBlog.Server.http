@@ -1,6 +1,6 @@
 @KeyBlog.Server_HostAddress = http://localhost:5179
 
-GET {{KeyBlog.Server_HostAddress}}/api/posts
+GET {{KeyBlog.Server_HostAddress}}/api/Blog/lists
 Accept: application/json
 
 ###

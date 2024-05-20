@@ -1,112 +1,116 @@
 ﻿<template>
-    <el-container>
-        <el-header>Header</el-header>
-        <el-main>
-            <el-row :gutter="20">
-                <el-col :span="24" v-for="post in posts" :key="post.id">
-                    <el-card shadow="always" class="mb-3">
-                        <template #header>
-                            <div class="card-header">
-                                <span>{{ post.categoryId }}</span>
-                            </div>
-                        </template>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="card-text">{{ post.summary }}</p>
-                            <el-button type="link"
-                                       class="btn-outline-secondary"
-                                       @click="viewPost(post.id)">
-                                查看全文
-                            </el-button>
-                        </div>
-                    </el-card>
-                </el-col>
-            </el-row>
-            <el-pagination background
-                           style="justify-content: center;"
-                           layout="prev, pager, next"
-                           :total="total"
-                           :page-size="pageSize"
-                           :current-page.sync="currentPage"
-                           @current-change="fetchPosts" />
-        </el-main>
-        <el-footer>Footer</el-footer>
-    </el-container>
+  <el-container>
+    <el-header>
+      <h2>Blog</h2>
+      <span> Posts</span>
+    </el-header>
+    <el-main>
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <PostList
+            :posts="posts"
+            :total="total"
+            :currentPage="currentPage"
+            @update:currentPage="(newPage) => (currentPage = newPage)"
+            :pageSize="pageSize"
+            @page-change="handlePageChange"
+            @view-post="viewPost"
+          />
+        </el-col>
+        <el-col :span="8" class="mb-3" id="categoryNodes">
+          <CategoryTree
+            :categories="categoryNodes"
+            :expandedKeys="expandedKeys"
+            :currentCategoryId="currentCategoryId"
+            @node-click="handleNodeClick"
+            @remove-key="(key) => expandedKeys.splice(key, 1)"
+            @add-key="(key) => expandedKeys.push(key)"
+          />
+        </el-col>
+      </el-row>
+    </el-main>
+    <el-footer>Footer</el-footer>
+  </el-container>
 </template>
 
-
 <script>
-    import { ref, onMounted } from 'vue';
-    import axios from 'axios';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import PostList from "./PostList.vue";
+import CategoryTree from "./CategoryTree.vue";
 
-    export default {
-        name: 'BlogList',
-        setup() {
-            const posts = ref([]);
-            const total = ref(0);
-            const currentPage = ref(1);
-            const pageSize = ref(10);
+export default {
+  name: "BlogList",
+  components: { PostList, CategoryTree },
+  setup() {
+    const posts = ref([]);
+    const total = ref(0);
+    const currentPage = ref(1);
+    const pageSize = ref(6);
+    const categoryNodes = ref([]);
+    const currentCategoryId = ref(0);
+    const expandedKeys = ref([]);
+    const categoryTree = ref(null);
 
-            const fetchPosts = async (page = 1) => {
-                try {
-                    const response = await axios.get('/api/Blog/posts', {
-                        params: {
-                            page,
-                            pageSize: pageSize.value,
-                        },
-                    });
-                    posts.value = response.data.items;
-                    total.value = response.data.totalCount;
-                    currentPage.value = page;
-                } catch (error) {
-                    console.error('Error fetching posts:', error);
-                }
-            };
+    const fetchData = async (categoryId = 0, page = 1) => {
+      try {
+        const response = await axios.get("/api/Blog/lists", {
+          params: {
+            categoryId,
+            page,
+            pageSize: pageSize.value,
+          },
+        });
+        const data = response.data;
+        categoryNodes.value = data.categoryNodes;
+        posts.value = data.posts.items;
+        total.value = data.posts.totalCount;
+        currentCategoryId.value = categoryId;
+        currentPage.value = page;
 
-            onMounted(() => {
-                fetchPosts(currentPage.value);
-            });
-
-            const viewPost = (postId) => {
-                this.$router.push({ name: 'Post', params: { id: postId } });
-            };
-
-            return {
-                posts,
-                total,
-                currentPage,
-                pageSize,
-                fetchPosts,
-                viewPost,
-            };
-        },
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
+
+    const handleNodeClick = async (node) => {
+      await fetchData(node.id, 1);
+    };
+
+    const handlePageChange = (page) => {
+      fetchData(currentCategoryId.value, page);
+    };
+
+    onMounted(() => {
+      fetchData();
+    });
+
+    const viewPost = (postId) => {
+      this.$router.push({ name: "Post", params: { id: postId } });
+    };
+
+    return {
+      posts,
+      total,
+      currentPage,
+      currentCategoryId,
+      pageSize,
+      categoryNodes,
+      expandedKeys,
+      categoryTree,
+      fetchData,
+      handleNodeClick,
+      handlePageChange,
+      viewPost,
+    };
+  },
+};
 </script>
 
 <style scoped>
-    .mb-3 {
-        width: 100%;
-        margin-bottom: 1rem;
-    }
-
-    .card-container {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .card-title {
-        font-size: 1.25rem;
-        font-weight: bold;
-    }
-
-    .card-text {
-        margin-bottom: 1rem;
-    }
-
-    .btn-outline-secondary {
-        border: 1px solid #dcdcdc;
-        color: #606266;
-    }
+.mb-3 {
+  width: 80%;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+}
 </style>
-

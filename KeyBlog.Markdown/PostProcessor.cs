@@ -11,11 +11,11 @@ namespace KeyBlog.Markdown;
 
 public class PostProcessor
 {
-    private readonly Post _post;
+    private readonly Article _post;
     private readonly string _importPath;
     private readonly string _assetsPath;
 
-    public PostProcessor(string importPath, string assetsPath, Post post)
+    public PostProcessor(string importPath, string assetsPath, Article post)
     {
         _post = post;
         _assetsPath = assetsPath;

@@ -19,7 +19,7 @@ foreach (var filename in removeFileList.Where(File.Exists))
 
 // 数据库
 var freeSql = FreeSqlFactory.Create("Data Source=app.db;Synchronous=Off;Cache Size=5000;");
-var postRepo = freeSql.GetRepository<Post>();
+var postRepo = freeSql.GetRepository<Article>();
 var categoryRepo = freeSql.GetRepository<Category>();
 
 // 数据导入
@@ -92,7 +92,7 @@ void WalkDirectoryTree(DirectoryInfo root)
             reader.Close();
 
             // 保存文章
-            var post = new Post
+            var post = new Article
             {
                 Id = GuidUtils.GuidTo16String(),
                 Status = "已发布",
