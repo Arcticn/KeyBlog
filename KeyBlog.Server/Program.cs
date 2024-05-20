@@ -14,6 +14,7 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddScoped<PostService>();
+        builder.Services.AddScoped<CategoryService>();
         builder.Services.AddControllers();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

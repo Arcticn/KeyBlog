@@ -18,11 +18,6 @@ public class PostService
 
     public List<Post> GetAllPosts()
     {
-        /* return new List<Post>
-         {
-             new Post { Id = "1", Title = "First Post", Content = "This is the first post." },
-             new Post { Id = "3", Title = "Second Post", Content = "This is the second post." }
-         };*/
         return _postRepo.Select.ToList();
     }
 

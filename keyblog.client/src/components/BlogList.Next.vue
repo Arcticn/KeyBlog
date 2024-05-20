@@ -6,32 +6,32 @@
         </el-header>
         <el-main>
             <el-row :gutter="20">
+                <el-col :span="16">
+                    <!--                <el-space direction="vertical" fill>-->
+                    <el-card v-if="posts.count === 0" shadow="always" class="mb-3">
+                        <div class="card-body">没有文章</div>
+                    </el-card>
+                    <el-card v-for="post in posts" :key="post.id" shadow="always" class="mb-3">
+                        <template #header>
+                            <div class="card-header">
+                                <span>{{ post.categoryId }}</span>
+                            </div>
+                        </template>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.summary }}</p>
+                            <el-button type="link" class="btn-outline-secondary" @click="viewPost(post.id)">
+                                查看全文
+                            </el-button>
+                        </div>
+                    </el-card>
+                    <!--         </el-space>-->
+                    <el-pagination background style="justify-content:start" layout="prev, pager, next" :total="total"
+                                   :page-size="pageSize" :current-page.sync="currentPage" @current-change="fetchPosts" />
+                </el-col>
                 <el-col :span="8" class="mb-3" id="categories">
                     <!-- Category Tree Component -->
                     <!--                    <category-tree :categories="categoryNodes"></category-tree>-->
-                </el-col>
-                <el-col :span="16">
-    <!--                <el-space direction="vertical" fill>-->
-                        <el-card v-if="posts.count === 0" shadow="always" class="mb-3">
-                            <div class="card-body">没有文章</div>
-                        </el-card>
-                        <el-card v-for="post in posts" :key="post.id" shadow="always" class="mb-3">
-                            <template #header>
-                                <div class="card-header">
-                                    <span>{{ post.categoryId }}</span>
-                                </div>
-                            </template>
-                            <div class="card-body">
-                                <h5 class="card-title">{{ post.title }}</h5>
-                                <p class="card-text">{{ post.summary }}</p>
-                                <el-button type="link" class="btn-outline-secondary" @click="viewPost(post.id)">
-                                    查看全文
-                                </el-button>
-                            </div>
-                        </el-card>
-           <!--         </el-space>-->
-                    <el-pagination background style="justify-content:start" layout="prev, pager, next" :total="total"
-                        :page-size="pageSize" :current-page.sync="currentPage" @current-change="fetchPosts" />
                 </el-col>
             </el-row>
         </el-main>
