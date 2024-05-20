@@ -23,7 +23,7 @@ public class CategoryService
     public async Task<List<CategoryNode>?> GetNodes()
     {
         var categoryList = await _cRepo.Select
-            .IncludeMany(a => a.Posts.Select(p => new Article { Id = p.Id }))
+            .IncludeMany(a => a.Articles.Select(p => new Article { Id = p.Id }))
             .ToListAsync();
         return GetNodes(categoryList, 0);
     }

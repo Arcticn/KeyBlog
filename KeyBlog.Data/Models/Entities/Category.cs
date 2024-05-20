@@ -16,5 +16,5 @@ public class Category
     /// </summary>
     public bool Visible { get; set; } = true;
 
-    public List<Article> Posts { get; set; }
+    public List<Article> Articles { get; set; }
 }

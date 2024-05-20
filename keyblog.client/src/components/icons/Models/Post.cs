@@ -1,6 +1,6 @@
 ﻿namespace KeyBlog.Data.Models;
 
-public class Post
+public class Article
 {
     public string? Status { get; set; }
     public bool IsPublish { get; set; }

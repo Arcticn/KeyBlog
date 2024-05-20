@@ -1,21 +1,21 @@
 <template>
   <div>
-    <el-card v-if="posts.length === 0" shadow="always" class="mb-3">
+    <el-card v-if="articles.length === 0" shadow="always" class="mb-3">
       <div class="card-body">没有文章</div>
     </el-card>
-    <el-card v-for="post in posts" :key="post.id" shadow="always" class="mb-3">
+    <el-card v-for="article in articles" :key="article.id" shadow="always" class="mb-3">
       <template #header>
         <div class="card-header">
-          <span>{{ post.categoryId }}</span>
+          <span>{{ article.categoryId }}</span>
         </div>
       </template>
       <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
-        <p class="card-text">{{ post.summary }}</p>
+        <h5 class="card-title">{{ article.title }}</h5>
+        <p class="card-text">{{ article.summary }}</p>
         <el-button
           type="link"
           class="btn-outline-secondary"
-          @click="viewPost(post.id)"
+          @click="viewArticle(article.id)"
         >
           查看全文
         </el-button>
@@ -38,9 +38,9 @@ import { defineComponent } from "vue";
 import "@/assets/style.scss";
 
 export default defineComponent({
-  name: "PostList",
+  name: "ArticleList",
   props: {
-    posts: {
+    articles: {
       type: Array,
       required: true,
     },
@@ -57,19 +57,19 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["page-change", "view-post"],
+  emits: ["page-change", "view-article"],
   setup(props, { emit }) {
     const handlePageChange = (page) => {
       emit("update:currentPage", page);
     };
 
-    const viewPost = (postId) => {
-      emit("view-post", postId);
+    const viewArticle = (articleId) => {
+      emit("view-article", articleId);
     };
 
     return {
       handlePageChange,
-      viewPost,
+      viewArticle,
     };
   },
 });

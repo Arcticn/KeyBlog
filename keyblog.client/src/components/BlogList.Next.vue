@@ -2,32 +2,32 @@
   <el-container>
     <el-header>
       <h2>Blog</h2>
-      <span>Posts</span>
+      <span>Articles</span>
     </el-header>
     <el-main>
       <el-row :gutter="20">
         <el-col :span="16">
-          <el-card v-if="posts.length === 0" shadow="always" class="mb-3">
+          <el-card v-if="articles.length === 0" shadow="always" class="mb-3">
             <div class="card-body">没有文章</div>
           </el-card>
           <el-card
-            v-for="post in posts"
-            :key="post.id"
+            v-for="article in articles"
+            :key="article.id"
             shadow="always"
             class="mb-3"
           >
             <template #header>
               <div class="card-header">
-                <span>{{ post.categoryId }}</span>
+                <span>{{ article.categoryId }}</span>
               </div>
             </template>
             <div class="card-body">
-              <h5 class="card-title">{{ post.title }}</h5>
-              <p class="card-text">{{ post.summary }}</p>
+              <h5 class="card-title">{{ article.title }}</h5>
+              <p class="card-text">{{ article.summary }}</p>
               <el-button
                 type="default"
                 class="btn-outline-secondary"
-                @click="viewPost(post.id)"
+                @click="viewArticle(article.id)"
               >
                 查看全文
               </el-button>
@@ -68,7 +68,7 @@ import axios from "axios";
 export default {
   name: "BlogList",
   setup() {
-    const posts = ref([]);
+    const articles = ref([]);
     const total = ref(0);
     const currentPage = ref(1);
     const pageSize = ref(6);
@@ -92,8 +92,8 @@ export default {
         });
         const data = response.data;
         categoryNodes.value = data.categoryNodes;
-        posts.value = data.posts.items;
-        total.value = data.posts.totalCount;
+        articles.value = data.articles.items;
+        total.value = data.articles.totalCount;
         currentCategoryId.value = data.currentCategoryId;
         currentPage.value = page;
       } catch (error) {
@@ -135,12 +135,12 @@ export default {
       fetchData();
     });
 
-    const viewPost = (postId) => {
-      this.$router.push({ name: "Post", params: { id: postId } });
+    const viewArticle = (articleId) => {
+      this.$router.push({ name: "Article", params: { id: articleId } });
     };
 
     return {
-      posts,
+      articles,
       total,
       currentPage,
       currentCategoryId,
@@ -150,7 +150,7 @@ export default {
       fetchData,
       handleNodeClick,
       handlePageChange,
-      viewPost,
+      viewArticle,
       expandedKeys,
       categoryTree,
     };

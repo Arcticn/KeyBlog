@@ -2,19 +2,19 @@
   <el-container>
     <el-header>
       <h2>Blog</h2>
-      <span> Posts</span>
+      <span> articles</span>
     </el-header>
     <el-main>
       <el-row :gutter="20">
         <el-col :span="16">
-          <PostList
-            :posts="posts"
+          <ArticleList
+            :articles="articles"
             :total="total"
             :currentPage="currentPage"
             @update:currentPage="(newPage) => (currentPage = newPage)"
             :pageSize="pageSize"
             @page-change="handlePageChange"
-            @view-post="viewPost"
+            @view-article="viewArticle"
           />
         </el-col>
         <el-col :span="8" class="mb-3" id="categoryNodes">
@@ -36,14 +36,14 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import PostList from "./PostList.vue";
+import ArticleList from "./ArticleList.vue";
 import CategoryTree from "./CategoryTree.vue";
 
 export default {
   name: "BlogList",
-  components: { PostList, CategoryTree },
+  components: { ArticleList, CategoryTree },
   setup() {
-    const posts = ref([]);
+    const articles = ref([]);
     const total = ref(0);
     const currentPage = ref(1);
     const pageSize = ref(6);
@@ -63,8 +63,8 @@ export default {
         });
         const data = response.data;
         categoryNodes.value = data.categoryNodes;
-        posts.value = data.posts.items;
-        total.value = data.posts.totalCount;
+        articles.value = data.articles.items;
+        total.value = data.articles.totalCount;
         currentCategoryId.value = categoryId;
         currentPage.value = page;
 
@@ -85,12 +85,12 @@ export default {
       fetchData();
     });
 
-    const viewPost = (postId) => {
-      this.$router.push({ name: "Post", params: { id: postId } });
+    const viewArticle = (articleId) => {
+      this.$router.push({ name: "Article", params: { id: articleId } });
     };
 
     return {
-      posts,
+      articles,
       total,
       currentPage,
       currentCategoryId,
@@ -101,7 +101,7 @@ export default {
       fetchData,
       handleNodeClick,
       handlePageChange,
-      viewPost,
+      viewArticle,
     };
   },
 };

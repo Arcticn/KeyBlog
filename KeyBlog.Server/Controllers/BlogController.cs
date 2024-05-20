@@ -9,19 +9,19 @@ namespace KeyBlog.Server.Controllers;
 [ApiController]
 public class BlogController : ControllerBase
 {
-    private readonly PostService _postService;
+    private readonly ArticleService _articleService;
     private readonly CategoryService _categoryService;
 
-    public BlogController(PostService postService, CategoryService categoryService)
+    public BlogController(ArticleService articleService, CategoryService categoryService)
     {
-        _postService = postService;
+        _articleService = articleService;
         _categoryService = categoryService;
     }
 
-    [HttpGet("posts")]
-    public async Task<IActionResult> GetPosts([FromQuery] PostQueryParameters param, bool adminMode = false)
+    [HttpGet("articles")]
+    public async Task<IActionResult> GetArticles([FromQuery] ArticleQueryParameters param, bool adminMode = false)
     {
-        var pagedList = await _postService.GetPagedList(param, adminMode);
+        var pagedList = await _articleService.GetPagedList(param, adminMode);
         if (pagedList == null)
         {
             return NotFound(); // 返回 HTTP 404 状态码
@@ -48,7 +48,7 @@ public class BlogController : ControllerBase
         }
 
         var categoryNodes = await _categoryService.GetNodes();
-        var posts = await _postService.GetPagedList(new PostQueryParameters
+        var articles = await _articleService.GetPagedList(new ArticleQueryParameters
         {
             CategoryId = categoryId,
             Page = page,
@@ -63,7 +63,7 @@ public class BlogController : ControllerBase
             CategoryNodes = categoryNodes,
             SortType = sortType,
             SortBy = sortBy,
-            Posts = posts
+            Articles = articles
         });
     }
 }

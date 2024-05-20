@@ -13,7 +13,7 @@ public class Program
 
 
         // Add services to the container.
-        builder.Services.AddScoped<PostService>();
+        builder.Services.AddScoped<ArticleService>();
         builder.Services.AddScoped<CategoryService>();
         builder.Services.AddControllers();
 

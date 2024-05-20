@@ -26,8 +26,4 @@ public class FreeSqlFactory
         return Create(DataType.MySql, connectionString);
     }
 
-    public static IFreeSql CreatePostgresSql(string connectionString)
-    {
-        return Create(DataType.PostgreSQL, connectionString);
-    }
 }

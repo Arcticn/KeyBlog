@@ -9,15 +9,15 @@ using System.Web;
 
 namespace KeyBlog.Markdown;
 
-public class PostProcessor
+public class ArticleProcessor
 {
-    private readonly Article _post;
+    private readonly Article _article;
     private readonly string _importPath;
     private readonly string _assetsPath;
 
-    public PostProcessor(string importPath, string assetsPath, Article post)
+    public ArticleProcessor(string importPath, string assetsPath, Article article)
     {
-        _post = post;
+        _article = article;
         _assetsPath = assetsPath;
         _importPath = importPath;
     }
@@ -28,12 +28,12 @@ public class PostProcessor
     /// <returns></returns>
     public string MarkdownParse()
     {
-        if (_post.Content == null)
+        if (_article.Content == null)
         {
             return string.Empty;
         }
 
-        var document = Markdig.Markdown.Parse(_post.Content);
+        var document = Markdig.Markdown.Parse(_article.Content);
 
         foreach (var node in document.AsEnumerable())
         {
@@ -47,9 +47,9 @@ public class PostProcessor
                 if (imgUrl.StartsWith("http")) continue;
 
                 // 路径处理
-                var imgPath = Path.Combine(_importPath, _post.Path ?? "", imgUrl);
+                var imgPath = Path.Combine(_importPath, _article.Path ?? "", imgUrl);
                 var imgFilename = Path.GetFileName(imgUrl);
-                var destDir = Path.Combine(_assetsPath, _post.Id);
+                var destDir = Path.Combine(_assetsPath, _article.Id);
                 if (!Directory.Exists(destDir)) Directory.CreateDirectory(destDir);
                 var destPath = Path.Combine(destDir, imgFilename);
                 if (File.Exists(destPath))
@@ -84,9 +84,9 @@ public class PostProcessor
     /// <returns></returns>
     public string GetSummary(int length)
     {
-        return _post.Content == null
+        return _article.Content == null
             ? string.Empty
-            : Markdig.Markdown.ToPlainText(_post.Content).Limit(length);
+            : Markdig.Markdown.ToPlainText(_article.Content).Limit(length);
     }
 
     /// <summary>
@@ -96,21 +96,21 @@ public class PostProcessor
     public (string, string) InflateStatusTitle()
     {
         const string pattern = @"^（(.+)）(.+)$";
-        var status = _post.Status ?? "已发布";
-        var title = _post.Title;
-        if (string.IsNullOrEmpty(title)) return (status, $"未命名文章{_post.CreationTime.ToLongDateString()}");
+        var status = _article.Status ?? "已发布";
+        var title = _article.Title;
+        if (string.IsNullOrEmpty(title)) return (status, $"未命名文章{_article.CreationTime.ToLongDateString()}");
         var result = Regex.Match(title, pattern);
         if (!result.Success) return (status, title);
 
         status = result.Groups[1].Value;
         title = result.Groups[2].Value;
 
-        _post.Status = status;
-        _post.Title = title;
+        _article.Status = status;
+        _article.Title = title;
 
-        if (!new[] { "已发表", "已发布" }.Contains(_post.Status))
+        if (!new[] { "已发表", "已发布" }.Contains(_article.Status))
         {
-            _post.IsPublish = false;
+            _article.IsPublish = false;
         }
 
         return (status, title);

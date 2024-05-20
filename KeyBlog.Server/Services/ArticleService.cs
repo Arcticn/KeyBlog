@@ -5,25 +5,25 @@ using KeyBlog.Server.Services.QueryFilters;
 
 namespace KeyBlog.Server.Services;
 
-public class PostService
+public class ArticleService
 {
-    private readonly IBaseRepository<Article> _postRepo;
+    private readonly IBaseRepository<Article> _articleRepo;
     private readonly IBaseRepository<Category> _categoryRepo;
 
-    public PostService(IBaseRepository<Article> postRepo, IBaseRepository<Category> categoryRepo)
+    public ArticleService(IBaseRepository<Article> articleRepo, IBaseRepository<Category> categoryRepo)
     {
-        _postRepo = postRepo;
+        _articleRepo = articleRepo;
         _categoryRepo = categoryRepo;
     }
 
-    public List<Article> GetAllPosts()
+    public List<Article> GetAllArticles()
     {
-        return _postRepo.Select.ToList();
+        return _articleRepo.Select.ToList();
     }
 
-    public async Task<PagedResult<Article>> GetPagedList(PostQueryParameters param, bool adminMode = false)
+    public async Task<PagedResult<Article>> GetPagedList(ArticleQueryParameters param, bool adminMode = false)
     {
-        var querySet = _postRepo.Select;
+        var querySet = _articleRepo.Select;
 
         // 筛选发布状态
         if (param.IsPublish != null && adminMode)

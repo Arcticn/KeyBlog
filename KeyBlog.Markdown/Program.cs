@@ -19,7 +19,7 @@ foreach (var filename in removeFileList.Where(File.Exists))
 
 // 数据库
 var freeSql = FreeSqlFactory.Create("Data Source=app.db;Synchronous=Off;Cache Size=5000;");
-var postRepo = freeSql.GetRepository<Article>();
+var articleRepo = freeSql.GetRepository<Article>();
 var categoryRepo = freeSql.GetRepository<Category>();
 
 // 数据导入
@@ -60,9 +60,9 @@ void WalkDirectoryTree(DirectoryInfo root)
         foreach (var fi in files)
         {
             Console.WriteLine(fi.FullName);
-            var postPath = fi.DirectoryName!.Replace(importDir, "");
+            var articlePath = fi.DirectoryName!.Replace(importDir, "");
 
-            var categoryNames = postPath.Split(Path.DirectorySeparatorChar);
+            var categoryNames = articlePath.Split(Path.DirectorySeparatorChar);
             Console.WriteLine($"categoryNames: {string.Join(",", categoryNames)}");
             var categories = new List<Category>();
             if (categoryNames.Length > 0)
@@ -92,14 +92,14 @@ void WalkDirectoryTree(DirectoryInfo root)
             reader.Close();
 
             // 保存文章
-            var post = new Article
+            var article = new Article
             {
                 Id = GuidUtils.GuidTo16String(),
                 Status = "已发布",
                 Title = fi.Name.Replace(".md", ""),
                 IsPublish = true,
                 Content = content,
-                Path = postPath,
+                Path = articlePath,
                 CreationTime = fi.CreationTime,
                 LastUpdateTime = fi.LastWriteTime,
                 CategoryId = categories[^1].Id,
@@ -107,17 +107,17 @@ void WalkDirectoryTree(DirectoryInfo root)
             };
 
 
-            var processor = new PostProcessor(importDir, assetsPath, post);
+            var processor = new ArticleProcessor(importDir, assetsPath, article);
 
             // 处理文章标题和状态
             processor.InflateStatusTitle();
 
             // 处理文章正文内容
             // 导入文章的时候一并导入文章里的图片，并对图片相对路径做替换操作
-            post.Content = processor.MarkdownParse();
-            post.Summary = processor.GetSummary(50);
+            article.Content = processor.MarkdownParse();
+            article.Summary = processor.GetSummary(50);
 
-            postRepo.Insert(post);
+            articleRepo.Insert(article);
         }
     }
 

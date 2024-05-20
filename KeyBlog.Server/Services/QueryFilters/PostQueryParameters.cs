@@ -3,7 +3,7 @@
 /// <summary>
 /// 博客文章请求参数
 /// </summary>
-public class PostQueryParameters : QueryParameters
+public class ArticleQueryParameters : QueryParameters
 {
     /// <summary>
     /// 是否已发布（仅管理员可以查询和管理未发布文章）
