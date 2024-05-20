@@ -1,5 +1,6 @@
 ﻿using FreeSql;
-using KeyBlog.Data.Models;
+using KeyBlog.Data.Models.DTOs;
+using KeyBlog.Data.Models.Entities;
 
 namespace KeyBlog.Server.Services;
 
@@ -19,8 +20,31 @@ public class CategoryService
         return _cRepo.Where(a => a.Id == categoryId).FirstAsync();
     }
 
-    /*internal async Task GetNodes()
+    public async Task<List<CategoryNode>?> GetNodes()
     {
-        throw new NotImplementedException();
-    }*/
+        var categoryList = await _cRepo.Select
+            .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
+            .ToListAsync();
+        return GetNodes(categoryList, 0);
+    }
+
+    /// <summary>
+    /// 生成文章分类树
+    /// </summary>
+    public List<CategoryNode>? GetNodes(List<Category> categoryList, int parentId = 0)
+    {
+        var categories = categoryList
+            .Where(a => a.ParentId == parentId && a.Visible)
+            .ToList();
+
+        if (categories.Count == 0) return null;
+
+        return categories.Select(category => new CategoryNode
+        {
+            Id = category.Id,
+            Label = category.Name,
+            Children = GetNodes(categoryList, category.Id)
+        }).ToList();
+    }
+
 }

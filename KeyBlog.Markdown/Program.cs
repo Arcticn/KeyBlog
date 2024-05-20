@@ -1,5 +1,5 @@
 ﻿using KeyBlog.Data;
-using KeyBlog.Data.Models;
+using KeyBlog.Data.Models.Entities;
 using KeyBlog.Markdown;
 using KeyBlog.Markdown.Utils;
 

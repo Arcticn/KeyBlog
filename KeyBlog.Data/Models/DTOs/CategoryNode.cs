@@ -1,0 +1,8 @@
+﻿namespace KeyBlog.Data.Models.DTOs;
+
+public class CategoryNode
+{
+    public int Id { get; set; }
+    public string Label { get; set; } // 用于 el-tree 的显示名称
+    public List<CategoryNode>? Children { get; set; } // 子节点列表
+}

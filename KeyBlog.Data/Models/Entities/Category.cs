@@ -1,5 +1,5 @@
 ﻿using FreeSql.DataAnnotations;
-namespace KeyBlog.Data.Models;
+namespace KeyBlog.Data.Models.Entities;
 
 public class Category
 {

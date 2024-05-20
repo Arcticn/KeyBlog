@@ -1,4 +1,4 @@
-﻿using KeyBlog.Data.Models;
+﻿using KeyBlog.Data.Models.Entities;
 using KeyBlog.Markdown.Extensions;
 using KeyBlog.Markdown.Utils;
 using Markdig.Renderers.Normalize;

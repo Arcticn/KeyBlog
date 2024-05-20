@@ -1,5 +1,5 @@
 ﻿using FreeSql;
-using KeyBlog.Data.Models;
+using KeyBlog.Data.Models.Entities;
 using KeyBlog.Server.Services.QueryFilters;
 using KeyBlog.Server.Utils;
 

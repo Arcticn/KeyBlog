@@ -1,7 +1,7 @@
 ﻿using FreeSql.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
 
-namespace KeyBlog.Data.Models;
+namespace KeyBlog.Data.Models.Entities;
 
 /// <summary>
 /// 博客文章

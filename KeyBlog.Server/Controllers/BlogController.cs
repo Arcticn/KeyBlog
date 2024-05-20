@@ -1,4 +1,4 @@
-﻿using KeyBlog.Data.Models;
+﻿using KeyBlog.Data.Models.Entities;
 using KeyBlog.Server.Services;
 using KeyBlog.Server.Services.QueryFilters;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +46,7 @@ public class BlogController : ControllerBase
             return BadRequest(new { message = $"Category {categoryId} is not available!" });
         }
 
-        //var categoryNodes = await _categoryService.GetNodes();
+        var categoryNodes = await _categoryService.GetNodes();
         var posts = await _postService.GetPagedList(new PostQueryParameters
         {
             CategoryId = categoryId,
@@ -59,7 +59,7 @@ public class BlogController : ControllerBase
         {
             CurrentCategory = currentCategory,
             CurrentCategoryId = categoryId,
-            //CategoryNodes = categoryNodes,
+            CategoryNodes = categoryNodes,
             SortType = sortType,
             SortBy = sortBy,
             Posts = posts
