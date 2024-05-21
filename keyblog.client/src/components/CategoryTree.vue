@@ -14,13 +14,10 @@
   </div>
 </template>
 
-<script>
-import { ref, defineComponent } from "vue";
-import "@/assets/style.scss";
+<script setup>
 
-export default defineComponent({
-  name: "CategoryTree",
-  props: {
+
+ const props=defineProps({
     categories: {
       type: Array,
       required: true,
@@ -33,14 +30,8 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-  },
-  emits: ["node-click"],
-  setup(props, { emit }) {
-    const categoryTree = ref(null);
-    const defaultProps = ref({
-      children: "children",
-      label: "label",
-    });
+ });
+  const emit=defineEmits(["node-click"]);
 
     const toggleNodeExpansion = (node) => {
       const index = props.expandedKeys.indexOf(node.id);
@@ -68,12 +59,5 @@ export default defineComponent({
       emit("node-click", node);
     };
 
-    return {
-      categoryTree,
-      defaultProps,
-      handleNodeClick,
-    };
-  },
-});
 </script>
 

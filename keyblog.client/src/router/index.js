@@ -1,11 +1,9 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import BlogList from '@/components/BlogList.vue'
-import BlogList_Next from '@/components/BlogList.Next.vue'
 import ArticlePage from '@/components/ArticlePage.vue'
 
 
 const routes = [
-    { path: '/next', component: BlogList_Next },
     {
         path: '/',
         name: 'Home',

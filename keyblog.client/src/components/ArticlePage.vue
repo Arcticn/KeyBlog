@@ -1,10 +1,11 @@
 <template>
   <el-container>
-    <el-header class="header">Header Content</el-header>
+    <BaseHeader />
     <el-container>
       <el-main class="markdown-content">
         <MdPreview
           :editorId="id"
+          :theme="theme"
           v-model="markdownContent"
           @onGetCatalog="onGetCatalog"
         />
@@ -20,27 +21,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,watch } from "vue";
 import axios from "axios";
 import { MdPreview, MdCatalog } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
-import { ElContainer, ElHeader, ElMain, ElFooter, ElAside, ElAffix } from 'element-plus';
+import BaseHeader from "./layouts/BaseHeader.vue";
+import { isDark } from "./composables/useDarkMode";
 
 const id = "MD_EDITOR_ID";
 const markdownContent = ref("") ;
-
 const scrollElement = document.documentElement;
+const theme = ref(isDark.value ? "dark" : "light");
 
-
-const state = ref({
-  markdownContent: "",
-  catalogList: [],
+watch(isDark, (newVal) => {
+  theme.value = newVal ? "dark" : "light";
 });
-
-const onGetCatalog = (list) => {
-  state.value.catalogList = list;
-  console.log(state.value);
-};
 
 const props = defineProps({
   id: String,
@@ -58,7 +53,10 @@ const fetchAndRenderContent = async () => {
 
 onMounted(() => {
   fetchAndRenderContent();
+  
 });
+
+
 </script>
 
 <style>

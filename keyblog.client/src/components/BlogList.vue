@@ -1,36 +1,32 @@
 ﻿<template>
+  <BaseHeader />
   <el-container>
-    <el-header>
-      <h2>Blog</h2>
-      <span> articles</span>
-    </el-header>
     <el-main>
-      <el-row :gutter="20">
-        <el-col :span="16">
-          <ArticleList
-            :articles="articles"
-            :total="total"
-            :currentPage="currentPage"
-            @update:currentPage="(newPage) => (currentPage = newPage)"
-            :pageSize="pageSize"
-            @page-change="handlePageChange"
-            @view-article="viewArticle"
-          />
-        </el-col>
-        <el-col :span="8" class="mb-3" id="categoryNodes">
-          <CategoryTree
-            :categories="categoryNodes"
-            :expandedKeys="expandedKeys"
-            :currentCategoryId="currentCategoryId"
-            @node-click="handleNodeClick"
-            @remove-key="(key) => expandedKeys.splice(key, 1)"
-            @add-key="(key) => expandedKeys.push(key)"
-          />
-        </el-col>
-      </el-row>
+      
+      <ArticleList
+        :articles="articles"
+        :total="total"
+        :currentPage="currentPage"
+        @update:currentPage="(newPage) => (currentPage = newPage)"
+        :pageSize="pageSize"
+        @page-change="handlePageChange"
+        @view-article="viewArticle"
+      />
     </el-main>
-    <el-footer>Footer</el-footer>
+    <el-aside id="categoryNodes" style="padding-right: 4rem;">
+      <CategoryTree
+        :categories="categoryNodes"
+        :expandedKeys="expandedKeys"
+        :currentCategoryId="currentCategoryId"
+        @node-click="handleNodeClick"
+        @remove-key="(key) => expandedKeys.splice(key, 1)"
+        @add-key="(key) => expandedKeys.push(key)"
+      />
+      <!-- <iframe height="800" style="border:none;" src="https://ac.yunyoujun.cn"></iframe> -->
+    </el-aside>
   </el-container>
+
+  <el-footer>Footer</el-footer>
 </template>
 
 <script setup>
@@ -39,6 +35,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import ArticleList from "./ArticleList.vue";
 import CategoryTree from "./CategoryTree.vue";
+import "element-plus/theme-chalk/display.css";
 
 const articles = ref([]);
 const total = ref(0);
@@ -84,6 +81,7 @@ onMounted(() => {
 const viewArticle = (articleId) => {
   router.push({ name: "Article", params: { id: articleId } });
 };
+
 </script>
 
 <style scoped>
@@ -91,5 +89,25 @@ const viewArticle = (articleId) => {
   width: 80%;
   padding-left: 2rem;
   margin-bottom: 1rem;
+}
+
+.sidebar
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  color: #409EFF;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.el-menu-demo {
+  background-color: transparent;
 }
 </style>

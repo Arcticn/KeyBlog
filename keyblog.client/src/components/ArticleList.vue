@@ -3,18 +3,22 @@
     <el-card v-if="articles.length === 0" shadow="always" class="mb-3">
       <div class="card-body">没有文章</div>
     </el-card>
-    <el-card v-for="article in articles" :key="article.id" shadow="always" class="mb-3">
-      <template #header>
+    <el-card
+      v-for="article in articles"
+      :key="article.id"
+      shadow="always"
+      class="mb-3"
+    >
+      <!-- <template #header>
         <div class="card-header">
           <span>{{ article.categoryId }}</span>
         </div>
-      </template>
+      </template> -->
       <div class="card-body">
         <h5 class="card-title">{{ article.title }}</h5>
         <p class="card-text">{{ article.summary }}</p>
         <el-button
-          type="link"
-          class="btn-outline-secondary"
+          type="default"
           @click="viewArticle(article.id)"
         >
           查看全文
@@ -33,44 +37,39 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup>
 import "@/assets/style.scss";
 
-export default defineComponent({
-  name: "ArticleList",
-  props: {
-    articles: {
-      type: Array,
-      required: true,
-    },
-    total: {
-      type: Number,
-      required: true,
-    },
-    currentPage: {
-      type: Number,
-      required: true,
-    },
-    pageSize: {
-      type: Number,
-      required: true,
-    },
+// 定义组件的 props
+const props = defineProps({
+  articles: {
+    type: Array,
+    required: true,
   },
-  emits: ["page-change", "view-article"],
-  setup(props, { emit }) {
-    const handlePageChange = (page) => {
-      emit("update:currentPage", page);
-    };
-
-    const viewArticle = (articleId) => {
-      emit("view-article", articleId);
-    };
-
-    return {
-      handlePageChange,
-      viewArticle,
-    };
+  total: {
+    type: Number,
+    required: true,
+  },
+  currentPage: {
+    type: Number,
+    required: true,
+  },
+  pageSize: {
+    type: Number,
+    required: true,
   },
 });
+
+// 定义组件的 emits
+const emit = defineEmits(["page-change", "view-article"]);
+
+// 处理分页改变的函数
+const handlePageChange = (page) => {
+  emit("update:currentPage", page);
+};
+
+// 查看文章的函数
+const viewArticle = (articleId) => {
+  emit("view-article", articleId);
+};
 </script>
