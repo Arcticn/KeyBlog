@@ -5,9 +5,18 @@ import ArticlePage from '@/components/ArticlePage.vue'
 
 
 const routes = [
-    { path: '/', component: BlogList },
     { path: '/next', component: BlogList_Next },
-    { path: '/article', component: ArticlePage },
+    {
+        path: '/',
+        name: 'Home',
+        component: BlogList,
+      },
+      {
+        path: '/article/:id',
+        name: 'Article',
+        component: ArticlePage,
+        props: true,
+      },
 ]
 
 const router = createRouter({

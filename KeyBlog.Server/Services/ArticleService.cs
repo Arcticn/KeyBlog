@@ -75,4 +75,11 @@ public class ArticleService
 
         return pagedResult;
     }
+
+    public async Task<Article> GetArticleById(string id)
+    {
+        var article= await _articleRepo.Select.Where(a => a.Id == id).FirstAsync();
+        
+        return article;
+    }
 }

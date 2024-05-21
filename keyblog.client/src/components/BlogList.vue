@@ -33,77 +33,56 @@
   </el-container>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
 import ArticleList from "./ArticleList.vue";
 import CategoryTree from "./CategoryTree.vue";
 
-export default {
-  name: "BlogList",
-  components: { ArticleList, CategoryTree },
-  setup() {
-    const articles = ref([]);
-    const total = ref(0);
-    const currentPage = ref(1);
-    const pageSize = ref(6);
-    const categoryNodes = ref([]);
-    const currentCategoryId = ref(0);
-    const expandedKeys = ref([]);
-    const categoryTree = ref(null);
+const articles = ref([]);
+const total = ref(0);
+const currentPage = ref(1);
+const pageSize = ref(6);
+const categoryNodes = ref([]);
+const currentCategoryId = ref(0);
+const expandedKeys = ref([]);
+const router = useRouter();
 
-    const fetchData = async (categoryId = 0, page = 1) => {
-      try {
-        const response = await axios.get("/api/Blog/lists", {
-          params: {
-            categoryId,
-            page,
-            pageSize: pageSize.value,
-          },
-        });
-        const data = response.data;
-        categoryNodes.value = data.categoryNodes;
-        articles.value = data.articles.items;
-        total.value = data.articles.totalCount;
-        currentCategoryId.value = categoryId;
-        currentPage.value = page;
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    const handleNodeClick = async (node) => {
-      await fetchData(node.id, 1);
-    };
-
-    const handlePageChange = (page) => {
-      fetchData(currentCategoryId.value, page);
-    };
-
-    onMounted(() => {
-      fetchData();
+const fetchData = async (categoryId = 0, page = 1) => {
+  try {
+    const response = await axios.get("/api/Blog/lists", {
+      params: {
+        categoryId,
+        page,
+        pageSize: pageSize.value,
+      },
     });
+    const data = response.data;
+    categoryNodes.value = data.categoryNodes;
+    articles.value = data.articles.items;
+    total.value = data.articles.totalCount;
+    currentCategoryId.value = categoryId;
+    currentPage.value = page;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 
-    const viewArticle = (articleId) => {
-      this.$router.push({ name: "Article", params: { id: articleId } });
-    };
+const handleNodeClick = async (node) => {
+  await fetchData(node.id, 1);
+};
 
-    return {
-      articles,
-      total,
-      currentPage,
-      currentCategoryId,
-      pageSize,
-      categoryNodes,
-      expandedKeys,
-      categoryTree,
-      fetchData,
-      handleNodeClick,
-      handlePageChange,
-      viewArticle,
-    };
-  },
+const handlePageChange = (page) => {
+  fetchData(currentCategoryId.value, page);
+};
+
+onMounted(() => {
+  fetchData();
+});
+
+const viewArticle = (articleId) => {
+  router.push({ name: "Article", params: { id: articleId } });
 };
 </script>
 
