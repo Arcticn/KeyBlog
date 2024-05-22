@@ -21,15 +21,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted,watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import { MdPreview, MdCatalog } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
 import { isDark } from "./composables/useDarkMode";
+import anchor from "markdown-it-anchor";
+import { config } from "md-editor-v3";
+
+config({
+  markdownItConfig(mdit) {
+    mdit.use(anchor, {
+      permalink: true,
+      permalinkSymbol: " ",
+    });
+  },
+});
 
 const id = "MD_EDITOR_ID";
-const markdownContent = ref("") ;
+const markdownContent = ref("");
 const scrollElement = document.documentElement;
 const theme = ref(isDark.value ? "dark" : "light");
 
@@ -43,7 +54,7 @@ const props = defineProps({
 
 const fetchAndRenderContent = async () => {
   try {
-    const response = await axios.get(`/api/Blog/articles/${props.id}`); 
+    const response = await axios.get(`/api/Blog/articles/${props.id}`);
     const postData = response.data;
     markdownContent.value = postData.content;
   } catch (error) {
@@ -53,41 +64,19 @@ const fetchAndRenderContent = async () => {
 
 onMounted(() => {
   fetchAndRenderContent();
-  
 });
-
-
 </script>
 
 <style>
-
-.header {
-  padding: 10px;
-  background-color: #f5f5f5;
-  text-align: center;
-}
-
-.footer {
-  padding: 10px;
-  background-color: #f5f5f5;
-  text-align: center;
-}
-
-
-
-.markdown-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
 .markdown-content .md-editor-preview {
   text-align: left;
 }
 
 .catalog-container {
   overflow-y: auto;
-  max-height: calc(100vh - 80px); /* 80px is the combined height of header and footer */
+  max-height: calc(
+    100vh - 80px
+  ); /* 80px is the combined height of header and footer */
   padding: 20px;
   position: sticky;
   top: 10px; /* Adjust as needed to offset from the top */
@@ -98,8 +87,22 @@ onMounted(() => {
   margin: 0 !important;
 }
 
-.markdown-content code {
-  white-space: pre-wrap !important;
-  display: block;
+/* 添加淡入淡出效果 */
+.anchor-link {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.anchor-link:hover {
+  opacity: 1;
+}
+
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  opacity: 1;
 }
 </style>

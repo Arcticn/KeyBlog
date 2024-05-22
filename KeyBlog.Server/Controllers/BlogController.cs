@@ -77,4 +77,23 @@ public class BlogController : ControllerBase
             Articles = articles
         });
     }
+
+    [HttpPost("saveArticle")]
+    public IActionResult SaveContent([FromBody] ContentModel model)
+    {
+        if (model == null || string.IsNullOrEmpty(model.Content))
+        {
+            return BadRequest("Content is null or empty");
+        }
+
+        // 将内容保存到数据库或文件
+        // 示例：保存到文件
+        System.IO.File.WriteAllText("D:/123.txt", model.Content);
+
+        return Ok(new { message = "Content saved successfully" });
+    }
+}
+public class ContentModel
+{
+    public string Content { get; set; }
 }

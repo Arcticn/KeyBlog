@@ -4,8 +4,11 @@
       :default-active="currentCategoryId.toString()"
       class="el-menu-sidebar"
       mode="vertical"
+      :style="{
+          boxShadow: 'var(--el-box-shadow)',
+        }"
       :data="categories"
-      :props="defaultProps" 
+      :props="defaultProps"
       :collapse-transition="false"
     >
       <RecursiveMenu
@@ -19,7 +22,7 @@
 </template>
 
 <script setup>
-import RecursiveMenu from './RecursiveMenu.vue';
+import RecursiveMenu from "./RecursiveMenu.vue";
 
 const props = defineProps({
   categories: {
@@ -34,39 +37,23 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-})
+});
 
-const emit = defineEmits(['node-click', 'add-key', 'remove-key'])
-
-// const toggleNodeExpansion = (node) => {
-//   const index = props.expandedKeys.indexOf(node.id)
-//   if (index > -1) {
-//     emit('remove-key', index)
-//     removeChildKeys(node.children)
-//   } else {
-//     emit('add-key', node.id)
-//   }
-// }
-
-// const removeChildKeys = (children) => {
-//   if (!children) return
-//   children.forEach((child) => {
-//     const index = props.expandedKeys.indexOf(child.id)
-//     if (index > -1) {
-//       emit('remove-key', index)
-//     }
-//     removeChildKeys(child.children)
-//   })
-// }
+const emit = defineEmits(["node-click", "add-key", "remove-key"]);
 
 const handleNodeClick = (node) => {
   //toggleNodeExpansion(node)
-  emit('node-click', node)
-}
+  emit("node-click", node);
+};
 </script>
 
 <style scoped>
 .el-menu-sidebar {
   width: 300px;
+  max-height: 600px; /* 设置最大高度 */
+  overflow-y: auto; /* 超出高度时添加滚动条 */
+  border: 1px solid #dcdfe6;
+  margin: 1rem;
+  border-radius: 6px;
 }
 </style>

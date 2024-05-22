@@ -1,9 +1,10 @@
 <template>
   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
     <el-menu-item index="/" @click="pushUrl('/')">主页</el-menu-item>
-    <el-menu-item index="/About" @click="pushUrl('/About')">关于</el-menu-item>
+    <el-menu-item index="/editor" @click="pushUrl('/editor')">在线编辑</el-menu-item>
+    <el-menu-item index="/about" @click="pushUrl('/about')">关于</el-menu-item>
     <el-menu-item h="full">
-        <el-switch :value="isDark" v-model="value" @click="toggleDark()"></el-switch>
+        <el-switch v-model="theme" class="ml-2" @click="toggleDark()"></el-switch>
     </el-menu-item>
   </el-menu>
 </template>
@@ -31,4 +32,11 @@ watch(
     activeIndex.value = newId;
   }
 );
+
+const theme = ref(isDark.value);
+watch(isDark, (newVal) => {
+  console.log(newVal);
+  theme.value = newVal;
+});
+
 </script>
