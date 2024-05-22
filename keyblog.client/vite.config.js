@@ -33,4 +33,7 @@ export default defineConfig({
             },
         },
     },
+    configureWebpack: {
+        devtool: "source-map",
+    },
 });

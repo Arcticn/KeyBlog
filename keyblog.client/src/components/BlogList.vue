@@ -19,8 +19,6 @@
         :expandedKeys="expandedKeys"
         :currentCategoryId="currentCategoryId"
         @node-click="handleNodeClick"
-        @remove-key="(key) => expandedKeys.splice(key, 1)"
-        @add-key="(key) => expandedKeys.push(key)"
       />
       <!-- <iframe height="800" style="border:none;" src="https://ac.yunyoujun.cn"></iframe> -->
     </el-aside>
