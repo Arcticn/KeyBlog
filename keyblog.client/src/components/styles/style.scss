@@ -1,0 +1,22 @@
+.mb-3 {
+    width: 80%;
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.card-text {
+    margin-bottom: 1rem;
+}
+
+  

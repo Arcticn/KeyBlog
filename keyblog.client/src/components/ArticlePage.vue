@@ -26,7 +26,7 @@ import axios from "axios";
 import { MdPreview, MdCatalog } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
-import { isDark } from "./composables/useDarkMode";
+import { isDark } from "../composables/useDarkMode";
 import anchor from "markdown-it-anchor";
 import { config } from "md-editor-v3";
 
@@ -87,22 +87,14 @@ onMounted(() => {
   margin: 0 !important;
 }
 
-/* 添加淡入淡出效果 */
-.anchor-link {
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.md-editor {
+  --md-bk-color: transparent; /* 使用网页的背景色 */
+  /* --md-color: inherit; 文字颜色继承网页的颜色 */
 }
-
-.anchor-link:hover {
-  opacity: 1;
+.md-editor-catalog-active > span{
+  color: #409EFF;
 }
-
-h1:hover .anchor-link,
-h2:hover .anchor-link,
-h3:hover .anchor-link,
-h4:hover .anchor-link,
-h5:hover .anchor-link,
-h6:hover .anchor-link {
-  opacity: 1;
+.md-editor-catalog-link span:hover{
+  color: #a0cfff;
 }
 </style>

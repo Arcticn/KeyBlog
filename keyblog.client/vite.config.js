@@ -1,6 +1,8 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
-import plugin from "@vitejs/plugin-vue";
+
+import vue from '@vitejs/plugin-vue';
+import VueDevTools from 'vite-plugin-vue-devtools';
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
@@ -9,7 +11,8 @@ const targetURL = "http://localhost:5179";
 
 export default defineConfig({
     plugins: [
-        plugin(),
+        vue(),
+        VueDevTools(),
         AutoImport({
             resolvers: [ElementPlusResolver()],
         }),
@@ -33,7 +36,7 @@ export default defineConfig({
             },
         },
     },
-    configureWebpack: {
-        devtool: "source-map",
-    },
+    // configureWebpack: {
+    //     devtool: "source-map",
+    // },
 });

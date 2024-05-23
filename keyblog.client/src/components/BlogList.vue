@@ -2,7 +2,7 @@
   <BaseHeader />
   <el-container>
     <el-main>
-      
+
       <ArticleList
         :articles="articles"
         :total="total"
@@ -13,7 +13,7 @@
         @view-article="viewArticle"
       />
     </el-main>
-    <el-aside id="categoryNodes" style="padding-right: 4rem;">
+    <el-aside id="categoryNodes" style="padding-right: 4rem">
       <CategoryTree
         :categories="categoryNodes"
         :expandedKeys="expandedKeys"
@@ -43,6 +43,9 @@ const categoryNodes = ref([]);
 const currentCategoryId = ref(0);
 const expandedKeys = ref([]);
 const router = useRouter();
+
+const value1 = ref(true);
+const value2 = ref(true);
 
 const fetchData = async (categoryId = 0, page = 1) => {
   try {
@@ -79,7 +82,6 @@ onMounted(() => {
 const viewArticle = (articleId) => {
   router.push({ name: "Article", params: { id: articleId } });
 };
-
 </script>
 
 <style scoped>
@@ -89,14 +91,12 @@ const viewArticle = (articleId) => {
   margin-bottom: 1rem;
 }
 
-.sidebar
-
-.header {
+.sidebar .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
-  color: #409EFF;
+  color: #409eff;
   padding: 0 20px;
 }
 

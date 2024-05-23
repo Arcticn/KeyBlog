@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import "@/assets/style.scss";
+import "@/components/styles/style.scss";
 
 // 定义组件的 props
 const props = defineProps({

@@ -1,21 +1,45 @@
+
 <template>
-  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-    <el-menu-item index="/" @click="pushUrl('/')">主页</el-menu-item>
-    <el-menu-item index="/editor" @click="pushUrl('/editor')">在线编辑</el-menu-item>
-    <el-menu-item index="/about" @click="pushUrl('/about')">关于</el-menu-item>
-    <el-menu-item h="full">
-        <el-switch v-model="theme" class="ml-2" @click="toggleDark()"></el-switch>
-    </el-menu-item>
-  </el-menu>
+  <el-affix :offset="0">
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo"
+      mode="horizontal"
+    >
+      <el-menu-item index="/" @click="pushUrl('/')">主页</el-menu-item>
+      <el-menu-item index="/editor" @click="pushUrl('/editor')"
+        >在线编辑</el-menu-item
+      >
+      <el-menu-item index="/about" @click="pushUrl('/about')"
+        >关于</el-menu-item
+      >
+      <el-menu-item h="full" class="menu-item-switch">
+        <el-switch
+          v-model="isDark"
+          inline-prompt
+          active-text="暗"
+          inactive-text="亮"
+          @click="toggleDark"
+        />
+
+      </el-menu-item>
+    </el-menu>
+  </el-affix>
 </template>
 
 <script setup>
 import { useRouter, useRoute } from "vue-router";
 import { ref, watch } from "vue";
-import { isDark, toggleDark } from "../composables/useDarkMode";
+// import { useDark, toggleDark } from "@/composables/useDarkMode";
 
 const route = useRoute();
 const activeIndex = ref("/");
+
+const isDark = ref(false);
+const toggleDark = () => {
+  document.documentElement.classList.toggle('dark')
+  isDark.value = -isDark.value;
+};
 
 // 获取路由实例并立即调用push方法
 const router = useRouter();
@@ -33,10 +57,13 @@ watch(
   }
 );
 
-const theme = ref(isDark.value);
-watch(isDark, (newVal) => {
-  console.log(newVal);
-  theme.value = newVal;
-});
-
+// const theme = ref(isDark.value);
+// watch(isDark, (newVal) => {
+//   console.log(newVal);
+//   theme.value = newVal;
+// });
 </script>
+
+<style scoped>
+
+</style>
