@@ -19,7 +19,7 @@
           inline-prompt
           active-text="暗"
           inactive-text="亮"
-          @click="toggleDark"
+          @change="toggleDark"
         />
 
       </el-menu-item>
@@ -35,10 +35,10 @@ import { ref, watch } from "vue";
 const route = useRoute();
 const activeIndex = ref("/");
 
-const isDark = ref(false);
+const isDark = ref(document.documentElement.classList.contains('dark'));
+
 const toggleDark = () => {
-  document.documentElement.classList.toggle('dark')
-  isDark.value = -isDark.value;
+  document.documentElement.classList.toggle('dark');
 };
 
 // 获取路由实例并立即调用push方法
