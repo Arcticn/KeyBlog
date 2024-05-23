@@ -19,7 +19,6 @@
           inline-prompt
           active-text="暗"
           inactive-text="亮"
-          @change="toggleDark"
         />
 
       </el-menu-item>
@@ -30,16 +29,12 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
 import { ref, watch } from "vue";
-// import { useDark, toggleDark } from "@/composables/useDarkMode";
+import { useDarkMode} from "@/composables/useDarkMode";
 
 const route = useRoute();
-const activeIndex = ref("/");
+const activeIndex = ref(route.path);
 
-const isDark = ref(document.documentElement.classList.contains('dark'));
-
-const toggleDark = () => {
-  document.documentElement.classList.toggle('dark');
-};
+const { isDark } = useDarkMode();
 
 // 获取路由实例并立即调用push方法
 const router = useRouter();
@@ -57,11 +52,7 @@ watch(
   }
 );
 
-// const theme = ref(isDark.value);
-// watch(isDark, (newVal) => {
-//   console.log(newVal);
-//   theme.value = newVal;
-// });
+
 </script>
 
 <style scoped>

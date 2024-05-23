@@ -21,20 +21,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import { MdPreview, MdCatalog } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
-import { isDark } from "../composables/useDarkMode";
+import { useDarkMode } from "../composables/useDarkMode";
 import anchor from "markdown-it-anchor";
 import { config } from "md-editor-v3";
 
 config({
   markdownItConfig(mdit) {
     mdit.use(anchor, {
-      permalink: true,
-      permalinkSymbol: " ",
+      permalink: anchor.permalink.linkAfterHeader({
+        style: "visually-hidden",
+        assistiveText: (title) => `Permalink to “${title}”`,
+        visuallyHiddenClass: "visually-hidden",
+        wrapper: ['<div class="wrapper">', "</div>"],
+      })
     });
   },
 });
@@ -42,11 +46,8 @@ config({
 const id = "MD_EDITOR_ID";
 const markdownContent = ref("");
 const scrollElement = document.documentElement;
-const theme = ref(isDark.value ? "dark" : "light");
 
-watch(isDark, (newVal) => {
-  theme.value = newVal ? "dark" : "light";
-});
+const { theme } = useDarkMode();
 
 const props = defineProps({
   id: String,
@@ -91,10 +92,10 @@ onMounted(() => {
   --md-bk-color: transparent; /* 使用网页的背景色 */
   /* --md-color: inherit; 文字颜色继承网页的颜色 */
 }
-.md-editor-catalog-active > span{
-  color: #409EFF;
+.md-editor-catalog-active > span {
+  color: #409eff;
 }
-.md-editor-catalog-link span:hover{
+.md-editor-catalog-link span:hover {
   color: #a0cfff;
 }
 </style>
