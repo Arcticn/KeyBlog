@@ -3,16 +3,20 @@
     <BaseHeader />
     <el-container>
       <el-main class="markdown-content">
-        <MdPreview
-          :editorId="id"
-          :theme="theme"
-          v-model="markdownContent"
-          @onGetCatalog="onGetCatalog"
-        />
+        <el-card style="margin-left: 5rem;">
+          <MdPreview
+            :editorId="id"
+            :theme="theme"
+            v-model="markdownContent"
+            @onGetCatalog="onGetCatalog"
+          />
+        </el-card>
       </el-main>
       <el-aside class="catalog-container" width="250px">
-        <el-affix :offset="10">
-          <MdCatalog :editorId="id" :scrollElement="scrollElement" />
+        <el-affix :offset="100">
+          <el-card style="padding-left: 0px;padding-right: 10px;">
+            <MdCatalog :editorId="id" :scrollElement="scrollElement" />
+          </el-card>
         </el-affix>
       </el-aside>
     </el-container>
@@ -38,7 +42,7 @@ config({
         assistiveText: (title) => `Permalink to “${title}”`,
         visuallyHiddenClass: "visually-hidden",
         wrapper: ['<div class="wrapper">', "</div>"],
-      })
+      }),
     });
   },
 });
@@ -55,7 +59,7 @@ const props = defineProps({
 
 const fetchAndRenderContent = async () => {
   try {
-    const response = await axios.get(`/api/Blog/articles/${props.id}`);
+    const response = await axios.get(`/api/Blog/blogs/${props.id}`);
     const postData = response.data;
     markdownContent.value = postData.content;
   } catch (error) {

@@ -6,7 +6,7 @@ namespace KeyBlog.Data.Models.Entities;
 /// <summary>
 /// 博客文章
 /// </summary>
-public class Article
+public class Post
 {
     [Column(IsIdentity = false, IsPrimary = true)]
     public string? Id { get; set; }
@@ -18,7 +18,7 @@ public class Article
 
     /// <summary>
     /// 文章链接，设置后可以通过以下形式访问文章
-    /// <para> http://.../p/article-slug1 </para>
+    /// <para> http://.../p/blog-slug1 </para>
     /// </summary>
     [MaxLength(150)]
     public string? Slug { get; set; }

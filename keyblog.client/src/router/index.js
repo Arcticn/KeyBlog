@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import BlogList from '@/components/BlogList.vue'
-import ArticlePage from '@/components/ArticlePage.vue'
+import BlogPost from '@/components/BlogPost.vue'
 import OnlineEditor from '@/components/OnlineEditor.vue'
 
 const routes = [
@@ -10,9 +10,9 @@ const routes = [
         component: BlogList,
       },
       {
-        path: '/article/:id',
-        name: 'Article',
-        component: ArticlePage,
+        path: '/post/:id',
+        name: 'Post',
+        component: BlogPost,
         props: true,
       },
       {

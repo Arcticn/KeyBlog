@@ -29,17 +29,13 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  expandedKeys: {
-    type: Array,
-    required: true,
-  },
   currentCategoryId: {
     type: Number,
     required: true,
   },
 });
 
-const emit = defineEmits(["node-click", "add-key", "remove-key"]);
+const emit = defineEmits(["node-click"]);
 
 const handleNodeClick = (node) => {
   //toggleNodeExpansion(node)
@@ -49,7 +45,7 @@ const handleNodeClick = (node) => {
 
 <style scoped>
 .el-menu-sidebar {
-  width: 300px;
+  width: auto;
   max-height: 600px; /* 设置最大高度 */
   overflow-y: auto; /* 超出高度时添加滚动条 */
   border: 1px solid #dcdfe6;

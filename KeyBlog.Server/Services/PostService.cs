@@ -5,25 +5,25 @@ using KeyBlog.Server.Services.QueryFilters;
 
 namespace KeyBlog.Server.Services;
 
-public class ArticleService
+public class PostService
 {
-    private readonly IBaseRepository<Article> _articleRepo;
+    private readonly IBaseRepository<Post> _blogRepo;
     private readonly IBaseRepository<Category> _categoryRepo;
 
-    public ArticleService(IBaseRepository<Article> articleRepo, IBaseRepository<Category> categoryRepo)
+    public PostService(IBaseRepository<Post> blogRepo, IBaseRepository<Category> categoryRepo)
     {
-        _articleRepo = articleRepo;
+        _blogRepo = blogRepo;
         _categoryRepo = categoryRepo;
     }
 
-    public List<Article> GetAllArticles()
+    public List<Post> GetAllBlogs()
     {
-        return _articleRepo.Select.ToList();
+        return _blogRepo.Select.ToList();
     }
 
-    public async Task<PagedResult<Article>> GetPagedList(ArticleQueryParameters param, bool adminMode = false)
+    public async Task<PagedResult<Post>> GetPagedList(BlogQueryParameters param, bool adminMode = false)
     {
-        var querySet = _articleRepo.Select;
+        var querySet = _blogRepo.Select;
 
         // 筛选发布状态
         if (param.IsPublish != null && adminMode)
@@ -65,7 +65,7 @@ public class ArticleService
         var totalCount = await querySet.CountAsync();
         var items = await querySet.Page(param.Page, param.PageSize).Include(a => a.Category).ToListAsync();
 
-        var pagedResult = new PagedResult<Article>
+        var pagedResult = new PagedResult<Post>
         {
             Items = items,
             PageNumber = param.Page,
@@ -76,10 +76,10 @@ public class ArticleService
         return pagedResult;
     }
 
-    public async Task<Article> GetArticleById(string id)
+    public async Task<Post> GetBlogById(string id)
     {
-        var article= await _articleRepo.Select.Where(a => a.Id == id).FirstAsync();
-        
-        return article;
+        var blog = await _blogRepo.Select.Where(a => a.Id == id).FirstAsync();
+
+        return blog;
     }
 }

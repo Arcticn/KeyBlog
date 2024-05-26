@@ -1,4 +1,5 @@
-﻿using KeyBlog.Data.Models.Entities;
+﻿using KeyBlog.Data.Models.DTOs;
+using KeyBlog.Data.Models.Entities;
 using KeyBlog.Server.Services;
 using KeyBlog.Server.Services.QueryFilters;
 using Microsoft.AspNetCore.Mvc;
@@ -9,19 +10,19 @@ namespace KeyBlog.Server.Controllers;
 [ApiController]
 public class BlogController : ControllerBase
 {
-    private readonly ArticleService _articleService;
+    private readonly PostService _blogService;
     private readonly CategoryService _categoryService;
 
-    public BlogController(ArticleService articleService, CategoryService categoryService)
+    public BlogController(PostService blogService, CategoryService categoryService)
     {
-        _articleService = articleService;
+        _blogService = blogService;
         _categoryService = categoryService;
     }
 
-    [HttpGet("articles")]
-    public async Task<IActionResult> GetArticles([FromQuery] ArticleQueryParameters param, bool adminMode = false)
+    [HttpGet("blogs")]
+    public async Task<IActionResult> GetBlogs([FromQuery] BlogQueryParameters param, bool adminMode = false)
     {
-        var pagedList = await _articleService.GetPagedList(param, adminMode);
+        var pagedList = await _blogService.GetPagedList(param, adminMode);
         if (pagedList == null)
         {
             return NotFound(); // 返回 HTTP 404 状态码
@@ -29,15 +30,15 @@ public class BlogController : ControllerBase
         return Ok(pagedList); // 返回 HTTP 200 状态码和数据
     }
 
-    [HttpGet("articles/{id}")]
-    public async Task<IActionResult> GetArticle(string id)
+    [HttpGet("blogs/{id}")]
+    public async Task<IActionResult> GetBlog(string id)
     {
-        var article = await _articleService.GetArticleById(id);
-        if (article == null)
+        var blog = await _blogService.GetBlogById(id);
+        if (blog == null)
         {
             return NotFound();
         }
-        return Ok(article);
+        return Ok(blog);
     }
 
     [HttpGet("lists")]
@@ -59,7 +60,7 @@ public class BlogController : ControllerBase
         }
 
         var categoryNodes = await _categoryService.GetNodes();
-        var articles = await _articleService.GetPagedList(new ArticleQueryParameters
+        var blogs = await _blogService.GetPagedList(new BlogQueryParameters
         {
             CategoryId = categoryId,
             Page = page,
@@ -74,11 +75,38 @@ public class BlogController : ControllerBase
             CategoryNodes = categoryNodes,
             SortType = sortType,
             SortBy = sortBy,
-            Articles = articles
+            Blogs = blogs
         });
     }
 
-    [HttpPost("saveArticle")]
+    [HttpGet("getCategories")]
+    public async Task<IActionResult> GetCategories()
+    {
+        var categoryNodes = await _categoryService.GetNodes();
+        return Ok(new
+        {
+            CategoryNodes = categoryNodes
+        });
+    }
+
+    [HttpPost("addCategory")]
+    public IActionResult AddCategory([FromBody] TempCategory tempCategory)
+    {
+        if (tempCategory == null)
+        {
+            return BadRequest("Category is null");
+        }
+
+        if (!_categoryService.addCategory(tempCategory))
+        {
+            return BadRequest("Already exists the same category");
+        };
+
+        return Ok(new { message = "Catrgory added successfully" });
+    }
+
+
+    [HttpPost("saveBlog")]
     public IActionResult SaveContent([FromBody] ContentModel model)
     {
         if (model == null || string.IsNullOrEmpty(model.Content))

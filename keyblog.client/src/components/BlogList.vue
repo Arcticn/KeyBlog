@@ -2,24 +2,24 @@
   <BaseHeader />
   <el-container>
     <el-main>
-
-      <ArticleList
-        :articles="articles"
+      <PostList
+        :blogs="blogs"
         :total="total"
         :currentPage="currentPage"
-        @update:currentPage="(newPage) => (currentPage = newPage)"
+        @update:currentPage="(newPage) => {currentPage = newPage}"
         :pageSize="pageSize"
         @page-change="handlePageChange"
-        @view-article="viewArticle"
+        @view-blog="viewBlog"
       />
     </el-main>
-    <el-aside id="categoryNodes" style="padding-right: 4rem">
-      <CategoryTree
-        :categories="categoryNodes"
-        :expandedKeys="expandedKeys"
-        :currentCategoryId="currentCategoryId"
-        @node-click="handleNodeClick"
-      />
+    <el-aside id="categoryNodes" style="margin-right: 8rem">
+      <el-affix :offset="100">
+        <CategoryTree
+          :categories="categoryNodes"
+          :currentCategoryId="currentCategoryId"
+          @node-click="handleNodeClick"
+        />
+      </el-affix>
       <!-- <iframe height="800" style="border:none;" src="https://ac.yunyoujun.cn"></iframe> -->
     </el-aside>
   </el-container>
@@ -31,21 +31,18 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import ArticleList from "./ArticleList.vue";
+import PostList from "./PostList.vue";
 import CategoryTree from "./CategoryTree.vue";
 import "element-plus/theme-chalk/display.css";
+import "@/components/styles/style.scss";
 
-const articles = ref([]);
+const blogs = ref([]);
 const total = ref(0);
 const currentPage = ref(1);
 const pageSize = ref(6);
 const categoryNodes = ref([]);
 const currentCategoryId = ref(0);
-const expandedKeys = ref([]);
 const router = useRouter();
-
-const value1 = ref(true);
-const value2 = ref(true);
 
 const fetchData = async (categoryId = 0, page = 1) => {
   try {
@@ -58,8 +55,8 @@ const fetchData = async (categoryId = 0, page = 1) => {
     });
     const data = response.data;
     categoryNodes.value = data.categoryNodes;
-    articles.value = data.articles.items;
-    total.value = data.articles.totalCount;
+    blogs.value = data.blogs.items;
+    total.value = data.blogs.totalCount;
     currentCategoryId.value = categoryId;
     currentPage.value = page;
   } catch (error) {
@@ -79,8 +76,8 @@ onMounted(() => {
   fetchData();
 });
 
-const viewArticle = (articleId) => {
-  router.push({ name: "Article", params: { id: articleId } });
+const viewBlog = (blogId) => {
+  router.push({ name: "Blog", params: { id: blogId } });
 };
 </script>
 
