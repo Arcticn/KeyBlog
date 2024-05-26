@@ -8,7 +8,7 @@ public class Category
       IsPrimary = true 表示该字段是主键。*/
     public int Id { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public int ParentId { get; set; }
 
@@ -17,5 +17,5 @@ public class Category
     /// </summary>
     public bool Visible { get; set; } = true;
 
-    public List<Post>? Blogs { get; set; }
+    public List<Post>? Posts { get; set; }
 }

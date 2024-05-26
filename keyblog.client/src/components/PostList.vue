@@ -19,7 +19,7 @@
     </el-card>
     <el-pagination
       background
-      style="justify-content: center; margin-left: 5rem"
+      style="justify-content: center; margin-left: 5rem;"
       layout="prev, pager, next"
       :total="total"
       :page-size="pageSize"
@@ -53,11 +53,12 @@ const props = defineProps({
 });
 
 // 定义组件的 emits
-const emit = defineEmits(["page-change", "view-post","update:currentPage"]);
+const emit = defineEmits(["view-post","update:currentPage","page-change"]);
 
 // 处理分页改变的函数
-const handlePageChange = (page) => {
-  emit("update:currentPage", page);
+const handlePageChange = (newPage) => {
+  emit("update:currentPage", newPage);
+
 };
 
 // 查看文章的函数

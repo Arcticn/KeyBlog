@@ -10,19 +10,19 @@ namespace KeyBlog.Server.Controllers;
 [ApiController]
 public class BlogController : ControllerBase
 {
-    private readonly PostService _blogService;
+    private readonly PostService _postService;
     private readonly CategoryService _categoryService;
 
-    public BlogController(PostService blogService, CategoryService categoryService)
+    public BlogController(PostService postService, CategoryService categoryService)
     {
-        _blogService = blogService;
+        _postService = postService;
         _categoryService = categoryService;
     }
 
-    [HttpGet("blogs")]
-    public async Task<IActionResult> GetBlogs([FromQuery] BlogQueryParameters param, bool adminMode = false)
+    [HttpGet("posts")]
+    public async Task<IActionResult> GetPosts([FromQuery] PostQueryParameters param, bool adminMode = false)
     {
-        var pagedList = await _blogService.GetPagedList(param, adminMode);
+        var pagedList = await _postService.GetPagedList(param, adminMode);
         if (pagedList == null)
         {
             return NotFound(); // 返回 HTTP 404 状态码
@@ -30,15 +30,15 @@ public class BlogController : ControllerBase
         return Ok(pagedList); // 返回 HTTP 200 状态码和数据
     }
 
-    [HttpGet("blogs/{id}")]
-    public async Task<IActionResult> GetBlog(string id)
+    [HttpGet("posts/{id}")]
+    public async Task<IActionResult> GetPost(string id)
     {
-        var blog = await _blogService.GetBlogById(id);
-        if (blog == null)
+        var post = await _postService.GetPostById(id);
+        if (post == null)
         {
             return NotFound();
         }
-        return Ok(blog);
+        return Ok(post);
     }
 
     [HttpGet("lists")]
@@ -60,7 +60,7 @@ public class BlogController : ControllerBase
         }
 
         var categoryNodes = await _categoryService.GetNodes();
-        var blogs = await _blogService.GetPagedList(new BlogQueryParameters
+        var posts = await _postService.GetPagedList(new PostQueryParameters
         {
             CategoryId = categoryId,
             Page = page,
@@ -75,7 +75,7 @@ public class BlogController : ControllerBase
             CategoryNodes = categoryNodes,
             SortType = sortType,
             SortBy = sortBy,
-            Blogs = blogs
+            Posts = posts
         });
     }
 
@@ -106,7 +106,7 @@ public class BlogController : ControllerBase
     }
 
 
-    [HttpPost("saveBlog")]
+    [HttpPost("savePost")]
     public IActionResult SaveContent([FromBody] ContentModel model)
     {
         if (model == null || string.IsNullOrEmpty(model.Content))

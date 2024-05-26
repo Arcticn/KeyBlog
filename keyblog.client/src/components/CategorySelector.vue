@@ -9,19 +9,19 @@
       @change="handleCategoryChange"
     >
       <el-option
-        v-for="category in localCategories"
+        v-for="category in categoryNodes"
         :key="category.id"
-        :label="category.name"
+        :label="category.label"
         :value="category.id"
       />
     </el-select>
-    <el-button v-if="selectedCategory && !showSubcategory" @click="addSubcategory">添加子分类</el-button>
+    <!-- <el-button v-if="selectedCategory && !showSubcategory" @click="addSubcategory">添加子分类</el-button>
     <CategorySelector
       v-if="showSubcategory && selectedCategory && selectedCategory.subcategories"
       :categories="selectedCategory.subcategories"
       v-model:selectedCategoryId="selectedCategory.subcategoryId"
       @update:categories="updateSubcategories"
-    />
+    /> -->
   </div>
 </template>
 
@@ -29,7 +29,10 @@
 import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
-  categories: Array,
+  categories: {
+    type: Array,
+    required: true,
+  },
   modelValue: Number
 });
 

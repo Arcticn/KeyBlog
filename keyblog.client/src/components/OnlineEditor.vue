@@ -44,7 +44,7 @@ const selectedCategoryId = ref(null);
 
 const { theme } = useDarkMode();
 
-const categories = ref();
+const categories = ref(null);
 
 const updateCategories = (newCategories) => {
   categories.value = newCategories;
@@ -52,7 +52,7 @@ const updateCategories = (newCategories) => {
 
 const onSave = async (v) => {
   try {
-    const response = await axios.post("/api/blog/saveBlog", {
+    const response = await axios.post("/api/blog/savePost", {
       title: input_title.value,
       content: v,
       categoryId: selectedCategoryId.value,
@@ -69,6 +69,7 @@ const fetchData = async () => {
     const response = await axios.get("/api/blog/getCategories");
     const data = response.data;
     categories.value = data;
+    console.log(categories);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

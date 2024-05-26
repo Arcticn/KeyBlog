@@ -2,7 +2,7 @@ namespace KeyBlog.Data.Models.DTOs;
 
 public class TempCategory
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public int ParentId { get; set; }
 

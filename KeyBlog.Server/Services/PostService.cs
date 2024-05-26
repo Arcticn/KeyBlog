@@ -7,23 +7,23 @@ namespace KeyBlog.Server.Services;
 
 public class PostService
 {
-    private readonly IBaseRepository<Post> _blogRepo;
+    private readonly IBaseRepository<Post> _postRepo;
     private readonly IBaseRepository<Category> _categoryRepo;
 
-    public PostService(IBaseRepository<Post> blogRepo, IBaseRepository<Category> categoryRepo)
+    public PostService(IBaseRepository<Post> postRepo, IBaseRepository<Category> categoryRepo)
     {
-        _blogRepo = blogRepo;
+        _postRepo = postRepo;
         _categoryRepo = categoryRepo;
     }
 
-    public List<Post> GetAllBlogs()
+    public List<Post> GetAllPosts()
     {
-        return _blogRepo.Select.ToList();
+        return _postRepo.Select.ToList();
     }
 
-    public async Task<PagedResult<Post>> GetPagedList(BlogQueryParameters param, bool adminMode = false)
+    public async Task<PagedResult<Post>> GetPagedList(PostQueryParameters param, bool adminMode = false)
     {
-        var querySet = _blogRepo.Select;
+        var querySet = _postRepo.Select;
 
         // 筛选发布状态
         if (param.IsPublish != null && adminMode)
@@ -76,10 +76,10 @@ public class PostService
         return pagedResult;
     }
 
-    public async Task<Post> GetBlogById(string id)
+    public async Task<Post> GetPostById(string id)
     {
-        var blog = await _blogRepo.Select.Where(a => a.Id == id).FirstAsync();
+        var post = await _postRepo.Select.Where(a => a.Id == id).FirstAsync();
 
-        return blog;
+        return post;
     }
 }

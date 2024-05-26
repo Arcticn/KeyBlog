@@ -2,5 +2,5 @@
 
 public class CommentQueryParameters : QueryParameters
 {
-    public string? ArticleId { get; set; }
+    public string? PostId { get; set; }
 }

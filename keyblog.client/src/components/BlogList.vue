@@ -3,13 +3,13 @@
   <el-container>
     <el-main>
       <PostList
-        :blogs="blogs"
+        :posts="posts"
         :total="total"
         :currentPage="currentPage"
-        @update:currentPage="(newPage) => {currentPage = newPage}"
         :pageSize="pageSize"
-        @page-change="handlePageChange"
-        @view-blog="viewBlog"
+        @update:currentPage="handlePageChange"
+
+        @view-post="viewPost"
       />
     </el-main>
     <el-aside id="categoryNodes" style="margin-right: 8rem">
@@ -36,7 +36,7 @@ import CategoryTree from "./CategoryTree.vue";
 import "element-plus/theme-chalk/display.css";
 import "@/components/styles/style.scss";
 
-const blogs = ref([]);
+const posts = ref([]);
 const total = ref(0);
 const currentPage = ref(1);
 const pageSize = ref(6);
@@ -55,10 +55,10 @@ const fetchData = async (categoryId = 0, page = 1) => {
     });
     const data = response.data;
     categoryNodes.value = data.categoryNodes;
-    blogs.value = data.blogs.items;
-    total.value = data.blogs.totalCount;
+    posts.value = data.posts.items;
+    total.value = data.posts.totalCount;
     currentCategoryId.value = categoryId;
-    currentPage.value = page;
+    //currentPage.value = page;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -69,6 +69,7 @@ const handleNodeClick = async (node) => {
 };
 
 const handlePageChange = (page) => {
+  currentPage.value = page;
   fetchData(currentCategoryId.value, page);
 };
 
@@ -76,8 +77,8 @@ onMounted(() => {
   fetchData();
 });
 
-const viewBlog = (blogId) => {
-  router.push({ name: "Blog", params: { id: blogId } });
+const viewPost = (postId) => {
+  router.push({ name: "Post", params: { id: postId } });
 };
 </script>
 
