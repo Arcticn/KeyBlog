@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-card v-if="posts.length === 0" shadow="always" class="mb-3">
+    <el-card v-if="posts.length === 0" shadow="always" class="mb-3 glass-effect">
       <div class="card-body">没有文章</div>
     </el-card>
-    <el-card v-for="post in posts" :key="post.id" shadow="always" class="mb-3">
+    <el-card v-for="post in posts" :key="post.id" shadow="always" class="mb-3 glass-effect">
       <!-- <template #header>
         <div class="card-header">
           <span>{{ post.categoryId }}</span>
@@ -31,6 +31,7 @@
 
 <script setup>
 import "@/components/styles/style.scss";
+import "@/components/styles/glass.scss"
 
 // 定义组件的 props
 const props = defineProps({

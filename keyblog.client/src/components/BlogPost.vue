@@ -3,7 +3,7 @@
     <BaseHeader />
     <el-container>
       <el-main class="markdown-content">
-        <el-card style="margin-left: 5rem;">
+        <el-card class="glass-effect" style="margin-left: 5rem">
           <MdPreview
             :editorId="id"
             :theme="theme"
@@ -14,7 +14,10 @@
       </el-main>
       <el-aside class="catalog-container" width="250px">
         <el-affix :offset="100">
-          <el-card style="padding-left: 0px;padding-right: 10px;">
+          <el-card
+            class="glass-effect"
+            style="padding-left: 0px; padding-right: 10px"
+          >
             <MdCatalog :editorId="id" :scrollElement="scrollElement" />
           </el-card>
         </el-affix>

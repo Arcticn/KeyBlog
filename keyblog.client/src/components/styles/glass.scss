@@ -1,0 +1,61 @@
+/* 适应深色模式的毛玻璃效果 */
+:root {
+    --glass-bg-light: rgba(255, 255, 255, 0.2);
+    --glass-bg-dark: rgba(0, 0, 0, 0.8);
+    --glass-border-light: rgba(255, 255, 255, 0.3);
+    --glass-border-dark: rgba(0, 0, 0, 0.1);
+}
+
+.el-card.glass-effect {
+    background: var(--glass-bg-light) !important;
+    /* 半透明背景 */
+    backdrop-filter: blur(10px) !important;
+    /* 毛玻璃效果 */
+    border: 1px solid var(--glass-border-light) !important;
+    /* 边框 */
+}
+
+.el-menu.glass-effect,
+.el-menu.glass-effect .el-menu-item {
+    background: var(--glass-bg-light) !important;
+    /* 半透明背景 */
+    backdrop-filter: blur(10px) !important;
+    /* 毛玻璃效果 */
+    border: 1px solid var(--glass-border-light) !important;
+}
+
+.el-menu.glass-effect ul {
+    background: transparent !important;
+    /* 半透明背景 */
+    backdrop-filter: blur(10px) !important;
+    /* 毛玻璃效果 */
+    border: 1px solid var(--glass-border-light) !important;
+}
+
+html.dark {
+    .el-card.glass-effect {
+        background: var(--glass-bg-dark) !important;
+        /* 半透明背景 */
+        backdrop-filter: blur(10px) !important;
+        /* 毛玻璃效果 */
+        border: 1px solid var(--glass-border-dark) !important;
+        /* 边框 */
+    }
+
+    .el-menu.glass-effect,
+    .el-menu.glass-effect .el-menu-item {
+        background: var(--glass-bg-dark) !important;
+        /* 深色模式的背景 */
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid var(--glass-border-dark) !important;
+        /* 深色模式的边框 */
+    }
+
+    .el-menu.glass-effect ul {
+        background: transparent !important;
+        /* 深色模式的背景 */
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid var(--glass-border-dark) !important;
+        /* 深色模式的边框 */
+    }
+}

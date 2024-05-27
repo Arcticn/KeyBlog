@@ -2,11 +2,8 @@
   <div>
     <el-menu
       :default-active="currentCategoryId.toString()"
-      class="el-menu-sidebar"
+      class="el-menu-sidebar glass-effect"
       mode="vertical"
-      :style="{
-          boxShadow: 'var(--el-box-shadow)',
-        }"
       :data="categories"
       :props="defaultProps"
       :collapse-transition="false"
@@ -23,6 +20,7 @@
 
 <script setup>
 import RecursiveMenu from "./RecursiveMenu.vue";
+import "@/components/styles/glass.scss";
 
 const props = defineProps({
   categories: {

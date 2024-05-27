@@ -86,6 +86,7 @@ const viewPost = (postId) => {
 .mb-3 {
   width: 80%;
   padding-left: 2rem;
+  color: Transparent;
   margin-bottom: 1rem;
 }
 

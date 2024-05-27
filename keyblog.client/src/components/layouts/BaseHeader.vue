@@ -3,7 +3,7 @@
   <el-affix :offset="0">
     <el-menu
       :default-active="activeIndex"
-      class="el-menu-demo"
+      class="el-menu glass-effect"
       mode="horizontal"
     >
       <el-menu-item index="/" @click="pushUrl('/')">主页</el-menu-item>
@@ -30,6 +30,7 @@
 import { useRouter, useRoute } from "vue-router";
 import { ref, watch } from "vue";
 import { useDarkMode} from "@/composables/useDarkMode";
+import "@/components/styles/glass.scss"
 
 const route = useRoute();
 const activeIndex = ref(route.path);
