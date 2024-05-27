@@ -19,7 +19,7 @@
           <CategorySelector
             :categories="categories"
             v-model:selectedCategoryId="selectedCategoryId"
-            @update:categories="updateCategories"
+            @add-category="updateCategories"
           />
         </div>
       </el-col>
@@ -46,8 +46,15 @@ const { theme } = useDarkMode();
 
 const categories = ref(null);
 
-const updateCategories = (newCategories) => {
-  categories.value = newCategories;
+const updateCategories = async(newCategories) => {
+  try{
+   console.log('newCategory:', newCategories);
+    const response = await axios.post("/api/blog/addCategory", newCategories);
+    console.log("Category added successfully:", response.data);
+    fetchData();
+  }catch(error){
+    console.log("Error adding category:", error);
+  }
 };
 
 const onSave = async (v) => {
@@ -64,11 +71,13 @@ const onSave = async (v) => {
   }
 };
 
+
+
 const fetchData = async () => {
   try {
     const response = await axios.get("/api/blog/getCategories");
     const data = response.data;
-    categories.value = data;
+    categories.value = data.categoryNodes;
     console.log(categories);
   } catch (error) {
     console.error("Error fetching data:", error);

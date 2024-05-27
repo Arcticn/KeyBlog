@@ -44,6 +44,7 @@ public class CategoryService
         {
             Id = category.Id,
             Label = category.Name,
+            ParentId = category.ParentId,
             Children = GetNodes(categoryList, category.Id)
         }).ToList();
     }
