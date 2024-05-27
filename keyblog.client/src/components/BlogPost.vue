@@ -3,7 +3,7 @@
     <BaseHeader />
     <el-container>
       <el-main class="markdown-content">
-        <el-card class="glass-effect" style="margin-left: 5rem">
+        <el-card class="glass-effect" style="margin-left: 5rem;margin-right: 2rem">
           <MdPreview
             :editorId="id"
             :theme="theme"
@@ -12,13 +12,14 @@
           />
         </el-card>
       </el-main>
-      <el-aside class="catalog-container" width="250px">
+      <el-aside class="catalog-container" width="220px">
         <el-affix :offset="100">
           <el-card
             class="glass-effect"
-            style="padding-left: 0px; padding-right: 10px"
+            style="width: 11rem;padding-right: 10px;"
+            body-style="padding:10px"
           >
-            <MdCatalog :editorId="id" :scrollElement="scrollElement" />
+            <MdCatalog :editorId="id" style="font-size: 15px;" :scrollElement="scrollElement" />
           </el-card>
         </el-affix>
       </el-aside>
@@ -37,18 +38,18 @@ import { useDarkMode } from "../composables/useDarkMode";
 import anchor from "markdown-it-anchor";
 import { config } from "md-editor-v3";
 
-config({
-  markdownItConfig(mdit) {
-    mdit.use(anchor, {
-      permalink: anchor.permalink.linkAfterHeader({
-        style: "visually-hidden",
-        assistiveText: (title) => `Permalink to “${title}”`,
-        visuallyHiddenClass: "visually-hidden",
-        wrapper: ['<div class="wrapper">', "</div>"],
-      }),
-    });
-  },
-});
+// config({
+//   markdownItConfig(mdit) {
+//     mdit.use(anchor, {
+//       permalink: anchor.permalink.linkAfterHeader({
+//         style: "visually-hidden",
+//         assistiveText: (title) => `Permalink to “${title}”`,
+//         visuallyHiddenClass: "visually-hidden",
+//         wrapper: ['<div class="wrapper">', "</div>"],
+//       }),
+//     });
+//   },
+// });
 
 const id = "MD_EDITOR_ID";
 const markdownContent = ref("");

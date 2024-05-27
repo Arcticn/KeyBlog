@@ -4,57 +4,72 @@
     --glass-bg-dark: rgba(0, 0, 0, 0.8);
     --glass-border-light: rgba(255, 255, 255, 0.3);
     --glass-border-dark: rgba(0, 0, 0, 0.1);
+    --glass-increa-light:rgba(255,255,255,0.2);//由于渲染会重叠，单独设置增量
+    --glass-increa-dark:rgba(0, 0, 0, 0.1);
 }
 
 .el-card.glass-effect {
-    background: var(--glass-bg-light) !important;
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+    background: var(--glass-bg-light) ;
     /* 半透明背景 */
-    backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(8px)   !important;
     /* 毛玻璃效果 */
     border: 1px solid var(--glass-border-light) !important;
     /* 边框 */
 }
 
-.el-menu.glass-effect,
-.el-menu.glass-effect .el-menu-item {
+.el-card.glass-effect:hover {
+    background-color: rgba(255, 255, 255, 0.7);; /* 悬浮时的背景颜色 */
+    box-shadow: var(--el-box-shadow-dark); /* 悬浮时的阴影效果 */
+  }
+
+.el-menu.glass-effect{
     background: var(--glass-bg-light) !important;
     /* 半透明背景 */
-    backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(8px) !important;
     /* 毛玻璃效果 */
     border: 1px solid var(--glass-border-light) !important;
+    box-shadow: var(--el-box-shadow);
+}
+
+.el-menu.glass-effect .el-menu-item{
+    border: 1px solid var(--glass-bg-light) !important;
+    background: var(--glass-increa-light) !important;
+    /* 半透明背景 */
+
 }
 
 .el-menu.glass-effect ul {
-    background: transparent !important;
+    background: var(--glass-increa-light) !important;
     /* 半透明背景 */
-    backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(8px) !important;
     /* 毛玻璃效果 */
     border: 1px solid var(--glass-border-light) !important;
+    z-index: 1000;
 }
 
 html.dark {
     .el-card.glass-effect {
         background: var(--glass-bg-dark) !important;
         /* 半透明背景 */
-        backdrop-filter: blur(10px) !important;
+        backdrop-filter: blur(8px) !important;
         /* 毛玻璃效果 */
         border: 1px solid var(--glass-border-dark) !important;
         /* 边框 */
     }
 
-    .el-menu.glass-effect,
-    .el-menu.glass-effect .el-menu-item {
+    .el-menu.glass-effect {
         background: var(--glass-bg-dark) !important;
         /* 深色模式的背景 */
-        backdrop-filter: blur(10px) !important;
+        backdrop-filter: blur(8px) !important;
         border: 1px solid var(--glass-border-dark) !important;
         /* 深色模式的边框 */
     }
 
     .el-menu.glass-effect ul {
-        background: transparent !important;
+        background: var(--glass-increa-dark) !important;
         /* 深色模式的背景 */
-        backdrop-filter: blur(10px) !important;
+        backdrop-filter: blur(8px) !important;
         border: 1px solid var(--glass-border-dark) !important;
         /* 深色模式的边框 */
     }
