@@ -36,7 +36,6 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\KeyBlog.Data\KeyBlog.Data.csproj" />
-    <ProjectReference Include="..\KeyBlog.Markdown\KeyBlog.Markdown.csproj" />
   </ItemGroup>
 
 </Project>

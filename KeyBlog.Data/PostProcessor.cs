@@ -1,13 +1,12 @@
 ﻿using KeyBlog.Data.Models.Entities;
-using KeyBlog.Markdown.Extensions;
-using KeyBlog.Markdown.Utils;
+using KeyBlog.Data.Utils;
 using Markdig.Renderers.Normalize;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace KeyBlog.Markdown;
+namespace KeyBlog.Data;
 
 public class PostProcessor
 {
@@ -55,7 +54,7 @@ public class PostProcessor
                 if (File.Exists(destPath))
                 {
                     // 图片重名处理
-                    var imgId = GuidUtils.GuidTo16String();
+                    var imgId = GuidUtils.GetGuid();
                     imgFilename =
                         $"{Path.GetFileNameWithoutExtension(imgFilename)}-{imgId}.{Path.GetExtension(imgFilename)}";
                     destPath = Path.Combine(destDir, imgFilename);
@@ -82,12 +81,12 @@ public class PostProcessor
     /// </summary>
     /// <param name="length"></param>
     /// <returns></returns>
-    public string GetSummary(int length)
+/*    public string GetSummary(int length)
     {
         return _post.Content == null
             ? string.Empty
             : Markdig.Markdown.ToPlainText(_post.Content).Limit(length);
-    }
+    }*/
 
     /// <summary>
     /// 填充文章状态和标题

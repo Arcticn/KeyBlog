@@ -12,10 +12,18 @@ public class Category
 
     public int ParentId { get; set; }
 
+    [Navigate(nameof(ParentId))]
+    public Category? Parent { get; set; }
+
+    [Navigate(nameof(ParentId))]
+    public List<Category>? Children { get; set; }
     /// <summary>
     /// 分类是否可见
     /// </summary>
     public bool Visible { get; set; } = true;
 
-    public List<Post>? Posts { get; set; }
+    public List<Post>? Posts { get; set; } //集合导航
+    public string? Categories { get; set; } = "0";//类的层级结构
+
+
 }

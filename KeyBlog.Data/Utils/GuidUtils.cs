@@ -1,32 +1,33 @@
-﻿namespace KeyBlog.Markdown.Utils;
+﻿using System.Security.Cryptography;
+
+namespace KeyBlog.Data.Utils;
 
 public static class GuidUtils
 {
     /// <summary>
-    /// 由连字符分隔的32位数字
+    /// 没有连字符分隔的32位数字
     /// </summary>
     /// <returns></returns>
-    private static string GetGuid()
+    public static string GetGuid()
     {
-        var guid = new Guid();
-        guid = Guid.NewGuid();
-        return guid.ToString();
+        var guid = Guid.NewGuid();
+        return guid.ToString("N");
     }
 
     /// <summary>  
     /// 根据GUID获取16位的唯一字符串  
     /// </summary>  
     /// <returns></returns>  
-    public static string GuidTo16String()
-    {
-        long i = 1;
-        foreach (var b in Guid.NewGuid().ToByteArray())
-        {
-            i *= b + 1;
-        }
+    // public static string GuidTo16String()
+    // {
+    //     long i = 1;
+    //     foreach (var b in Guid.NewGuid().ToByteArray())
+    //     {
+    //         i *= b + 1;
+    //     }
 
-        return $"{i - DateTime.Now.Ticks:x}";
-    }
+    //     return $"{i - DateTime.Now.Ticks:x}";
+    // }
 
     /// <summary>  
     /// 根据GUID获取19位的唯一数字序列  

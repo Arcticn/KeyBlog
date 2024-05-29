@@ -1,6 +1,6 @@
 namespace KeyBlog.Data.Models.DTOs;
 
-public class TempCategory
+public class CategoryCreation
 {
     public string? Name { get; set; }
 

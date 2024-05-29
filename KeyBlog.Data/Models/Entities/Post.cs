@@ -1,4 +1,5 @@
 ﻿using FreeSql.DataAnnotations;
+using KeyBlog.Data.Extensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace KeyBlog.Data.Models.Entities;
@@ -36,15 +37,29 @@ public class Post
     public bool IsPublish { get; set; }
 
     /// <summary>
-    /// 梗概
-    /// </summary>
-    public string? Summary { get; set; }
-
-    /// <summary>
     /// 内容（markdown格式）
     /// </summary>
     [MaxLength(-1)]
     public string? Content { get; set; }
+
+
+    /// <summary>
+    /// 梗概
+    /// </summary>
+    private string? _summary;
+    public string? Summary
+    {
+        get
+        {
+            return _summary ??
+            (Content != null ? Markdig.Markdown.ToPlainText(Content).Limit(100) : "");
+        }
+        set
+        {
+            _summary = value != null ? value.Limit(100) :
+            (Content != null ? Markdig.Markdown.ToPlainText(Content).Limit(100) : "");
+        }
+    }
 
     /// <summary>
     /// 博客在导入前的相对路径
@@ -63,15 +78,11 @@ public class Post
     public DateTime LastUpdateTime { get; set; }
 
     /// <summary>
-    /// 分类ID
+    /// Category导航属性
     /// </summary>
     public int CategoryId { get; set; }
-
-    /// <summary>
-    /// 分类
-    /// </summary>
     public Category? Category { get; set; }
 
-    public string? Categories { get; set; }
+
 
 }

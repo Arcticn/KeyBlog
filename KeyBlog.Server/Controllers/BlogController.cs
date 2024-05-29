@@ -1,5 +1,6 @@
 ﻿using KeyBlog.Data.Models.DTOs;
 using KeyBlog.Data.Models.Entities;
+using KeyBlog.Data.Services;
 using KeyBlog.Server.Services;
 using KeyBlog.Server.Services.QueryFilters;
 using Microsoft.AspNetCore.Mvc;
@@ -10,19 +11,19 @@ namespace KeyBlog.Server.Controllers;
 [ApiController]
 public class BlogController : ControllerBase
 {
-    private readonly PostService _postService;
+    private readonly BlogPostService _blogPostService;
     private readonly CategoryService _categoryService;
 
-    public BlogController(PostService postService, CategoryService categoryService)
+    public BlogController(BlogPostService blogPostService, CategoryService categoryService)
     {
-        _postService = postService;
+        _blogPostService = blogPostService;
         _categoryService = categoryService;
     }
 
     [HttpGet("posts")]
     public async Task<IActionResult> GetPosts([FromQuery] PostQueryParameters param, bool adminMode = false)
     {
-        var pagedList = await _postService.GetPagedList(param, adminMode);
+        var pagedList = await _blogPostService.GetPagedList(param, adminMode);
         if (pagedList == null)
         {
             return NotFound(); // 返回 HTTP 404 状态码
@@ -33,7 +34,7 @@ public class BlogController : ControllerBase
     [HttpGet("posts/{id}")]
     public async Task<IActionResult> GetPost(string id)
     {
-        var post = await _postService.GetPostById(id);
+        var post = await _blogPostService.GetPostById(id);
         if (post == null)
         {
             return NotFound();
@@ -59,8 +60,8 @@ public class BlogController : ControllerBase
             return BadRequest(new { message = $"Category {categoryId} is not available!" });
         }
 
-        var categoryNodes = await _categoryService.GetNodes();
-        var posts = await _postService.GetPagedList(new PostQueryParameters
+        var categoryNodes = await _categoryService.GetTreeList();
+        var posts = await _blogPostService.GetPagedList(new PostQueryParameters
         {
             CategoryId = categoryId,
             Page = page,
@@ -82,22 +83,22 @@ public class BlogController : ControllerBase
     [HttpGet("getCategories")]
     public async Task<IActionResult> GetCategories()
     {
-        var categoryNodes = await _categoryService.GetNodes();
+        var categoryTree = await _categoryService.GetTreeList();
         return Ok(new
         {
-            CategoryNodes = categoryNodes
+            CategoryNodes = categoryTree
         });
     }
 
     [HttpPost("addCategory")]
-    public IActionResult AddCategory([FromBody] TempCategory tempCategory)
+    public async Task<ActionResult> AddCategory([FromBody] CategoryCreation tempCategory)
     {
         if (tempCategory == null)
         {
             return BadRequest("Category is null");
         }
 
-        if (!_categoryService.addCategory(tempCategory))
+        if (!await _categoryService.addCategory(tempCategory))
         {
             return BadRequest("Already exists the same category");
         };
@@ -107,21 +108,29 @@ public class BlogController : ControllerBase
 
 
     [HttpPost("savePost")]
-    public IActionResult SaveContent([FromBody] ContentModel model)
+    public async Task<IActionResult> SavePost([FromBody] PostCreation newPost)
     {
-        if (model == null || string.IsNullOrEmpty(model.Content))
+        if (newPost == null || string.IsNullOrEmpty(newPost.Content))
         {
             return BadRequest("Content is null or empty");
         }
 
         // 将内容保存到数据库或文件
         // 示例：保存到文件
-        System.IO.File.WriteAllText("D:/123.txt", model.Content);
+        // System.IO.File.WriteAllText("D:/123.txt", newPost.Content);
 
-        return Ok(new { message = "Content saved successfully" });
+
+        Post tempPost = new Post
+        {
+            Title = newPost.Title,
+            Summary = newPost.Summary,
+            Content = newPost.Content,
+            CreationTime = newPost.CreationTime,
+            CategoryId = newPost.CategoryId,
+        };
+
+        await _blogPostService.InsetPost(tempPost);
+
+        return Ok();
     }
-}
-public class ContentModel
-{
-    public string Content { get; set; }
 }

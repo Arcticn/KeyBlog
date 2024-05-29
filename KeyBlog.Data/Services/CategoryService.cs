@@ -2,7 +2,7 @@
 using KeyBlog.Data.Models.DTOs;
 using KeyBlog.Data.Models.Entities;
 
-namespace KeyBlog.Server.Services;
+namespace KeyBlog.Data.Services;
 
 public class CategoryService
 {
@@ -14,19 +14,22 @@ public class CategoryService
         _cRepo = cRepo;
     }
 
-
     //_categoryRepo.Where(a => a.Id == categoryId)
-    public Task<Category> GetCategory(int categoryId)
+    public async Task<Category> GetCategory(int categoryId)
     {
-        return _cRepo.Where(a => a.Id == categoryId).FirstAsync();
+        var category = await _cRepo.Select.Where(a => a.Id == categoryId).FirstAsync();
+        return category;
     }
 
-    public async Task<List<CategoryNode>?> GetNodes()
+    public async Task<List<Category>?> GetTreeList()
     {
         var categoryList = await _cRepo.Select
-            .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
-            .ToListAsync();
-        return GetNodes(categoryList, 0);
+        .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
+        .ToTreeListAsync();
+        // var categoryList = await _cRepo.Select
+        //     .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
+        //     .ToListAsync();
+        return categoryList;
     }
 
     /// <summary>
@@ -49,14 +52,13 @@ public class CategoryService
         }).ToList();
     }
 
-
-    public bool addCategory(TempCategory tempCategory)
+    public async Task<bool> addCategory(CategoryCreation tempCategory)
     {
-        var existingCategory = _cRepo.Where(a => a.Name == tempCategory.Name && a.ParentId == tempCategory.ParentId)
+        var existingCategory = await _cRepo.Where(a => a.Name == tempCategory.Name && a.ParentId == tempCategory.ParentId)
                                 .FirstAsync();
         if (existingCategory != null)
         {
-            _cRepo.Insert(new Category
+            await _cRepo.InsertAsync(new Category
             {
                 Name = tempCategory.Name,
                 ParentId = tempCategory.ParentId
@@ -67,5 +69,20 @@ public class CategoryService
 
         else return false;//已经存在相同分类
 
+    }
+
+    public string GetCategoryHierarchy(int categoryId)
+    {
+        var category = _cRepo.Where(c => c.Id == categoryId).First();
+        if (category == null) return string.Empty;
+
+        var hierarchy = new Stack<int>();
+        while (category != null)
+        {
+            hierarchy.Push(category.Id);
+            category = _cRepo.Where(c => c.Id == category.ParentId).First();
+        }
+
+        return string.Join(",", hierarchy);
     }
 }

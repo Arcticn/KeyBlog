@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace KeyBlog.Markdown.Utils;
+namespace KeyBlog.Data.Utils;
 
 /// <summary>
 /// 哈希工具

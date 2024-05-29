@@ -1,6 +1,6 @@
-﻿using KeyBlog.Markdown.Utils;
+﻿using KeyBlog.Data.Utils;
 
-namespace KeyBlog.Markdown.Extensions;
+namespace KeyBlog.Data.Extensions;
 
 public static class StringExt
 {

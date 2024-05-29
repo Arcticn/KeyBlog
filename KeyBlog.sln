@@ -9,8 +9,6 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "keyblog.client", "keyblog.c
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyBlog.Data", "KeyBlog.Data\KeyBlog.Data.csproj", "{51E58F68-A878-4DA3-AB92-B1EE9F5EE56E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyBlog.Markdown", "KeyBlog.Markdown\KeyBlog.Markdown.csproj", "{4E9B99A5-854E-4D40-92F4-4D7657A8FD32}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,10 +29,6 @@ Global
 		{51E58F68-A878-4DA3-AB92-B1EE9F5EE56E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51E58F68-A878-4DA3-AB92-B1EE9F5EE56E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51E58F68-A878-4DA3-AB92-B1EE9F5EE56E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E9B99A5-854E-4D40-92F4-4D7657A8FD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E9B99A5-854E-4D40-92F4-4D7657A8FD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E9B99A5-854E-4D40-92F4-4D7657A8FD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E9B99A5-854E-4D40-92F4-4D7657A8FD32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
