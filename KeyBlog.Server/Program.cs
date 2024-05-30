@@ -1,5 +1,6 @@
 using KeyBlog.Data;
 using KeyBlog.Data.Extensions;
+using KeyBlog.Data.Services;
 using KeyBlog.Server.Services;
 
 namespace KeyBlog.Server;
@@ -12,11 +13,13 @@ public class Program
 
         builder.Services.AddFreeSql(builder.Configuration);
 
-
         // Add services to the container.
         builder.Services.AddScoped<PostService>();
         builder.Services.AddScoped<CategoryService>();
+        builder.Services.AddScoped<BlogPostService>();
         builder.Services.AddControllers();
+
+
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 

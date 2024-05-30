@@ -2,6 +2,7 @@
 using KeyBlog.Data.Models.Entities;
 using KeyBlog.Data.Services;
 using KeyBlog.Server.Services;
+using KeyBlog.Data.Utils;
 using KeyBlog.Server.Services.QueryFilters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -122,11 +123,13 @@ public class BlogController : ControllerBase
 
         Post tempPost = new Post
         {
+            Id = GuidUtils.GetGuid(),
             Title = newPost.Title,
             Summary = newPost.Summary,
+            IsPublish = newPost.IsPublish,
             Content = newPost.Content,
             CreationTime = newPost.CreationTime,
-            CategoryId = newPost.CategoryId,
+            CategoryId = newPost.CategoryId
         };
 
         await _blogPostService.InsetPost(tempPost);

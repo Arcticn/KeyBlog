@@ -21,15 +21,16 @@ public class CategoryService
         return category;
     }
 
-    public async Task<List<Category>?> GetTreeList()
+    public async Task<List<CategoryNode>?> GetTreeList()
     {
-        var categoryList = await _cRepo.Select
-        .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
-        .ToTreeListAsync();
+        // 树形查询功能冗余，暂时弃用
         // var categoryList = await _cRepo.Select
-        //     .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
-        //     .ToListAsync();
-        return categoryList;
+        // .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
+        // .ToTreeListAsync();
+        var categoryList = await _cRepo.Select
+            .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
+            .ToListAsync();
+        return GetNodes(categoryList, 0);
     }
 
     /// <summary>
@@ -56,14 +57,17 @@ public class CategoryService
     {
         var existingCategory = await _cRepo.Where(a => a.Name == tempCategory.Name && a.ParentId == tempCategory.ParentId)
                                 .FirstAsync();
-        if (existingCategory != null)
+        if (existingCategory == null)
         {
             await _cRepo.InsertAsync(new Category
             {
                 Name = tempCategory.Name,
                 ParentId = tempCategory.ParentId
             });
-
+            var temp = await _cRepo.Where(a => a.Name == tempCategory.Name && a.ParentId == tempCategory.ParentId)
+                                .FirstAsync();
+            temp.Categories = GetCategoryHierarchy(temp.Id);
+            await _cRepo.UpdateAsync(temp);
             return true;
         }
 

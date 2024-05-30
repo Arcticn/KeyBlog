@@ -15,8 +15,8 @@ public class Category
     [Navigate(nameof(ParentId))]
     public Category? Parent { get; set; }
 
-    [Navigate(nameof(ParentId))]
-    public List<Category>? Children { get; set; }
+    // [Navigate(nameof(ParentId))]
+    // public List<Category>? Children { get; set; } //树形查询使用
     /// <summary>
     /// 分类是否可见
     /// </summary>

@@ -13,7 +13,7 @@ public class PostCreation
     [MaxLength(-1)]
     public string? Content { get; set; }
 
-     public DateTime CreationTime { get; set; }
+    public DateTime CreationTime { get; set; }
     /// <summary>
     /// 分类ID
     /// </summary>

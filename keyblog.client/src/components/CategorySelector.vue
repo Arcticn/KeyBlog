@@ -34,29 +34,31 @@
         </template>
       </template>
     </el-select>
-    <span style="margin-right: 10px;">/</span>
+    <span style="margin-right: 10px">/</span>
     <el-button
       v-if="selectedCategory && !selectedCategory.children"
-      style="margin-left: 1rem"
+      style="margin-left: 0.3rem"
+      :icon="Plus"
+      circle
       @click="showAddSubcategoryBox"
-      >添加子分类</el-button
-    >
+    ></el-button>
     <template v-if="selectedCategory && selectedCategory.children">
       <CategorySelector
         :categories="selectedCategory.children"
         @add-category="handleAddCategory"
+        @id-change="idUpdate"
       />
     </template>
   </div>
 </template>
 
 <script setup>
+import { Plus } from "@element-plus/icons-vue";
 import { ref, watch, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 
 const props = defineProps({
-  categories: Array,
-  modelValue: Number,
+  categories: Array
 });
 
 const selectedCategoryId = ref(null);
@@ -67,7 +69,10 @@ const optionName = ref("");
 const handleCategoryChange = (value) => {
   selectedCategoryId.value = value;
   selectedCategory.value = findCategoryById(props.categories, value);
+  idUpdate(selectedCategoryId.value);
 };
+
+
 
 const onAddOption = () => {
   isAdding.value = true;
@@ -143,15 +148,22 @@ const handleAddCategory = (newCategory) => {
   emits("add-category", newCategory); // 冒泡事件到父组件
 };
 
-const emits = defineEmits(["add-category"]);
+const idUpdate = (newId) => {
+  emits("id-change",newId)
+};
+
+const emits = defineEmits(["add-category","id-change"]);
 
 watch(
   () => props.categories,
   (newCategories) => {
+    //处理只有单个分类情况
     if (newCategories && newCategories.length === 1) {
       selectedCategoryId.value = newCategories[0].id;
       selectedCategory.value = newCategories[0];
+      idUpdate(selectedCategoryId.value);
     }
+    //数据更新时，更新分类显示
     if (selectedCategoryId.value) {
       selectedCategory.value = findCategoryById(
         newCategories,
