@@ -2,8 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KeyBlog.Data.Models.DTOs;
 
-public class PostCreation
+public class PostDto
 {
+    public string? Id { get; set; }
     public string? Title { get; set; }
 
     public bool IsPublish { get; set; }
@@ -14,9 +15,9 @@ public class PostCreation
     public string? Content { get; set; }
 
     public DateTime CreationTime { get; set; }
-    /// <summary>
-    /// 分类ID
-    /// </summary>
+
+    public DateTime LastUpdateTime { get; set; }
+
     public int CategoryId { get; set; }
 
 }

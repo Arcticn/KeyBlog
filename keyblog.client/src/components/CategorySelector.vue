@@ -13,7 +13,7 @@
       <el-option
         v-for="category in categories"
         :key="category.id"
-        :label="category.label"
+        :label="category.name"
         :value="category.id"
       />
       <template #footer>

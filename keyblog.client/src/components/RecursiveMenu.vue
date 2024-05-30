@@ -4,7 +4,7 @@
     :index="category.id.toString()"
     class="glass-effect"
   >
-    <template #title>{{ category.label }}</template>
+    <template #title>{{ category.name }}</template>
     <RecursiveMenu
       v-for="child in category.children"
       :key="child.id"
@@ -18,7 +18,7 @@
     class="glass-effect"
     @click="handleNodeClick(category)"
   >
-    {{ category.label }}
+    {{ category.name }}
   </el-menu-item>
 </template>
 

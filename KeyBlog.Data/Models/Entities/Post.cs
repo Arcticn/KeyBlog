@@ -70,7 +70,19 @@ public class Post
     /// <summary>
     /// 创建时间
     /// </summary>
-    public DateTime CreationTime { get; set; }
+    private static DateTime _creatime;
+    public DateTime CreationTime
+    {
+        get => _creatime;
+        set
+        {
+            if (_creatime == DateTime.MinValue)
+            {
+                _creatime = value;
+                LastUpdateTime = _creatime;
+            }
+        }
+    }
 
     /// <summary>
     /// 上次更新时间
@@ -80,7 +92,9 @@ public class Post
     /// <summary>
     /// Category导航属性
     /// </summary>
+    
     public int CategoryId { get; set; }
+    [Navigate(nameof(CategoryId))]
     public Category? Category { get; set; }
 
 }

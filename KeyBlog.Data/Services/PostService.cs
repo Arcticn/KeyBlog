@@ -19,7 +19,7 @@ public class PostService
         return _postRepo.Select.ToList();
     }
 
-    public async Task<Post> GetPostById(string id)
+    public async Task<Post> GetPost(string id)
     {
         var post = await _postRepo.Select.Where(a => a.Id == id).FirstAsync();
 
@@ -29,5 +29,16 @@ public class PostService
     public async Task InsetPost(Post post)
     {
         await _postRepo.InsertAsync(post);
+    }
+
+    public async Task EditPost(Post post){
+        var tempPost=await _postRepo.Where(a=>a.Id==post.Id).FirstAsync();
+        post.Id=tempPost.Id;
+        await _postRepo.UpdateAsync(post);
+    }
+
+    public async Task DeletePost(string id)
+    {
+        await _postRepo.DeleteAsync(a => a.Id == id);
     }
 }

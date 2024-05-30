@@ -71,7 +71,11 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { MdEditor } from "md-editor-v3";
-import { ElMessage } from "element-plus";
+import {
+  SuccessMessage,
+  ErrorMessage,
+  WarningMessage,
+} from "@/composables/PopupMessage.vue";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
 import { useDarkMode } from "../composables/useDarkMode";
@@ -99,9 +103,8 @@ const updateCategories = async (newCategories) => {
   try {
     console.log("newCategory:", newCategories);
     const response = await axios.post("/api/blog/addCategory", newCategories);
-    console.log("Category added successfully:", response.data);
     fetchData();
-    SuccessMessage("成功添加分类");
+    SuccessMessage("成功添加分类", response.data);
   } catch (error) {
     ErrorMessage("Error adding category:", error);
   }
@@ -163,33 +166,6 @@ const fetchData = async () => {
   } catch (error) {
     console.error("Error fetching data:", error);
   }
-};
-
-const WarningMessage = (newMeassage) => {
-  ElMessage({
-    message: newMeassage,
-    duration: 1500,
-    showClose: true,
-    type: "warning",
-  });
-};
-
-const SuccessMessage = (newMeassage) => {
-  ElMessage({
-    message: newMeassage,
-    duration: 1500,
-    showClose: true,
-    type: "success",
-  });
-};
-
-const ErrorMessage = (newMeassage) => {
-  ElMessage({
-    message: newMeassage,
-    duration: 1500,
-    showClose: true,
-    type: "error",
-  });
 };
 
 onMounted(() => {

@@ -21,27 +21,6 @@ public class BlogController : ControllerBase
         _categoryService = categoryService;
     }
 
-    [HttpGet("posts")]
-    public async Task<IActionResult> GetPosts([FromQuery] PostQueryParameters param, bool adminMode = false)
-    {
-        var pagedList = await _blogPostService.GetPagedList(param, adminMode);
-        if (pagedList == null)
-        {
-            return NotFound(); // 返回 HTTP 404 状态码
-        }
-        return Ok(pagedList); // 返回 HTTP 200 状态码和数据
-    }
-
-    [HttpGet("posts/{id}")]
-    public async Task<IActionResult> GetPost(string id)
-    {
-        var post = await _blogPostService.GetPostById(id);
-        if (post == null)
-        {
-            return NotFound();
-        }
-        return Ok(post);
-    }
 
     [HttpGet("lists")]
     public async Task<IActionResult> List(int categoryId = 0, int page = 1, int pageSize = 6,
@@ -61,7 +40,7 @@ public class BlogController : ControllerBase
             return BadRequest(new { message = $"Category {categoryId} is not available!" });
         }
 
-        var categoryNodes = await _categoryService.GetTreeList();
+        var categoryNodes = await _categoryService.GetNode();
         var posts = await _blogPostService.GetPagedList(new PostQueryParameters
         {
             CategoryId = categoryId,
@@ -80,60 +59,5 @@ public class BlogController : ControllerBase
             Posts = posts
         });
     }
-
-    [HttpGet("getCategories")]
-    public async Task<IActionResult> GetCategories()
-    {
-        var categoryTree = await _categoryService.GetTreeList();
-        return Ok(new
-        {
-            CategoryNodes = categoryTree
-        });
-    }
-
-    [HttpPost("addCategory")]
-    public async Task<ActionResult> AddCategory([FromBody] CategoryCreation tempCategory)
-    {
-        if (tempCategory == null)
-        {
-            return BadRequest("Category is null");
-        }
-
-        if (!await _categoryService.addCategory(tempCategory))
-        {
-            return BadRequest("Already exists the same category");
-        };
-
-        return Ok(new { message = "Catrgory added successfully" });
-    }
-
-
-    [HttpPost("savePost")]
-    public async Task<IActionResult> SavePost([FromBody] PostCreation newPost)
-    {
-        if (newPost == null || string.IsNullOrEmpty(newPost.Content))
-        {
-            return BadRequest("Content is null or empty");
-        }
-
-        // 将内容保存到数据库或文件
-        // 示例：保存到文件
-        // System.IO.File.WriteAllText("D:/123.txt", newPost.Content);
-
-
-        Post tempPost = new Post
-        {
-            Id = GuidUtils.GetGuid(),
-            Title = newPost.Title,
-            Summary = newPost.Summary,
-            IsPublish = newPost.IsPublish,
-            Content = newPost.Content,
-            CreationTime = newPost.CreationTime,
-            CategoryId = newPost.CategoryId
-        };
-
-        await _blogPostService.InsetPost(tempPost);
-
-        return Ok();
-    }
+    
 }
