@@ -96,10 +96,10 @@ public class CategoryService
         }
         else return false;
     }
-    
+
     public async Task DeleteCategory(int categoryId)
     {
-        await _cRepo.DeleteCascadeByDatabaseAsync(a=>a.Id==categoryId);
+        await _cRepo.DeleteCascadeByDatabaseAsync(a => a.Id == categoryId);
     }
 
 }

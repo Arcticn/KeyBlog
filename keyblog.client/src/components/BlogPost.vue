@@ -63,7 +63,7 @@ const props = defineProps({
 
 const fetchAndRenderContent = async () => {
   try {
-    const response = await axios.get(`/api/Blog/posts/${props.id}`);
+    const response = await axios.get(`/api/Post/posts/${props.id}`);
     const postData = response.data;
     markdownContent.value = postData.content;
   } catch (error) {

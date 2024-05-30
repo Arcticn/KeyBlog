@@ -33,7 +33,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("posts/{id}")]
-    public async Task<IActionResult> GetPost(string id)
+    public async Task<IActionResult> GetPost([FromRoute]string id)
     {
         var post = await _blogPostService.GetPost(id);
         if (post == null)

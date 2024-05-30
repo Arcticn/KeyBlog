@@ -8,7 +8,10 @@
     >
       <el-menu-item index="/" @click="pushUrl('/')"><el-icon><HomeFilled /></el-icon>主页</el-menu-item>
       <el-menu-item index="/editor" @click="pushUrl('/editor')"
-        ><el-icon><EditPen /></el-icon>在线编辑</el-menu-item
+        ><el-icon><EditPen /></el-icon>在线书写</el-menu-item
+      >
+      <el-menu-item index="/manage" @click="pushUrl('/manage')"
+        >管理</el-menu-item
       >
       <el-menu-item index="/about" @click="pushUrl('/about')"
         >关于</el-menu-item

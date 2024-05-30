@@ -71,11 +71,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { MdEditor } from "md-editor-v3";
-import {
-  SuccessMessage,
-  ErrorMessage,
-  WarningMessage,
-} from "@/composables/PopupMessage.vue";
+import { WarningMessage, SuccessMessage, ErrorMessage } from "@/composables/PopupMessage.js";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
 import { useDarkMode } from "../composables/useDarkMode";
@@ -102,7 +98,7 @@ const updateCategoryId = async (newId) => {
 const updateCategories = async (newCategories) => {
   try {
     console.log("newCategory:", newCategories);
-    const response = await axios.post("/api/blog/addCategory", newCategories);
+    const response = await axios.post("/api/Category/addCategory", newCategories);
     fetchData();
     SuccessMessage("成功添加分类", response.data);
   } catch (error) {
@@ -146,7 +142,7 @@ const onSave = async () => {
 
 const saveRemote = async (newPost) => {
   try {
-    const response = await axios.post("/api/blog/savePost", newPost);
+    const response = await axios.post("/api/Post/savePost", newPost);
     SuccessMessage("Content saved successfully:", response.data);
   } catch (error) {
     ErrorMessage("Error saving content:", error);
@@ -159,7 +155,7 @@ const saveLocal = (newPost) => {
 
 const fetchData = async () => {
   try {
-    const response = await axios.get("/api/blog/getCategories");
+    const response = await axios.get("/api/Category/getCategories");
     const data = response.data;
     categories.value = data.categoryNodes;
     console.log(categories);
