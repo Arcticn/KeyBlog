@@ -17,18 +17,8 @@ public static class StringExt
         return str.Length <= length ? str : $"{str[..length]}...";
     }
 
-    public static string ToSHA256(this string source)
+    public static string ToSM3Hash(this string source)
     {
-        return HashUtils.ComputeSHA256Hash(source);
-    }
-
-    public static string ToSHA384(this string source)
-    {
-        return HashUtils.ComputeSHA384Hash(source);
-    }
-
-    public static string ToSHA512(this string source)
-    {
-        return HashUtils.ComputeSHA512Hash(source);
+        return SM3Hash.ComputeHash(source);
     }
 }

@@ -1,6 +1,7 @@
 using KeyBlog.Data.Models.DTOs;
 using KeyBlog.Data.Services;
 using KeyBlog.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -27,22 +28,24 @@ public class CategoryController : ControllerBase
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("addCategory")]
     public async Task<IActionResult> AddCategory([FromBody] CategoryCreation tempCategory)
     {
         if (tempCategory == null)
         {
-            return BadRequest("Category is null");
+            return BadRequest("类别为空");
         }
 
         if (!await _categoryService.AddCategory(tempCategory))
         {
-            return BadRequest("Already exists the same category");
+            return BadRequest("已经存在相同的类");
         };
 
-        return Ok(new { message = "Catrgory added successfully" });
+        return Ok(new { message = "成功添加分类" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("editCategory")]
     public async Task<IActionResult> EditCategory(int id, string name)
     {
@@ -50,6 +53,7 @@ public class CategoryController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("deleteCategory")]
     public async Task<IActionResult> DeleteCategory(int id){
         await _categoryService.DeleteCategory(id);

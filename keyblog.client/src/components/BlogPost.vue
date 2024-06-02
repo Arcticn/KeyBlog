@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import api from '@/services/api';
 import { MdPreview, MdCatalog } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
@@ -63,7 +63,7 @@ const props = defineProps({
 
 const fetchAndRenderContent = async () => {
   try {
-    const response = await axios.get(`/api/Post/posts/${props.id}`);
+    const response = await api.get(`/api/Post/posts/${props.id}`);
     const postData = response.data;
     markdownContent.value = postData.content;
   } catch (error) {

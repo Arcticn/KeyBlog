@@ -56,9 +56,20 @@ public class Post
         }
         set
         {
-            _summary = value != null ? value.Limit(100) :
-            (Content != null ? Markdig.Markdown.ToPlainText(Content).Limit(100) : "");
+            if (!string.IsNullOrEmpty(value))
+            {
+                _summary = value.Limit(100);
+            }
+            else if (Content != null)
+            {
+                _summary = Markdig.Markdown.ToPlainText(Content).Limit(100);
+            }
+            else
+            {
+                _summary = "";
+            }
         }
+
     }
 
     /// <summary>
@@ -92,7 +103,7 @@ public class Post
     /// <summary>
     /// Category导航属性
     /// </summary>
-    
+
     public int CategoryId { get; set; }
     [Navigate(nameof(CategoryId))]
     public Category? Category { get; set; }

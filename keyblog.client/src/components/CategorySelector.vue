@@ -45,6 +45,7 @@
     <template v-if="selectedCategory && selectedCategory.children">
       <CategorySelector
         :categories="selectedCategory.children"
+        :incomingCategoryId="incomingCategoryId"
         @add-category="handleAddCategory"
         @id-change="idUpdate"
       />
@@ -58,7 +59,8 @@ import { ref, watch, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 
 const props = defineProps({
-  categories: Array
+  categories: Array,
+  incomingCategoryId: Number,
 });
 
 const selectedCategoryId = ref(null);
@@ -71,8 +73,6 @@ const handleCategoryChange = (value) => {
   selectedCategory.value = findCategoryById(props.categories, value);
   idUpdate(selectedCategoryId.value);
 };
-
-
 
 const onAddOption = () => {
   isAdding.value = true;
@@ -149,14 +149,47 @@ const handleAddCategory = (newCategory) => {
 };
 
 const idUpdate = (newId) => {
-  emits("id-change",newId)
+  emits("id-change", newId);
 };
 
-const emits = defineEmits(["add-category","id-change"]);
+const emits = defineEmits(["add-category", "id-change"]);
+
+const findCurrentCategoryId = (categories, id) => {
+  for (const category of categories) {
+    if (category.id === id) {
+      return category.id;
+    }
+    if (category.children) {
+      const found = findCurrentCategoryId(category.children, id);
+      if (found) {
+        return category.id;
+      }
+    }
+  }
+  return null;
+};
+
+watch(
+  () => props.incomingCategoryId,
+  async (newId, oldId) => {
+    if (newId !== oldId && newId !== null) {
+      selectedCategoryId.value = findCurrentCategoryId(props.categories, newId);
+      handleCategoryChange(selectedCategoryId.value);
+    }
+  },
+  { immediate: true }
+);
 
 watch(
   () => props.categories,
   (newCategories) => {
+    if (props.incomingCategoryId) {
+      selectedCategoryId.value = findCurrentCategoryId(
+        newCategories,
+        props.incomingCategoryId
+      );
+      handleCategoryChange(selectedCategoryId.value);
+    }
     //处理只有单个分类情况
     if (newCategories && newCategories.length === 1) {
       selectedCategoryId.value = newCategories[0].id;

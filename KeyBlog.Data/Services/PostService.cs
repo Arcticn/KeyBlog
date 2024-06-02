@@ -31,9 +31,11 @@ public class PostService
         await _postRepo.InsertAsync(post);
     }
 
-    public async Task EditPost(Post post){
-        var tempPost=await _postRepo.Where(a=>a.Id==post.Id).FirstAsync();
-        post.Id=tempPost.Id;
+    public async Task EditPost(Post post)
+    {
+        var tempPost = await _postRepo.Where(a => a.Id == post.Id).FirstAsync();
+        post.Id = tempPost.Id;
+        post.Summary = null;
         await _postRepo.UpdateAsync(post);
     }
 

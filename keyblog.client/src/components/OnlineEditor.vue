@@ -54,6 +54,7 @@
             <span>文章分类：</span>
             <CategorySelector
               :categories="categories"
+              :incomingCategoryId="incomingCategoryId"
               @add-category="updateCategories"
               @id-change="updateCategoryId"
             />
@@ -69,9 +70,14 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import api from '@/services/api';
 import { MdEditor } from "md-editor-v3";
-import { WarningMessage, SuccessMessage, ErrorMessage } from "@/composables/PopupMessage.js";
+import { useRoute } from "vue-router";
+import {
+  WarningMessage,
+  SuccessMessage,
+  ErrorMessage,
+} from "@/composables/PopupMessage.js";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
 import { useDarkMode } from "../composables/useDarkMode";
@@ -79,12 +85,17 @@ import CategorySelector from "./CategorySelector.vue";
 
 const defaultDateTime = new Date();
 
+const blogId = ref(null);
 const text = ref("Hello Editor!");
 const inputTitle = ref("");
 const publishState = ref(false);
 const selectedCategoryId = ref(null);
 const time = ref(defaultDateTime);
 const saveMethod = ref("true");
+const route = useRoute();
+
+const incomingId = ref(null);
+const incomingCategoryId = ref(null);
 
 const { theme } = useDarkMode();
 
@@ -98,7 +109,10 @@ const updateCategoryId = async (newId) => {
 const updateCategories = async (newCategories) => {
   try {
     console.log("newCategory:", newCategories);
-    const response = await axios.post("/api/Category/addCategory", newCategories);
+    const response = await api.post(
+      "Category/addCategory",
+      newCategories
+    );
     fetchData();
     SuccessMessage("成功添加分类", response.data);
   } catch (error) {
@@ -125,7 +139,9 @@ const onSave = async () => {
     WarningMessage("请选择发布时间");
     return;
   }
+
   const newPost = {
+    Id: null,
     Title: inputTitle.value,
     Content: text.value,
     CategoryId: selectedCategoryId.value,
@@ -133,6 +149,10 @@ const onSave = async () => {
     CreationTime: time.value,
     IsPublish: publishState.value,
   };
+  if (incomingId.value) {
+    newPost.Id = incomingId.value;
+  }
+
   if (saveMethod.value === "true") {
     saveRemote(newPost);
   } else {
@@ -142,7 +162,7 @@ const onSave = async () => {
 
 const saveRemote = async (newPost) => {
   try {
-    const response = await axios.post("/api/Post/savePost", newPost);
+    const response = await api.post("Post/savePost", newPost);
     SuccessMessage("Content saved successfully:", response.data);
   } catch (error) {
     ErrorMessage("Error saving content:", error);
@@ -155,7 +175,7 @@ const saveLocal = (newPost) => {
 
 const fetchData = async () => {
   try {
-    const response = await axios.get("/api/Category/getCategories");
+    const response = await api.get("Category/getCategories");
     const data = response.data;
     categories.value = data.categoryNodes;
     console.log(categories);
@@ -164,8 +184,27 @@ const fetchData = async () => {
   }
 };
 
+const fetchPost = async () => {
+  try {
+    const response = await api.get(`Post/posts/${blogId.value}`);
+    const postData = response.data;
+    incomingId.value = postData.id;
+    inputTitle.value = postData.title;
+    text.value = postData.content;
+    incomingCategoryId.value = postData.categoryId;
+    time.value = postData.creationTime;
+    publishState.value = postData.isPublish;
+  } catch (error) {
+    console.error("Error fetching post data:", error);
+  }
+};
+
 onMounted(() => {
   fetchData();
+  blogId.value = route.query.id;
+  if (blogId.value) {
+    fetchPost();
+  }
 });
 </script>
 

@@ -1,4 +1,5 @@
 ﻿using KeyBlog.Data;
+using KeyBlog.Data.Extensions;
 using KeyBlog.Data.Models.Entities;
 using KeyBlog.Data.Services;
 using KeyBlog.Data.Utils;
@@ -22,6 +23,9 @@ foreach (var filename in removeFileList.Where(File.Exists))
 var freeSql = FreeSqlFactory.Create("Data Source=app.db;Synchronous=Off;Cache Size=5000;");
 var postRepo = freeSql.GetRepository<Post>();
 var categoryRepo = freeSql.GetRepository<Category>();
+var userRepo = freeSql.GetRepository<User>();
+userRepo.Insert(new User { Username = "admin", PasswordHash = "admin".ToSM3Hash(), IsAdmin = true });
+
 CategoryService categoryService = new(categoryRepo);
 
 // 数据导入

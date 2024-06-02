@@ -1,75 +1,75 @@
 <template>
   <BaseHeader />
-  <el-table
-    :data="categoryNodes"
-    style="margin-bottom: 20px; margin: 2rem"
-    row-key="id"
-    @row-click="fetchPosts"
-  >
-    <el-table-column prop="name" label="分类名称" sortable />
-    <el-table-column label="操作">
-      <template #default="scope">
-        <el-button
-          size="small"
-          type="info"
-          @click="handleCategoryCreate(scope.row)"
-        >
-          新增子类
-        </el-button>
-        <el-button
-          size="small"
-          type="primary"
-          @click="handleCategoryEdit(scope.row)"
-        >
-          编辑
-        </el-button>
-        <el-button
-          size="small"
-          type="danger"
-          @click="handleCategoryDelete(scope.row)"
-        >
-          删除
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  <el-table
-    :data="posts"
-    style="margin-bottom: 20px; margin: 2rem"
-    row-key="id"
-  >
-    <el-table-column prop="title" label="博客名称" sortable />
-    <el-table-column label="操作">
-      <template #default="scope">
-        <el-button
-          size="small"
-          type="info"
-          @click="handleCategoryCreate(scope.row)"
-        >
-          新增子类
-        </el-button>
-        <el-button
-          size="small"
-          type="primary"
-          @click="handleCategoryEdit(scope.row)"
-        >
-          编辑
-        </el-button>
-        <el-button
-          size="small"
-          type="danger"
-          @click="handleCategoryDelete(scope.row)"
-        >
-          删除
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <el-main style="padding: 3rem">
+    <el-card class="glass-effect" style="margin-bottom: 2rem;max-width: fit-content">
+      <el-table
+        :data="categoryNodes"
+        style="width: 30rem"
+        row-key="id"
+        @row-click="updateRow"
+      >
+        <el-table-column prop="name" label="分类名称" width="180" sortable />
+        <el-table-column label="操作">
+          <template #default="scope">
+            <el-button
+              size="small"
+              type="info"
+              @click="handleCategoryCreate(scope.row)"
+            >
+              新增子类
+            </el-button>
+            <el-button
+              size="small"
+              type="primary"
+              @click="handleCategoryEdit(scope.row)"
+            >
+              编辑
+            </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              @click="handleCategoryDelete(scope.row)"
+            >
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+    <el-card class="glass-effect" style="margin-bottom: 2rem;max-width: fit-content">
+      <el-table
+        :data="posts"
+        style="max-width: 30rem"
+        row-key="id"
+      >
+        <el-table-column prop="title" label="博客名称" sortable />
+        <el-table-column label="操作">
+          <template #default="scope1">
+            <el-button
+              size="small"
+              type="primary"
+              @click="handlePostEdit(scope1.row)"
+            >
+              编辑
+            </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              @click="handlePostDelete(scope1.row)"
+            >
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+  </el-main>
 </template>
 
 <script setup>
-import axios from "axios";
-import { onMounted, ref, watch } from "vue";
+import api from "@/services/api";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import BaseHeader from "./layouts/BaseHeader.vue";
 import {
@@ -78,10 +78,12 @@ import {
   ErrorMessage,
 } from "@/composables/PopupMessage.js";
 
+const categoryRow = ref(null);
 const categoryNodes = ref(null);
 const editName = ref(null);
 const newName = ref(null);
 const posts = ref(null);
+const router = useRouter();
 
 const handleCategoryCreate = async (row) => {
   newName.value = (
@@ -98,7 +100,7 @@ const handleCategoryCreate = async (row) => {
   };
 
   try {
-    const response = await axios.post("/api/Category/addCategory", newCategory);
+    const response = await api.post("Category/addCategory", newCategory);
     fetchData();
     SuccessMessage("新增成功", response.data.message);
   } catch (error) {
@@ -115,7 +117,7 @@ const handleCategoryEdit = async (row) => {
   ).value;
   console.log(row.id);
   try {
-    const response = await axios.put("/api/Category/editCategory", null, {
+    const response = await api.put("Category/editCategory", null, {
       params: {
         id: row.id,
         name: editName.value,
@@ -137,7 +139,7 @@ const handleCategoryDelete = async (row) => {
     .then(async () => {
       try {
         console.log(row.id);
-        const response = await axios.delete("/api/Category/deleteCategory", {
+        const response = await api.delete("Category/deleteCategory", {
           params: {
             id: row.id,
           },
@@ -156,13 +158,56 @@ const handleCategoryDelete = async (row) => {
     });
 };
 
-const fetchPosts = async (row) => {
+const handlePostEdit = async (row) => {
+  router.push({
+    path: "/editor",
+    query: {
+      id: row.id,
+    },
+  });
+};
+
+const handlePostDelete = async (row) => {
+  ElMessageBox.confirm("是否删除该帖子？", "警告", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      try {
+        const response = await api.delete("Post/deletePost", {
+          params: {
+            id: row.id,
+          },
+        });
+        fetchPosts();
+        SuccessMessage("删除成功", response.data.message);
+      } catch (error) {
+        ErrorMessage(error);
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "Delete canceled",
+      });
+    });
+};
+
+const updateRow = (row) => {
+  categoryRow.value = row;
+  fetchPosts();
+};
+
+const fetchPosts = async () => {
+  console.log(categoryRow.value);
   try {
-    const response = await axios.get("/api/Blog/lists", {
+    const response = await api.get("Blog/lists", {
       params: {
-        categoryId: row.id,
+        categoryId: categoryRow.value.id,
         page: 1,
         pageSize: 999,
+        adminMode: true,
       },
     });
     posts.value = response.data.posts.items;
@@ -173,7 +218,7 @@ const fetchPosts = async (row) => {
 
 const fetchData = async () => {
   try {
-    const response = await axios.get("/api/Category/getCategories");
+    const response = await api.get("Category/getCategories");
     const data = response.data;
     categoryNodes.value = data.categoryNodes;
     // console.log(categoryNodes);

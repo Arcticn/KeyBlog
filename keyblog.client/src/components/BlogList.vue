@@ -8,13 +8,14 @@
         :currentPage="currentPage"
         :pageSize="pageSize"
         @update:currentPage="handlePageChange"
-
         @view-post="viewPost"
       />
     </el-main>
     <el-aside id="categoryNodes" style="margin-right: 8rem">
       <el-affix :offset="100">
+        <UserCard />
         <CategoryTree
+          style="margin-top: 1rem"
           :categories="categoryNodes"
           :currentCategoryId="currentCategoryId"
           @node-click="handleNodeClick"
@@ -30,8 +31,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import api from '@/services/api';
 import PostList from "./PostList.vue";
+import UserCard from "./UserCard.vue";
 import CategoryTree from "./CategoryTree.vue";
 import "element-plus/theme-chalk/display.css";
 import "@/components/styles/style.scss";
@@ -46,7 +48,7 @@ const router = useRouter();
 
 const fetchData = async (categoryId = 0, page = 1) => {
   try {
-    const response = await axios.get("/api/Blog/lists", {
+    const response = await api.get("Blog/lists", {
       params: {
         categoryId,
         page,

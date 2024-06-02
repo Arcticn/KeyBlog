@@ -4,6 +4,7 @@ using KeyBlog.Data.Services;
 using KeyBlog.Data.Utils;
 using KeyBlog.Server.Services;
 using KeyBlog.Server.Services.QueryFilters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -33,7 +34,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("posts/{id}")]
-    public async Task<IActionResult> GetPost([FromRoute]string id)
+    public async Task<IActionResult> GetPost([FromRoute] string id)
     {
         var post = await _blogPostService.GetPost(id);
         if (post == null)
@@ -43,13 +44,13 @@ public class PostController : ControllerBase
         return Ok(post);
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpPost("savePost")]
     public async Task<IActionResult> SavePost([FromBody] PostDto newPost)
     {
         if (newPost == null || string.IsNullOrEmpty(newPost.Content))
         {
-            return BadRequest("Content is null or empty");
+            return BadRequest("内容为空");
         }
 
         Post tempPost = new Post
@@ -63,17 +64,27 @@ public class PostController : ControllerBase
             CategoryId = newPost.CategoryId
         };
 
-        await _blogPostService.InsetPost(tempPost);
+        if (newPost.Id == null)
+        {
+            await _blogPostService.InsetPost(tempPost);
+        }
+        else
+        {
+            tempPost.Id = newPost.Id;
+            tempPost.LastUpdateTime = DateTime.Now;
+            await _blogPostService.EditPost(tempPost);
+        }
 
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("updatePost")]
     public async Task<IActionResult> UpdatePost([FromBody] PostDto post)
     {
         if (post == null || string.IsNullOrEmpty(post.Content))
         {
-            return BadRequest("Content is null or empty");
+            return BadRequest("内容为空");
         }
 
         Post tempPost = new Post
@@ -93,12 +104,13 @@ public class PostController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("deletePost")]
     public async Task<IActionResult> DeletePost(string id)
     {
         if (string.IsNullOrEmpty(id))
         {
-            return BadRequest("Id is null or empty");
+            return BadRequest("id为空");
         }
 
         await _blogPostService.DeletePost(id);

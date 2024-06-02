@@ -1,4 +1,3 @@
-
 <template>
   <el-affix :offset="0">
     <el-menu
@@ -6,11 +5,13 @@
       class="el-menu glass-effect"
       mode="horizontal"
     >
-      <el-menu-item index="/" @click="pushUrl('/')"><el-icon><HomeFilled /></el-icon>主页</el-menu-item>
+      <el-menu-item index="/" @click="pushUrl('/')"
+        ><el-icon><HomeFilled /></el-icon>主页</el-menu-item
+      >
       <el-menu-item index="/editor" @click="pushUrl('/editor')"
         ><el-icon><EditPen /></el-icon>在线书写</el-menu-item
       >
-      <el-menu-item index="/manage" @click="pushUrl('/manage')"
+      <el-menu-item v-if="isAdmin" index="/manage" @click="pushUrl('/manage')"
         >管理</el-menu-item
       >
       <el-menu-item index="/about" @click="pushUrl('/about')"
@@ -23,7 +24,6 @@
           active-text="暗"
           inactive-text="亮"
         />
-
       </el-menu-item>
     </el-menu>
   </el-affix>
@@ -31,9 +31,9 @@
 
 <script setup>
 import { useRouter, useRoute } from "vue-router";
-import { ref, watch } from "vue";
-import { useDarkMode} from "@/composables/useDarkMode";
-import "@/components/styles/glass.scss"
+import { onMounted, ref, watch } from "vue";
+import { useDarkMode } from "@/composables/useDarkMode";
+import "@/components/styles/glass.scss";
 
 const route = useRoute();
 const activeIndex = ref(route.path);
@@ -56,9 +56,17 @@ watch(
   }
 );
 
+const isAdmin = ref(false);
 
+onMounted(() => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (currentUser && currentUser.isAdmin === true) {
+    isAdmin.value = true;
+  }
+  else {
+    isAdmin.value = false;
+  }
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

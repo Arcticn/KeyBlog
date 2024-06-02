@@ -24,7 +24,7 @@ public class BlogController : ControllerBase
 
     [HttpGet("lists")]
     public async Task<IActionResult> List(int categoryId = 0, int page = 1, int pageSize = 6,
-             string sortType = "asc", string sortBy = "CreationTime")
+             string sortType = "asc", string sortBy = "CreationTime", bool adminMode = false)
     {
         var currentCategory = categoryId == 0
             ? new Category { Id = 0, Name = "All" }
@@ -47,7 +47,7 @@ public class BlogController : ControllerBase
             Page = page,
             PageSize = pageSize,
             SortBy = sortType == "desc" ? $"-{sortBy}" : sortBy
-        });
+        }, adminMode);
 
         return Ok(new
         {
@@ -59,5 +59,5 @@ public class BlogController : ControllerBase
             Posts = posts
         });
     }
-    
+
 }
