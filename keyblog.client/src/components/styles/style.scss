@@ -1,7 +1,6 @@
 .mb-3 {
-    margin-left: 8rem;
-    margin-right: 2rem;
-    margin-bottom: 1.5rem;
+    margin: 1rem;
+    margin-bottom: 1.7rem;
     text-align: center;
 }
 
@@ -14,8 +13,14 @@
 .card-title {
     font-size: 1.25rem;
     font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .card-text {
+    text-indent:2em;
     margin-bottom: 1rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    text-align: left;
 }

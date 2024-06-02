@@ -1,5 +1,6 @@
 ﻿using KeyBlog.Data;
 using KeyBlog.Data.Extensions;
+using KeyBlog.Data.Models.DTOs;
 using KeyBlog.Data.Models.Entities;
 using KeyBlog.Data.Services;
 using KeyBlog.Data.Utils;
@@ -109,7 +110,7 @@ void WalkDirectoryTree(DirectoryInfo root)
             reader.Close();
 
             // 保存文章
-            var post = new Post
+            var localPost = new LocalPost
             {
                 Id = GuidUtils.GetGuid(),
                 Status = "已发布",
@@ -124,16 +125,26 @@ void WalkDirectoryTree(DirectoryInfo root)
             };
 
 
-            var processor = new PostProcessor(importDir, assetsPath, post);
+            var processor = new PostProcessor(importDir, assetsPath, localPost);
 
             // 处理文章标题和状态
             processor.InflateStatusTitle();
 
             // 处理文章正文内容
             // 导入文章的时候一并导入文章里的图片，并对图片相对路径做替换操作
-            post.Content = processor.MarkdownParse();
+            localPost.Content = processor.MarkdownParse();
 
-            postRepo.Insert(post);
+            postRepo.Insert(new Post
+            {
+                Id = localPost.Id,
+                Title = localPost.Title,
+                IsPublish = localPost.IsPublish,
+                Content = localPost.Content,
+                Summary = localPost.Summary,
+                CreationTime = localPost.CreationTime,
+                LastUpdateTime = localPost.LastUpdateTime,
+                CategoryId = localPost.CategoryId
+            });
         }
     }
 

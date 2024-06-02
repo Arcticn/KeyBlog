@@ -1,68 +1,89 @@
 <template>
   <BaseHeader />
-  <el-main style="padding: 3rem">
-    <el-card class="glass-effect" style="margin-bottom: 2rem;max-width: fit-content">
-      <el-table
-        :data="categoryNodes"
-        style="width: 30rem"
-        row-key="id"
-        @row-click="updateRow"
-      >
-        <el-table-column prop="name" label="分类名称" width="180" sortable />
-        <el-table-column label="操作">
-          <template #default="scope">
-            <el-button
-              size="small"
-              type="info"
-              @click="handleCategoryCreate(scope.row)"
-            >
-              新增子类
-            </el-button>
-            <el-button
-              size="small"
-              type="primary"
-              @click="handleCategoryEdit(scope.row)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click="handleCategoryDelete(scope.row)"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
-    <el-card class="glass-effect" style="margin-bottom: 2rem;max-width: fit-content">
-      <el-table
-        :data="posts"
-        style="max-width: 30rem"
-        row-key="id"
-      >
-        <el-table-column prop="title" label="博客名称" sortable />
-        <el-table-column label="操作">
-          <template #default="scope1">
-            <el-button
-              size="small"
-              type="primary"
-              @click="handlePostEdit(scope1.row)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click="handlePostDelete(scope1.row)"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+  <el-main
+    style="
+      padding: 3rem;
+      display: flex;
+      justify-content: flex-start;
+      flex-flow: row wrap;
+    "
+  >
+    <el-table
+      class="glass-effect"
+      ref="categoryTable"
+      :data="categoryNodes"
+      style="
+        margin-bottom: 2rem;
+        margin-right: 4rem;
+        height: fit-content;
+        width: fit-content;
+      "
+      row-key="id"
+      @row-click="updateRow"
+    >
+      <el-table-column prop="name" label="分类名称" width="300" sortable />
+      <el-table-column label="操作" width="230">
+        <template #default="scope">
+          <el-button
+            size="small"
+            type="info"
+            @click="handleCategoryCreate(scope.row)"
+          >
+            新增子类
+          </el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="handleCategoryEdit(scope.row)"
+          >
+            编辑
+          </el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="handleCategoryDelete(scope.row)"
+          >
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-table
+      v-if="posts && posts.length > 0"
+      class="glass-effect"
+      :data="posts"
+      style="margin-bottom: 2rem; height: fit-content; width: fit-content"
+      row-key="id"
+    >
+      <el-table-column prop="title" label="博客名称" width="300" sortable />
+      <el-table-column prop="isPublish" :formatter="formatPublish" label="状态" width="100" sortable />
+      <el-table-column
+        prop="lastUpdateTime"
+        :formatter="formatDate1"
+        label="最后修改时间"
+        width="200"
+        sortable
+      />
+      <el-table-column label="操作" width="230">
+        <template #default="scope1">
+          <el-button
+            size="small"
+            type="primary"
+            @click="handlePostEdit(scope1.row)"
+          >
+            编辑
+          </el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="handlePostDelete(scope1.row)"
+          >
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- </el-card> -->
   </el-main>
 </template>
 
@@ -70,13 +91,14 @@
 import api from "@/services/api";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox, formatter } from "element-plus";
 import BaseHeader from "./layouts/BaseHeader.vue";
 import {
   WarningMessage,
   SuccessMessage,
   ErrorMessage,
 } from "@/composables/PopupMessage.js";
+import { formatDate } from "@vueuse/core";
 
 const categoryRow = ref(null);
 const categoryNodes = ref(null);
@@ -84,6 +106,17 @@ const editName = ref(null);
 const newName = ref(null);
 const posts = ref(null);
 const router = useRouter();
+const categoryTable = ref(null);
+
+const formatDate1 = (row, column, cellValue) => {
+  if (!cellValue) return '';
+  const date = new Date(cellValue);
+  return date.toLocaleString(); // 自定义格式化方式
+};
+
+const formatPublish = (row,column,cellValue) => {
+  return cellValue ? "已发布" : "未发布";
+};
 
 const handleCategoryCreate = async (row) => {
   newName.value = (
@@ -195,6 +228,7 @@ const handlePostDelete = async (row) => {
 };
 
 const updateRow = (row) => {
+  categoryTable.value.toggleRowExpansion(row);
   categoryRow.value = row;
   fetchPosts();
 };

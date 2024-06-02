@@ -62,11 +62,11 @@ onMounted(() => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (currentUser && currentUser.isAdmin === true) {
     isAdmin.value = true;
-  }
-  else {
+  } else {
     isAdmin.value = false;
   }
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

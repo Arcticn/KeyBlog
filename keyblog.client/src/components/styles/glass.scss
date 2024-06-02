@@ -1,30 +1,55 @@
 /* 适应深色模式的毛玻璃效果 */
 :root {
-    --glass-bg-light: rgba(255, 255, 255, 0.2);
-    --glass-bg-dark: rgba(0, 0, 0, 0.8);
-    --glass-border-light: rgba(255, 255, 255, 0.3);
+    --glass-bg-light: rgba(255, 255, 255, 0.3);
+    --glass-bg-dark: rgba(0, 0, 0, 0.7);
+    --glass-border-light: rgba(255, 255, 255, 0.4);
     --glass-border-dark: rgba(0, 0, 0, 0.1);
-    --glass-increa-light:rgba(255,255,255,0.2);//由于渲染会重叠，单独设置增量
-    --glass-increa-dark:rgba(0, 0, 0, 0.1);
+    --glass-increa-light: rgba(255, 255, 255, 0.2); //由于渲染会重叠，单独设置增量
+    --glass-increa-dark: rgba(0, 0, 0, 0.1);
 }
 
 .el-card.glass-effect {
+    border-radius: 6px;
     transition: background-color 0.5s ease, box-shadow 0.5s ease;
-    background: var(--glass-bg-light) ;
+    background-color: var(--glass-bg-light);
     /* 半透明背景 */
-    backdrop-filter: blur(8px)   !important;
+    backdrop-filter: blur(8px) !important;
     /* 毛玻璃效果 */
     border: 1px solid var(--glass-border-light) !important;
-    /* 边框 */
+
 }
 
 .el-card.glass-effect:hover {
-    background-color: rgba(255, 255, 255, 0.85); /* 悬浮时的背景颜色 */
-    box-shadow: var(--el-box-shadow-dark); /* 悬浮时的阴影效果 */
-  }
+    background-color: rgba(255, 255, 255, 0.85);
+    /* 悬浮时的背景颜色 */
+    box-shadow: var(--el-box-shadow-dark);
+    /* 悬浮时的阴影效果 */
+}
 
-.el-menu.glass-effect{
-    background: var(--glass-bg-light) !important;
+.el-table.glass-effect {
+    border-radius: 6px;
+    --el-table-header-bg-color: rgba(255, 255, 255, 0.6);
+    --el-table-tr-bg-color: var(--glass-bg-light);
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+    background-color: var(--glass-bg-light);
+    /* 半透明背景 */
+    backdrop-filter: blur(8px) !important;
+    /* 毛玻璃效果 */
+    box-shadow: var(--el-box-shadow);
+    border: 1px solid var(--glass-border-light) !important;
+
+}
+
+.el-table.glass-effect:hover {
+    background-color: rgba(255, 255, 255, 0.85);
+    /* 悬浮时的背景颜色 */
+    box-shadow: var(--el-box-shadow-dark);
+    /* 悬浮时的阴影效果 */
+}
+
+.el-menu.glass-effect {
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+    background-color: var(--glass-bg-light) !important;
     /* 半透明背景 */
     backdrop-filter: blur(8px) !important;
     /* 毛玻璃效果 */
@@ -32,15 +57,26 @@
     box-shadow: var(--el-box-shadow);
 }
 
-.el-menu.glass-effect .el-menu-item{
-    border: 1px solid var(--glass-bg-light) !important;
-    background: var(--glass-increa-light) !important;
-    /* 半透明背景 */
+.el-menu.glass-effect:hover {
+    box-shadow: var(--el-box-shadow-dark);
+}
 
+.el-menu.glass-effect .el-menu-item {
+    border: 1px solid var(--glass-bg-light) !important;
+    // background-color: var(--glass-increa-light) !important;
+    /* 半透明背景 */
+}
+
+.el-menu.glass-effect .el-menu-item:hover {
+    background-color: var(--el-color-primary-light-9) !important;
+}
+
+.el-menu.glass-effect .el-sub-menu__title:hover{
+    background-color: var(--el-color-primary-light-8) !important;
 }
 
 .el-menu.glass-effect ul {
-    background: var(--glass-increa-light) !important;
+    background-color: var(--glass-increa-light) !important;
     /* 半透明背景 */
     backdrop-filter: blur(8px) !important;
     /* 毛玻璃效果 */
@@ -50,24 +86,63 @@
 
 html.dark {
     .el-card.glass-effect {
-        background: var(--glass-bg-dark) !important;
+        background-color: var(--glass-bg-dark) !important;
         /* 半透明背景 */
         backdrop-filter: blur(8px) !important;
+        box-shadow: var(--el-box-shadow-light);
         /* 毛玻璃效果 */
         border: 1px solid var(--glass-border-dark) !important;
-        /* 边框 */
+    }
+
+    .el-card.glass-effect:hover {
+        background-color: rgba(0, 0, 0, 0.85) !important;
+        box-shadow: var(--el-box-shadow);
+    }
+
+    .el-table.glass-effect {
+        --el-table-header-bg-color: rgba(0, 0, 0, 0.4);
+        --el-table-tr-bg-color: rgba(0, 0, 0, 0);
+        background-color: var(--glass-bg-dark);
+        border: 1px solid var(--glass-border-dark) !important;
+        box-shadow: var(--el-box-shadow-light);
+    }
+
+    .el-table.glass-effect:hover {
+        background-color: rgba(0, 0, 0, 0.77);
+        /* 悬浮时的背景颜色 */
+        box-shadow: var(--el-box-shadow);
+        /* 悬浮时的阴影效果 */
     }
 
     .el-menu.glass-effect {
-        background: var(--glass-bg-dark) !important;
+        background-color: var(--glass-bg-dark) !important;
         /* 深色模式的背景 */
         backdrop-filter: blur(8px) !important;
         border: 1px solid var(--glass-border-dark) !important;
         /* 深色模式的边框 */
+        box-shadow: var(--el-box-shadow-light);
+    }
+
+    .el-menu.glass-effect:hover {
+        box-shadow: var(--el-box-shadow);
+    }
+
+    .el-menu.glass-effect .el-menu-item {
+        border: 1px solid var(--glass-border-dark) !important;
+        background-color: var(--glass-increa-dark) !important;
+        /* 半透明背景 */
+    }
+
+    .el-menu.glass-effect .el-menu-item:hover {
+        background-color: var(--el-color-primary-light-9) !important;
+    }
+    
+    .el-menu.glass-effect .el-sub-menu__title:hover{
+        background-color: var(--el-color-primary-light-8) !important;
     }
 
     .el-menu.glass-effect ul {
-        background: var(--glass-increa-dark) !important;
+        background-color: var(--glass-increa-dark) !important;
         /* 深色模式的背景 */
         backdrop-filter: blur(8px) !important;
         border: 1px solid var(--glass-border-dark) !important;

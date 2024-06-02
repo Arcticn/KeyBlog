@@ -1,21 +1,25 @@
-﻿using FreeSql.DataAnnotations;
+using FreeSql.DataAnnotations;
 using KeyBlog.Data.Extensions;
 using System.ComponentModel.DataAnnotations;
 
-namespace KeyBlog.Data.Models.Entities;
+namespace KeyBlog.Data.Models.DTOs;
 
 /// <summary>
 /// 博客文章
 /// </summary>
-public class Post
+public class LocalPost
 {
-    [Column(IsIdentity = false, IsPrimary = true)]
     public string? Id { get; set; }
 
     /// <summary>
     /// 标题
     /// </summary>
     public string? Title { get; set; }
+
+    /// <summary>
+    /// 文章标记，提取原markdown文件的文件名前缀，用于区分文章状态，《（已发表）.*》
+    /// </summary>
+    public string? Status { get; set; }
 
     // todo 新增 tag 功能
 
@@ -40,7 +44,7 @@ public class Post
         get
         {
             return _summary ??
-            (Content != null ? Markdig.Markdown.ToPlainText(Content).Limit(200) : "");
+            (Content != null ? "    "+Markdig.Markdown.ToPlainText(Content).Limit(200) : "");
         }
         set
         {
@@ -50,7 +54,7 @@ public class Post
             }
             else if (Content != null)
             {
-                _summary = Markdig.Markdown.ToPlainText(Content).Limit(200);
+                _summary = "    "+Markdig.Markdown.ToPlainText(Content).Limit(200);
             }
             else
             {
@@ -59,6 +63,12 @@ public class Post
         }
 
     }
+
+    /// <summary>
+    /// 博客在导入前的相对路径
+    /// <para>如："系列/AspNetCore开发笔记"</para>
+    /// </summary>
+    public string? Path { get; set; }
 
     /// <summary>
     /// 创建时间
@@ -87,7 +97,5 @@ public class Post
     /// </summary>
 
     public int CategoryId { get; set; }
-    [Navigate(nameof(CategoryId))]
-    public Category? Category { get; set; }
 
 }

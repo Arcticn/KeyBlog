@@ -1,4 +1,5 @@
-﻿using KeyBlog.Data.Models.Entities;
+﻿using KeyBlog.Data.Models.DTOs;
+using KeyBlog.Data.Models.Entities;
 using KeyBlog.Data.Utils;
 using Markdig.Renderers.Normalize;
 using Markdig.Syntax;
@@ -10,13 +11,13 @@ namespace KeyBlog.Data;
 
 public class PostProcessor
 {
-    private readonly Post _post;
+    private readonly LocalPost _localPost;
     private readonly string _importPath;
     private readonly string _assetsPath;
 
-    public PostProcessor(string importPath, string assetsPath, Post post)
+    public PostProcessor(string importPath, string assetsPath, LocalPost localPost)
     {
-        _post = post;
+        _localPost = localPost;
         _assetsPath = assetsPath;
         _importPath = importPath;
     }
@@ -27,12 +28,12 @@ public class PostProcessor
     /// <returns></returns>
     public string MarkdownParse()
     {
-        if (_post.Content == null)
+        if (_localPost.Content == null)
         {
             return string.Empty;
         }
 
-        var document = Markdig.Markdown.Parse(_post.Content);
+        var document = Markdig.Markdown.Parse(_localPost.Content);
 
         foreach (var node in document.AsEnumerable())
         {
@@ -46,9 +47,9 @@ public class PostProcessor
                 if (imgUrl.StartsWith("http")) continue;
 
                 // 路径处理
-                var imgPath = Path.Combine(_importPath, _post.Path ?? "", imgUrl);
+                var imgPath = Path.Combine(_importPath, _localPost.Path ?? "", imgUrl);
                 var imgFilename = Path.GetFileName(imgUrl);
-                var destDir = Path.Combine(_assetsPath, _post.Id);
+                var destDir = Path.Combine(_assetsPath, _localPost.Id);
                 if (!Directory.Exists(destDir)) Directory.CreateDirectory(destDir);
                 var destPath = Path.Combine(destDir, imgFilename);
                 if (File.Exists(destPath))
@@ -77,39 +78,27 @@ public class PostProcessor
     }
 
     /// <summary>
-    /// 从文章正文提取前 <paramref name="length"/> 字的梗概
-    /// </summary>
-    /// <param name="length"></param>
-    /// <returns></returns>
-/*    public string GetSummary(int length)
-    {
-        return _post.Content == null
-            ? string.Empty
-            : Markdig.Markdown.ToPlainText(_post.Content).Limit(length);
-    }*/
-
-    /// <summary>
     /// 填充文章状态和标题
     /// </summary>
     /// <returns></returns>
     public (string, string) InflateStatusTitle()
     {
         const string pattern = @"^（(.+)）(.+)$";
-        var status = _post.Status ?? "已发布";
-        var title = _post.Title;
-        if (string.IsNullOrEmpty(title)) return (status, $"未命名文章{_post.CreationTime.ToLongDateString()}");
+        var status = _localPost.Status ?? "已发布";
+        var title = _localPost.Title;
+        if (string.IsNullOrEmpty(title)) return (status, $"未命名文章{_localPost.CreationTime.ToLongDateString()}");
         var result = Regex.Match(title, pattern);
         if (!result.Success) return (status, title);
 
         status = result.Groups[1].Value;
         title = result.Groups[2].Value;
 
-        _post.Status = status;
-        _post.Title = title;
+        _localPost.Status = status;
+        _localPost.Title = title;
 
-        if (!new[] { "已发表", "已发布" }.Contains(_post.Status))
+        if (!new[] { "已发表", "已发布" }.Contains(_localPost.Status))
         {
-            _post.IsPublish = false;
+            _localPost.IsPublish = false;
         }
 
         return (status, title);

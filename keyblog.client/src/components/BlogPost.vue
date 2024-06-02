@@ -3,7 +3,7 @@
     <BaseHeader />
     <el-container>
       <el-main class="markdown-content">
-        <el-card class="glass-effect" style="margin-left: 5rem;margin-right: 2rem">
+        <el-card class="glass-effect" style="margin-left: 5rem;margin-right: 1rem">
           <MdPreview
             :editorId="id"
             :theme="theme"
@@ -12,7 +12,7 @@
           />
         </el-card>
       </el-main>
-      <el-aside class="catalog-container" width="220px">
+      <el-aside class="catalog-container" width="250px">
         <el-affix :offset="100">
           <el-card
             class="glass-effect"
@@ -63,7 +63,7 @@ const props = defineProps({
 
 const fetchAndRenderContent = async () => {
   try {
-    const response = await api.get(`/api/Post/posts/${props.id}`);
+    const response = await api.get(`Post/posts/${props.id}`);
     const postData = response.data;
     markdownContent.value = postData.content;
   } catch (error) {

@@ -1,7 +1,7 @@
 ﻿<template>
   <BaseHeader />
-  <el-container>
-    <el-main>
+  <el-container style="display: flex; justify-content: center">
+    <el-main style="margin-bottom: 5rem;max-width: 60rem">
       <PostList
         :posts="posts"
         :total="total"
@@ -11,7 +11,7 @@
         @view-post="viewPost"
       />
     </el-main>
-    <el-aside id="categoryNodes" style="margin-right: 8rem">
+    <el-aside>
       <el-affix :offset="100">
         <UserCard />
         <CategoryTree
@@ -25,13 +25,13 @@
     </el-aside>
   </el-container>
 
-  <el-footer>Footer</el-footer>
+  <!-- <el-footer>Footer</el-footer> -->
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import api from '@/services/api';
+import api from "@/services/api";
 import PostList from "./PostList.vue";
 import UserCard from "./UserCard.vue";
 import CategoryTree from "./CategoryTree.vue";
@@ -41,7 +41,7 @@ import "@/components/styles/style.scss";
 const posts = ref([]);
 const total = ref(0);
 const currentPage = ref(1);
-const pageSize = ref(6);
+const pageSize = ref(10);
 const categoryNodes = ref([]);
 const currentCategoryId = ref(0);
 const router = useRouter();
@@ -84,7 +84,7 @@ const viewPost = (postId) => {
 };
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .mb-3 {
   width: 80%;
   padding-left: 2rem;
@@ -109,4 +109,4 @@ const viewPost = (postId) => {
 .el-menu-demo {
   background-color: transparent;
 }
-</style>
+</style> -->

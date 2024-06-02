@@ -11,11 +11,6 @@ public class PostQueryParameters : QueryParameters
     public bool? IsPublish { get; set; } = null;
 
     /// <summary>
-    /// 文章状态
-    /// </summary>
-    public string? Status { get; set; }
-
-    /// <summary>
     /// 分类ID
     /// </summary>
     public int CategoryId { get; set; } = 0;

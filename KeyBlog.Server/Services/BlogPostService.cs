@@ -28,12 +28,6 @@ public class BlogPostService : PostService
             querySet = querySet.Where(a => a.IsPublish);
         }
 
-        // 状态过滤
-        if (!string.IsNullOrWhiteSpace(param.Status))
-        {
-            querySet = querySet.Where(a => a.Status == param.Status);
-        }
-
         // 分类过滤
         if (param.CategoryId != 0)
         {
