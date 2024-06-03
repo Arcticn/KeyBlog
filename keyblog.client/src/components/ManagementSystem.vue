@@ -1,5 +1,4 @@
 <template>
-  <BaseHeader />
   <el-main
     style="
       padding: 3rem;
@@ -16,7 +15,7 @@
         margin-bottom: 2rem;
         margin-right: 4rem;
         height: fit-content;
-        width: fit-content;
+        width: 502px;
       "
       row-key="id"
       @row-click="updateRow"
@@ -121,7 +120,7 @@
 
 <script setup>
 import api from "@/services/api";
-import { h, onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox, formatter } from "element-plus";
 import BaseHeader from "./layouts/BaseHeader.vue";

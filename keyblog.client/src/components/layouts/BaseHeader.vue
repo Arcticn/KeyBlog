@@ -2,6 +2,7 @@
   <el-affix :offset="0">
     <el-menu
       :default-active="activeIndex"
+      style=""
       class="el-menu glass-effect"
       mode="horizontal"
     >

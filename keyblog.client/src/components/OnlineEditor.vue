@@ -1,5 +1,4 @@
 <template>
-  <BaseHeader />
   <el-main style="padding: 3rem">
     <el-card class="glass-effect" style="margin-bottom: 2rem">
       <el-row justify="space-between" style="margin-bottom: 0" v-if="isAdmin">

@@ -1,6 +1,5 @@
 <template>
   <el-container>
-    <BaseHeader />
     <el-container>
       <el-main class="markdown-content">
         <el-card class="glass-effect" style="margin-left: 5rem;margin-right: 1rem">

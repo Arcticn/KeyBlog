@@ -1,4 +1,5 @@
 ﻿<template class="dark">
+  <BaseHeader />
   <RouterView />
 </template>
 
