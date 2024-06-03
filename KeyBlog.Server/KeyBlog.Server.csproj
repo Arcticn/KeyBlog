@@ -22,14 +22,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FreeSql" Version="3.2.822" />
-    <PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.822" />
-    <PackageReference Include="FreeSql.Repository" Version="3.2.822" />
+    <PackageReference Include="FreeSql" Version="3.2.825" />
+    <PackageReference Include="FreeSql.Provider.MySqlConnector" Version="3.2.825" />
+    <PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.2.825" />
+    <PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.825" />
+    <PackageReference Include="FreeSql.Repository" Version="3.2.825" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
       <Version>8.*-*</Version>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>

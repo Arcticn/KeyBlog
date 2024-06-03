@@ -1,5 +1,6 @@
 ﻿using FreeSql;
 using FreeSql.Internal;
+
 using System.Diagnostics;
 
 namespace KeyBlog.Data;
@@ -16,7 +17,7 @@ public class FreeSqlFactory
             .Build(); //请务必定义成 Singleton 单例模式
     }
 
-    public static IFreeSql Create(string connectionString)
+    public static IFreeSql CreateSqlite(string connectionString)
     {
         return Create(DataType.Sqlite, connectionString);
     }
@@ -24,6 +25,11 @@ public class FreeSqlFactory
     public static IFreeSql CreateMySql(string connectionString)
     {
         return Create(DataType.MySql, connectionString);
+    }
+
+    public static IFreeSql CreatePostgreSql(string connectionString)
+    {
+        return Create(DataType.PostgreSQL, connectionString);
     }
 
 }
