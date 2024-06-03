@@ -2,26 +2,15 @@
   <BaseHeader />
   <el-main style="padding: 3rem">
     <el-card class="glass-effect" style="margin-bottom: 2rem">
-      <el-row justify="space-between" style="margin-bottom: 0">
-        <el-col :span="13">
+      <el-row justify="space-between" style="margin-bottom: 0" v-if="isAdmin">
+        <el-col :span="24">
           <div class="input-container">
             <span>发布状态：</span>
             <el-radio-group v-model="publishState">
               <el-radio-button :value="true" border>已发布</el-radio-button>
               <el-radio-button :value="false" border>未发布</el-radio-button>
             </el-radio-group>
-          </div>
-        </el-col>
-        <el-col :span="11">
-          <div
-            class="input-container"
-            style="
-              display: flex;
-              justify-content: flex-end;
-              align-items: center;
-            "
-          >
-            <el-radio-group v-model="saveMethod">
+            <el-radio-group v-model="saveMethod" v-if="isAdmin" style="margin-left: auto">
               <el-radio-button value="true" border>远程</el-radio-button>
               <el-radio-button value="false" border>本地</el-radio-button>
             </el-radio-group>
@@ -33,7 +22,7 @@
       </el-row>
       <el-row style="margin-bottom: 0">
         <el-col :span="24">
-          <div class="input-container">
+          <div class="input-container" v-if="isAdmin">
             <span>发布时间：</span>
             <el-date-picker
               v-model="time"
@@ -47,10 +36,13 @@
             <el-input
               v-model="inputTitle"
               placeholder="在此处输入博客标题"
-              style="max-width: 50rem"
+              style="max-width: 50rem; margin-right: 2rem"
             />
+            <span style="margin-left: auto" v-if="!isAdmin">
+              <el-button type="primary" plain @click="onSave">保存</el-button>
+            </span>
           </div>
-          <div class="input-container">
+          <div class="input-container" v-if="isAdmin">
             <span>文章分类：</span>
             <CategorySelector
               :categories="categories"
@@ -70,7 +62,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import api from '@/services/api';
+import api from "@/services/api";
 import { MdEditor } from "md-editor-v3";
 import { useRoute } from "vue-router";
 import {
@@ -109,10 +101,7 @@ const updateCategoryId = async (newId) => {
 const updateCategories = async (newCategories) => {
   try {
     console.log("newCategory:", newCategories);
-    const response = await api.post(
-      "Category/addCategory",
-      newCategories
-    );
+    const response = await api.post("Category/addCategory", newCategories);
     fetchData();
     SuccessMessage("成功添加分类", response.data);
   } catch (error) {
@@ -127,35 +116,39 @@ const onSave = async () => {
     WarningMessage("请输入标题");
     return;
   }
-  if (selectedCategoryId.value === null) {
-    WarningMessage("请选择分类");
-    return;
-  }
-  if (text.value === "") {
-    WarningMessage("请输入内容");
-    return;
-  }
-  if (time.value === null) {
-    WarningMessage("请选择发布时间");
-    return;
-  }
-
-  const newPost = {
-    Id: null,
-    Title: inputTitle.value,
-    Content: text.value,
-    CategoryId: selectedCategoryId.value,
-    Summary: null,
-    CreationTime: time.value,
-    IsPublish: publishState.value,
-  };
-  if (incomingId.value) {
-    newPost.Id = incomingId.value;
-  }
 
   if (saveMethod.value === "true") {
+    if (selectedCategoryId.value === null) {
+      WarningMessage("请选择分类");
+      return;
+    }
+    if (text.value === "") {
+      WarningMessage("请输入内容");
+      return;
+    }
+    if (time.value === null) {
+      WarningMessage("请选择发布时间");
+      return;
+    }
+
+    const newPost = {
+      Id: null,
+      Title: inputTitle.value,
+      Content: text.value,
+      CategoryId: selectedCategoryId.value,
+      Summary: null,
+      CreationTime: time.value,
+      IsPublish: publishState.value,
+    };
+    if (incomingId.value) {
+      newPost.Id = incomingId.value;
+    }
     saveRemote(newPost);
   } else {
+    const newPost = {
+      Title: inputTitle.value,
+      Content: text.value,
+    };
     saveLocal(newPost);
   }
 };
@@ -170,7 +163,18 @@ const saveRemote = async (newPost) => {
 };
 
 const saveLocal = (newPost) => {
-  // Add your saveLocal implementation here
+  const blob = new Blob([newPost.Content], {
+    type: "text/markdown;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const filename = newPost.Title + ".md";
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 };
 
 const fetchData = async () => {
@@ -199,7 +203,16 @@ const fetchPost = async () => {
   }
 };
 
+const isAdmin = ref(true);
 onMounted(() => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (currentUser) {
+    if (!currentUser.isAdmin) {
+      isAdmin.value = false;
+    }
+  } else isAdmin.value = false;
+  saveMethod.value = isAdmin.value ? "true" : "false";
+
   fetchData();
   blogId.value = route.query.id;
   if (blogId.value) {

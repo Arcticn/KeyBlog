@@ -54,6 +54,14 @@ public class CategoryController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
+    [HttpPut("moveCategory")]
+    public async Task<IActionResult> MoveCategory(int id, int parentId)
+    {
+        await _categoryService.MoveCategory(id, parentId);
+        return Ok();
+    }
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("deleteCategory")]
     public async Task<IActionResult> DeleteCategory(int id){
         await _categoryService.DeleteCategory(id);

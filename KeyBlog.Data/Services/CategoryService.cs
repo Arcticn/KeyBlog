@@ -97,6 +97,18 @@ public class CategoryService
         else return false;
     }
 
+    public async Task<bool> MoveCategory(int categoryId, int parentId)
+    {
+        var existingCategory = await _cRepo.Where(a => a.Id == categoryId).FirstAsync();
+        if (existingCategory != null)
+        {
+            existingCategory.ParentId = parentId;
+            await _cRepo.UpdateAsync(existingCategory);
+            return true;
+        }
+        else return false;
+    }
+
     public async Task DeleteCategory(int categoryId)
     {
         await _cRepo.DeleteCascadeByDatabaseAsync(a => a.Id == categoryId);

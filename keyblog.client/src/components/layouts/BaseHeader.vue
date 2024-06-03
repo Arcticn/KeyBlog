@@ -14,9 +14,9 @@
       <el-menu-item v-if="isAdmin" index="/manage" @click="pushUrl('/manage')"
         >管理</el-menu-item
       >
-      <el-menu-item index="/about" @click="pushUrl('/about')"
+      <!-- <el-menu-item index="/about" @click="pushUrl('/about')"
         >关于</el-menu-item
-      >
+      > -->
       <el-menu-item h="full" class="menu-item-switch">
         <el-switch
           v-model="isDark"

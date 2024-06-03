@@ -63,19 +63,8 @@ public class Post
     /// <summary>
     /// 创建时间
     /// </summary>
-    private static DateTime _creatime;
-    public DateTime CreationTime
-    {
-        get => _creatime;
-        set
-        {
-            if (_creatime == DateTime.MinValue)
-            {
-                _creatime = value;
-                LastUpdateTime = _creatime;
-            }
-        }
-    }
+
+    public DateTime CreationTime {get; set;}
 
     /// <summary>
     /// 上次更新时间

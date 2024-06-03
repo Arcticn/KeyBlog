@@ -167,11 +167,32 @@ const handleLogOut = () => {
   window.location.reload();
 };
 
-onMounted(() => {
+onMounted(async () => {
   currentUser.value = JSON.parse(localStorage.getItem("currentUser"));
   console.log(currentUser);
+
   if (currentUser.value) {
-    isLoggedin.value = true;
+    if (currentUser.value.IsAdmin) {
+      try {
+        await api.get("User/admin"); //令牌过期则退出
+        isLoggedin.value = true;
+      } catch (error) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("currentUser");
+        isLoggedin.value = false;
+        currentUser.value = null;
+      }
+    } else {
+      try {
+        await api.get("User/user"); //令牌过期则退出
+        isLoggedin.value = true;
+      } catch (error) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("currentUser");
+        isLoggedin.value = false;
+        currentUser.value = null;
+      }
+    }
   }
 });
 </script>

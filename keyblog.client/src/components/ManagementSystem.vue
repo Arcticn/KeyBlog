@@ -21,8 +21,8 @@
       row-key="id"
       @row-click="updateRow"
     >
-      <el-table-column prop="name" label="分类名称" width="300" sortable />
-      <el-table-column label="操作" width="230">
+      <el-table-column prop="name" label="分类名称" width="200" sortable />
+      <el-table-column label="操作" width="300">
         <template #default="scope">
           <el-button
             size="small"
@@ -37,6 +37,13 @@
             @click="handleCategoryEdit(scope.row)"
           >
             编辑
+          </el-button>
+          <el-button
+            size="small"
+            plain
+            @click="openCategoryMoveDialog(scope.row)"
+          >
+            移动
           </el-button>
           <el-button
             size="small"
@@ -55,16 +62,22 @@
       style="margin-bottom: 2rem; height: fit-content; width: fit-content"
       row-key="id"
     >
-      <el-table-column prop="title" label="博客名称" width="300" sortable />
-      <el-table-column prop="isPublish" :formatter="formatPublish" label="状态" width="100" sortable />
+      <el-table-column prop="title" label="博客名称" width="260" sortable />
+      <el-table-column
+        prop="isPublish"
+        :formatter="formatPublish"
+        label="状态"
+        width="100"
+        sortable
+      />
       <el-table-column
         prop="lastUpdateTime"
         :formatter="formatDate1"
         label="最后修改时间"
-        width="200"
+        width="180"
         sortable
       />
-      <el-table-column label="操作" width="230">
+      <el-table-column label="操作" width="150">
         <template #default="scope1">
           <el-button
             size="small"
@@ -85,11 +98,30 @@
     </el-table>
     <!-- </el-card> -->
   </el-main>
+
+  <el-dialog
+    v-model="dialogTableVisible"
+    title="移动分类"
+    style="width: fit-content"
+  >
+    <el-table
+      :data="categoryNodesWithRoot"
+      @row-click="handleCategoryMove"
+      row-key="id"
+    >
+      <el-table-column prop="name" label="分类名称" width="560" sortable />
+    </el-table>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">关闭</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import api from "@/services/api";
-import { onMounted, ref } from "vue";
+import { h, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox, formatter } from "element-plus";
 import BaseHeader from "./layouts/BaseHeader.vue";
@@ -102,6 +134,7 @@ import { formatDate } from "@vueuse/core";
 
 const categoryRow = ref(null);
 const categoryNodes = ref(null);
+const categoryNodesWithRoot = ref(null);
 const editName = ref(null);
 const newName = ref(null);
 const posts = ref(null);
@@ -109,12 +142,12 @@ const router = useRouter();
 const categoryTable = ref(null);
 
 const formatDate1 = (row, column, cellValue) => {
-  if (!cellValue) return '';
+  if (!cellValue) return "";
   const date = new Date(cellValue);
   return date.toLocaleString(); // 自定义格式化方式
 };
 
-const formatPublish = (row,column,cellValue) => {
+const formatPublish = (row, column, cellValue) => {
   return cellValue ? "已发布" : "未发布";
 };
 
@@ -160,6 +193,35 @@ const handleCategoryEdit = async (row) => {
     SuccessMessage("修改成功", response.data.message);
   } catch (error) {
     ErrorMessage(error);
+  }
+};
+
+const dialogTableVisible = ref(false);
+const categoryToMove = ref(null);
+const openCategoryMoveDialog = (row) => {
+  dialogTableVisible.value = true;
+  categoryToMove.value = row;
+};
+
+const handleCategoryMove = async (row) => {
+  await ElMessageBox.confirm("移动到此目录？", "移动", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+  });
+  console.log(categoryToMove.value.id);
+  console.log("Selected ID:", row.id);
+  try {
+    const response = await api.put("Category/moveCategory", null, {
+      params: {
+        id: categoryToMove.value.id,
+        parentId: row.id,
+      },
+    });
+    SuccessMessage("移动成功", response.data.message);
+    // 在这里处理用户确认后的逻辑
+  } catch (err) {
+    // 处理用户取消或关闭对话框的情况
+    ErrorMessage(err);
   }
 };
 
@@ -255,10 +317,21 @@ const fetchData = async () => {
     const response = await api.get("Category/getCategories");
     const data = response.data;
     categoryNodes.value = data.categoryNodes;
+    addRootNode();
     // console.log(categoryNodes);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
+};
+
+const addRootNode = () => {
+  const rootNode = {
+    id: 0,
+    name: "根目录",
+    parentId: 0,
+    children: categoryNodes.value,
+  };
+  categoryNodesWithRoot.value = [rootNode];
 };
 
 onMounted(() => {

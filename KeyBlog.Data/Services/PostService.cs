@@ -28,6 +28,7 @@ public class PostService
 
     public async Task InsetPost(Post post)
     {
+        post.LastUpdateTime= post.CreationTime;
         await _postRepo.InsertAsync(post);
     }
 
