@@ -5,7 +5,7 @@ public class User
 {
     [Column(IsIdentity = true, IsPrimary = true)]
     public int Id { get; set; }
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; set; } = false;
     public string? Username { get; set; }
 
     /// <summary>
