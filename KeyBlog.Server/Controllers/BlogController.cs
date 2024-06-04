@@ -21,7 +21,6 @@ public class BlogController : ControllerBase
         _categoryService = categoryService;
     }
 
-
     [HttpGet("lists")]
     public async Task<IActionResult> List(int categoryId = 0, int page = 1, int pageSize = 6,
              string sortType = "asc", string sortBy = "CreationTime", string search = "", bool adminMode = false)
@@ -40,7 +39,7 @@ public class BlogController : ControllerBase
             return BadRequest(new { message = $"Category {categoryId} is not available!" });
         }
 
-        var categoryNodes = await _categoryService.GetNode();
+        var categoryNodes = await _categoryService.GetNode(adminMode);
         var posts = await _blogPostService.GetPagedList(new PostQueryParameters
         {
             CategoryId = categoryId,

@@ -21,7 +21,18 @@ public class CategoryController : ControllerBase
     [HttpGet("getCategories")]
     public async Task<IActionResult> GetCategories()
     {
-        var categoryTree = await _categoryService.GetNode();
+        var categoryTree = await _categoryService.GetNode(false);
+        return Ok(new
+        {
+            CategoryNodes = categoryTree
+        });
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("getCategoriesAdmin")]
+    public async Task<IActionResult> GetCategoriesAdmin()
+    {
+        var categoryTree = await _categoryService.GetNode(true);
         return Ok(new
         {
             CategoryNodes = categoryTree
@@ -63,7 +74,8 @@ public class CategoryController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpDelete("deleteCategory")]
-    public async Task<IActionResult> DeleteCategory(int id){
+    public async Task<IActionResult> DeleteCategory(int id)
+    {
         await _categoryService.DeleteCategory(id);
         return Ok();
     }

@@ -35,12 +35,24 @@ public class CategoryService
 
         return string.Join(",", hierarchy);
     }
-    public async Task<List<CategoryDto>?> GetNode()
+    public async Task<List<CategoryDto>?> GetNode(bool IsAdmin = false)
     {
-        var categoryList = await _cRepo.Select
+        if (IsAdmin == true)
+        {
+            var categoryList = await _cRepo.Select
             .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id }))
             .ToListAsync();
-        return GetNodes(categoryList, 0);
+            return GetNodes(categoryList, 0);
+        }
+        else
+        {
+            var categoryList = await _cRepo.Select
+            .IncludeMany(a => a.Posts.Select(p => new Post { Id = p.Id, IsPublish = p.IsPublish }),
+                then => then.Where(p => p.IsPublish == true))
+            .ToListAsync();
+
+            return GetNodes(categoryList, 0);
+        }
     }
 
     /// <summary>
@@ -57,7 +69,7 @@ public class CategoryService
         return categories.Select(category => new CategoryDto
         {
             Id = category.Id,
-            Name = category.Name,
+            Name = category.Posts?.Count() != 0 ? $"{category.Name} ({category.Posts?.Count()})" : category.Name,
             ParentId = category.ParentId,
             Children = GetNodes(categoryList, category.Id)
         }).ToList();

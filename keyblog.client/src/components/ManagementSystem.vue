@@ -313,7 +313,7 @@ const fetchPosts = async () => {
 
 const fetchData = async () => {
   try {
-    const response = await api.get("Category/getCategories");
+    const response = await api.get("Category/getCategoriesAdmin");
     const data = response.data;
     categoryNodes.value = data.categoryNodes;
     addRootNode();

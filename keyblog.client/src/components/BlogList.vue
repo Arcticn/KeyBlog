@@ -64,7 +64,8 @@ const fetchData = async (categoryId = 0, page = 1) => {
       },
     });
     const data = response.data;
-    const rootCategory = { id: 0, name: "所有博客" };
+    console.log(data);
+    const rootCategory = { id: 0, name: `所有博客 (${data.posts.totalCount})` };
     categoryNodes.value = [rootCategory, ...data.categoryNodes];
     posts.value = data.posts.items;
     total.value = data.posts.totalCount;
