@@ -182,6 +182,7 @@ onMounted(async () => {
         localStorage.removeItem("currentUser");
         isLoggedin.value = false;
         currentUser.value = null;
+        window.location.reload();
       }
     } else {
       try {
