@@ -36,6 +36,7 @@ import BaseHeader from "./layouts/BaseHeader.vue";
 import { useDarkMode } from "../composables/useDarkMode";
 import anchor from "markdown-it-anchor";
 import { config } from "md-editor-v3";
+import { ErrorMessage } from "@/composables/PopupMessage";
 
 // config({
 //   markdownItConfig(mdit) {
@@ -66,7 +67,7 @@ const fetchAndRenderContent = async () => {
     const postData = response.data;
     markdownContent.value = postData.content;
   } catch (error) {
-    console.error("Error fetching post data:", error);
+    ErrorMessage(error);
   }
 };
 

@@ -1,60 +1,61 @@
 <template>
-  <div>
-    <el-row justify="space-between" style="margin-bottom: 0">
-      <el-col :span="24">
-        <div class="input-container">
-          <el-card
-            style="height: 3.5rem; width:fit-content; display: flex;"
-            body-style="padding: 5px;"
-            class="mb-3 glass-effect"
-          >
-            <el-input
-              v-model="searchQuery"
-              style="width: 30rem; margin-top: 6px;margin-left: 6px;margin-right: 6px"
-              placeholder="搜索...."
-              @change="handleSearchChange"
-              :prefix-icon="Search"
-            />
-          </el-card>
-          <el-card
-            style="width: fit-content; height: 3.5rem;margin-left: auto"
-            body-style="padding: 5px;"
-            class="mb-3 glass-effect"
-          >
-            <el-select
-              v-model="sortBy"
-              placeholder="Select"
-              @change="handleSortChange"
-              style="width: 120px; margin-top: 7px; margin-left: 6px"
-            >
-              <el-option
-                v-for="item in sortByOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-            <el-radio-group
-              v-model="sortType"
-              @change="handleSortChange"
-              style="margin-left: 0.7rem;margin-right: 6px"
-            >
-              <el-radio-button label="desc" value="desc">
-                <el-icon>
-                  <SortDown />
-                </el-icon>
-              </el-radio-button>
-              <el-radio-button label="asc" value="asc">
-                <el-icon>
-                  <SortUp />
-                </el-icon>
-              </el-radio-button>
-            </el-radio-group>
-          </el-card>
-        </div>
-      </el-col>
-    </el-row>
+  <div class="input-container">
+    <el-card
+      style="height: 3.5rem; width: 60%; margin-bottom: 0.5rem"
+      body-style="padding: 5px;"
+      class="mb-3 glass-effect"
+    >
+      <el-input
+        v-model="searchQuery"
+        style="margin-top: 6px; margin-left: 6px; padding-right: 10px; "
+        placeholder="搜索...."
+        @change="handleSearchChange"
+        :prefix-icon="Search"
+      />
+    </el-card>
+    <el-card
+      style="
+        width: fit-content;
+        height: 3.5rem;
+        margin-left: auto;
+        margin-bottom: 0.5rem;
+      "
+      body-style="padding: 5px;"
+      class="mb-3 glass-effect"
+    >
+      <el-select
+        v-model="sortBy"
+        placeholder="Select"
+        @change="handleSortChange"
+        style="width: 120px; margin-top: 7px; margin-left: 6px"
+      >
+        <el-option
+          v-for="item in sortByOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+      <el-radio-group
+        v-model="sortType"
+        @change="handleSortChange"
+        style="margin-left: 0.7rem; margin-right: 6px"
+      >
+        <el-radio-button label="desc" value="desc">
+          <el-icon>
+            <SortDown />
+          </el-icon>
+        </el-radio-button>
+        <el-radio-button label="asc" value="asc">
+          <el-icon>
+            <SortUp />
+          </el-icon>
+        </el-radio-button>
+      </el-radio-group>
+    </el-card>
+  </div>
 
+  <div>
     <el-card
       v-if="posts.length === 0"
       shadow="always"
@@ -115,7 +116,7 @@ const props = defineProps({
 
 const sortBy = ref("LastUpdateTime");
 const sortType = ref("desc");
-const searchQuery= ref("");
+const searchQuery = ref("");
 
 const sortByOptions = [
   {
@@ -151,10 +152,9 @@ const handleSortChange = () => {
   emit("sort-change", sortBy.value, sortType.value);
 };
 
-const handleSearchChange =()=>{
+const handleSearchChange = () => {
   emit("search-change", searchQuery.value);
-
-}
+};
 
 // 查看文章的函数
 const viewPost = (postId) => {

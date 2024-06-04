@@ -38,6 +38,7 @@ import UserCard from "./UserCard.vue";
 import CategoryTree from "./CategoryTree.vue";
 import "element-plus/theme-chalk/display.css";
 import "@/components/styles/style.scss";
+import { ErrorMessage } from "@/composables/PopupMessage";
 
 const posts = ref([]);
 const total = ref(0);
@@ -63,7 +64,8 @@ const fetchData = async (categoryId = 0, page = 1) => {
       },
     });
     const data = response.data;
-    categoryNodes.value = data.categoryNodes;
+    const rootCategory = { id: 0, name: "所有博客" };
+    categoryNodes.value = [rootCategory, ...data.categoryNodes];
     posts.value = data.posts.items;
     total.value = data.posts.totalCount;
     currentCategoryId.value = categoryId;
@@ -72,7 +74,7 @@ const fetchData = async (categoryId = 0, page = 1) => {
     searchQuery.value = "";
     //currentPage.value = page;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    ErrorMessage(error);
   }
 };
 

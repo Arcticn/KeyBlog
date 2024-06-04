@@ -25,6 +25,7 @@
             v-model="optionName"
             class="option-input"
             placeholder="输入分类名称"
+            style="margin-bottom: 0.6rem;"
             size="small"
           />
           <el-button type="primary" size="small" @click="onConfirm">
@@ -57,6 +58,7 @@
 import { Plus } from "@element-plus/icons-vue";
 import { ref, watch, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
+import { ErrorMessage } from "@/composables/PopupMessage";
 
 const props = defineProps({
   categories: Array,
@@ -91,7 +93,7 @@ const onConfirm = () => {
 
     clear();
   } else {
-    ElMessage.error("分类名称不能为空");
+    ErrorMessage("分类名称不能为空");
   }
 };
 
@@ -109,7 +111,7 @@ const showAddSubcategoryBox = () => {
       if (value) {
         addSubcategory(value);
       } else {
-        ElMessage.error("分类名称不能为空");
+        ErrorMessage("分类名称不能为空");
       }
     })
     .catch(() => {
