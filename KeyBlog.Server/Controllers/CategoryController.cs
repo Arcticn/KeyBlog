@@ -21,23 +21,14 @@ public class CategoryController : ControllerBase
     [HttpGet("getCategories")]
     public async Task<IActionResult> GetCategories()
     {
-        var categoryTree = await _categoryService.GetNode(false);
+        bool adminMode = User.Identity.IsAuthenticated && User.IsInRole("Admin");
+        var categoryTree = await _categoryService.GetNode(adminMode);
         return Ok(new
         {
             CategoryNodes = categoryTree
         });
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpGet("getCategoriesAdmin")]
-    public async Task<IActionResult> GetCategoriesAdmin()
-    {
-        var categoryTree = await _categoryService.GetNode(true);
-        return Ok(new
-        {
-            CategoryNodes = categoryTree
-        });
-    }
 
     [Authorize(Roles = "Admin")]
     [HttpPost("addCategory")]

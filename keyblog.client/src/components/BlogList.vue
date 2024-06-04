@@ -50,6 +50,7 @@ const router = useRouter();
 const sortBy = ref("LastUpdateTime");
 const sortType = ref("desc");
 const searchQuery = ref("");
+const postCount = ref(0);
 
 const fetchData = async (categoryId = 0, page = 1) => {
   try {
@@ -65,11 +66,15 @@ const fetchData = async (categoryId = 0, page = 1) => {
     });
     const data = response.data;
     console.log(data);
-    const rootCategory = { id: 0, name: `所有博客 (${data.posts.totalCount})` };
+    currentCategoryId.value = categoryId;
+    if (currentCategoryId.value === 0 || postCount.value === 0) {
+      postCount.value = data.posts.totalCount;
+    }
+    const rootCategory = { id: 0, name: `所有博客 (${postCount.value})` };
     categoryNodes.value = [rootCategory, ...data.categoryNodes];
     posts.value = data.posts.items;
     total.value = data.posts.totalCount;
-    currentCategoryId.value = categoryId;
+
     sortBy.value = data.sortBy;
     sortType.value = data.sortType;
     searchQuery.value = "";
