@@ -1,6 +1,6 @@
 ﻿<template>
   <el-container style="display: flex; justify-content: center">
-    <el-main style="margin-bottom: 5rem;max-width: 60rem">
+    <el-main style="margin-bottom: 5rem; max-width: 60rem">
       <PostList
         :posts="posts"
         :total="total"
@@ -8,6 +8,8 @@
         :pageSize="pageSize"
         @update:currentPage="handlePageChange"
         @view-post="viewPost"
+        @sort-change="handleSortChange"
+        @search-change="handleSearchChange"
       />
     </el-main>
     <el-aside>
@@ -44,6 +46,9 @@ const pageSize = ref(10);
 const categoryNodes = ref([]);
 const currentCategoryId = ref(0);
 const router = useRouter();
+const sortBy = ref("LastUpdateTime");
+const sortType = ref("desc");
+const searchQuery = ref("");
 
 const fetchData = async (categoryId = 0, page = 1) => {
   try {
@@ -51,6 +56,9 @@ const fetchData = async (categoryId = 0, page = 1) => {
       params: {
         categoryId,
         page,
+        search: searchQuery.value,
+        sortType: sortType.value,
+        sortBy: sortBy.value,
         pageSize: pageSize.value,
       },
     });
@@ -59,6 +67,9 @@ const fetchData = async (categoryId = 0, page = 1) => {
     posts.value = data.posts.items;
     total.value = data.posts.totalCount;
     currentCategoryId.value = categoryId;
+    sortBy.value = data.sortBy;
+    sortType.value = data.sortType;
+    searchQuery.value = "";
     //currentPage.value = page;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -74,6 +85,17 @@ const handlePageChange = (page) => {
   fetchData(currentCategoryId.value, page);
 };
 
+const handleSortChange = (requestSortBy, requestSortType) => {
+  sortBy.value = requestSortBy;
+  sortType.value = requestSortType;
+  fetchData(currentCategoryId.value, currentPage.value);
+};
+
+const handleSearchChange = (query) => {
+  searchQuery.value = query;
+  fetchData(currentCategoryId.value, currentPage.value);
+};
+
 onMounted(() => {
   fetchData();
 });
@@ -82,30 +104,3 @@ const viewPost = (postId) => {
   router.push({ name: "Post", params: { id: postId } });
 };
 </script>
-
-<!-- <style scoped>
-.mb-3 {
-  width: 80%;
-  padding-left: 2rem;
-  color: Transparent;
-  margin-bottom: 1rem;
-}
-
-.sidebar .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  color: #409eff;
-  padding: 0 20px;
-}
-
-.logo {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.el-menu-demo {
-  background-color: transparent;
-}
-</style> -->

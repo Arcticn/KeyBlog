@@ -1,14 +1,73 @@
 <template>
   <div>
-    <el-card v-if="posts.length === 0" shadow="always" class="mb-3 glass-effect">
+    <el-row justify="space-between" style="margin-bottom: 0">
+      <el-col :span="24">
+        <div class="input-container">
+          <el-card
+            style="height: 3.5rem; width:fit-content; display: flex;"
+            body-style="padding: 5px;"
+            class="mb-3 glass-effect"
+          >
+            <el-input
+              v-model="searchQuery"
+              style="width: 30rem; margin-top: 6px;margin-left: 6px;margin-right: 6px"
+              placeholder="搜索...."
+              @change="handleSearchChange"
+              :prefix-icon="Search"
+            />
+          </el-card>
+          <el-card
+            style="width: fit-content; height: 3.5rem;margin-left: auto"
+            body-style="padding: 5px;"
+            class="mb-3 glass-effect"
+          >
+            <el-select
+              v-model="sortBy"
+              placeholder="Select"
+              @change="handleSortChange"
+              style="width: 120px; margin-top: 7px; margin-left: 6px"
+            >
+              <el-option
+                v-for="item in sortByOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+            <el-radio-group
+              v-model="sortType"
+              @change="handleSortChange"
+              style="margin-left: 0.7rem;margin-right: 6px"
+            >
+              <el-radio-button label="desc" value="desc">
+                <el-icon>
+                  <SortDown />
+                </el-icon>
+              </el-radio-button>
+              <el-radio-button label="asc" value="asc">
+                <el-icon>
+                  <SortUp />
+                </el-icon>
+              </el-radio-button>
+            </el-radio-group>
+          </el-card>
+        </div>
+      </el-col>
+    </el-row>
+
+    <el-card
+      v-if="posts.length === 0"
+      shadow="always"
+      class="mb-3 glass-effect"
+    >
       <div class="card-body">没有文章</div>
     </el-card>
-    <el-card v-for="post in posts" :key="post.id" shadow="always" class="mb-3 glass-effect">
-      <!-- <template #header>
-        <div class="card-header">
-          <span>{{ post.categoryId }}</span>
-        </div>
-      </template> -->
+    <el-card
+      v-for="post in posts"
+      :key="post.id"
+      shadow="always"
+      class="mb-3 glass-effect"
+    >
       <div class="card-body">
         <h5 class="card-title">{{ post.title }}</h5>
         <p class="card-text">{{ post.summary }}</p>
@@ -19,7 +78,7 @@
     </el-card>
     <el-pagination
       background
-      style="justify-content: center; margin-left: 5rem;"
+      style="justify-content: center; margin-left: 5rem"
       layout="prev, pager, next"
       :total="total"
       :page-size="pageSize"
@@ -30,8 +89,9 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import "@/components/styles/style.scss";
-import "@/components/styles/glass.scss"
+import "@/components/styles/glass.scss";
 
 // 定义组件的 props
 const props = defineProps({
@@ -53,17 +113,59 @@ const props = defineProps({
   },
 });
 
+const sortBy = ref("LastUpdateTime");
+const sortType = ref("desc");
+const searchQuery= ref("");
+
+const sortByOptions = [
+  {
+    value: "LastUpdateTime",
+    label: "更新时间",
+  },
+  {
+    value: "CreationTime",
+    label: "创建时间",
+  },
+
+  {
+    value: "Title",
+    label: "博客名称",
+  },
+];
+
 // 定义组件的 emits
-const emit = defineEmits(["view-post","update:currentPage","page-change"]);
+const emit = defineEmits([
+  "view-post",
+  "update:currentPage",
+  "page-change",
+  "handleSortChange",
+  "search-change",
+]);
 
 // 处理分页改变的函数
 const handlePageChange = (newPage) => {
   emit("update:currentPage", newPage);
-
 };
+
+const handleSortChange = () => {
+  emit("sort-change", sortBy.value, sortType.value);
+};
+
+const handleSearchChange =()=>{
+  emit("search-change", searchQuery.value);
+
+}
 
 // 查看文章的函数
 const viewPost = (postId) => {
   emit("view-post", postId);
 };
 </script>
+
+<style scoped>
+.input-container {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+</style>

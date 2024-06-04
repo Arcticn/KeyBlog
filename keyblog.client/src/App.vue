@@ -1,6 +1,7 @@
 ﻿<template class="dark">
   <BaseHeader />
   <RouterView />
+  <el-backtop :right="150" :bottom="100" />
 </template>
 
 <script>
