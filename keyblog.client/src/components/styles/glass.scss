@@ -59,6 +59,7 @@
 
 .el-menu.glass-effect:hover {
     box-shadow: var(--el-box-shadow-dark);
+    background-color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .el-menu.glass-effect .el-menu-item {
@@ -71,7 +72,7 @@
     background-color: var(--el-color-primary-light-9) !important;
 }
 
-.el-menu.glass-effect .el-sub-menu__title:hover{
+.el-menu.glass-effect .el-sub-menu__title:hover {
     background-color: var(--el-color-primary-light-8) !important;
 }
 
@@ -125,6 +126,7 @@ html.dark {
 
     .el-menu.glass-effect:hover {
         box-shadow: var(--el-box-shadow);
+        background-color: rgba(0, 0, 0, 0.8) !important;
     }
 
     .el-menu.glass-effect .el-menu-item {
@@ -136,8 +138,8 @@ html.dark {
     .el-menu.glass-effect .el-menu-item:hover {
         background-color: var(--el-color-primary-light-9) !important;
     }
-    
-    .el-menu.glass-effect .el-sub-menu__title:hover{
+
+    .el-menu.glass-effect .el-sub-menu__title:hover {
         background-color: var(--el-color-primary-light-8) !important;
     }
 

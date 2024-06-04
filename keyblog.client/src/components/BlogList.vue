@@ -67,7 +67,7 @@ const fetchData = async (categoryId = 0, page = 1) => {
     const data = response.data;
     console.log(data);
     currentCategoryId.value = categoryId;
-    if (currentCategoryId.value === 0 || postCount.value === 0) {
+    if (currentCategoryId.value === 0 && searchQuery.value === "") {
       postCount.value = data.posts.totalCount;
     }
     const rootCategory = { id: 0, name: `所有博客 (${postCount.value})` };
