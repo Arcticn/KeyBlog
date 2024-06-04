@@ -104,7 +104,7 @@ const updateCategories = async (newCategories) => {
     fetchData();
     SuccessMessage("成功添加分类", response.data);
   } catch (error) {
-    ErrorMessage("Error adding category:", error);
+    ErrorMessage(error.response.data);
   }
 };
 
@@ -157,7 +157,7 @@ const saveRemote = async (newPost) => {
     const response = await api.post("Post/savePost", newPost);
     SuccessMessage("Content saved successfully:", response.data);
   } catch (error) {
-    ErrorMessage("Error saving content:", error);
+    ErrorMessage(error.response.data);
   }
 };
 

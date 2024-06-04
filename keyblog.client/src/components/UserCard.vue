@@ -50,6 +50,7 @@
 </template>
 
 <script setup>
+import { ErrorMessage, SuccessMessage } from "@/composables/PopupMessage";
 import api from "@/services/api";
 import { onMounted, reactive, ref } from "vue";
 
@@ -126,10 +127,10 @@ const Login = async () => {
     localStorage.setItem("token", token);
     localStorage.setItem("currentUser", JSON.stringify(currentUser.value));
     isLoggedin.value = true;
-    console.log("欢迎回来,", currentUser.value.username);
+    SuccessMessage("欢迎回来,", currentUser.value.username);
     window.location.reload();
   } catch (error) {
-    console.log(error);
+    ErrorMessage(error.response.data);
   }
   console.log(localStorage.getItem("token"));
 };
@@ -152,10 +153,10 @@ const Register = async () => {
     localStorage.setItem("token", token);
     localStorage.setItem("currentUser", JSON.stringify(currentUser.value));
     isLoggedin.value = true;
-    console.log("欢迎回来,", currentUser.value.username);
+    SuccessMessage("欢迎回来,", currentUser.value.username);
     window.location.reload();
   } catch (error) {
-    console.log(error);
+    ErrorMessage(error.response.data);
   }
 };
 

@@ -1,35 +1,39 @@
 <template>
   <el-container>
-    <el-container>
-      <el-main class="markdown-content">
-        <el-card class="glass-effect" style="margin-left: 5rem;margin-right: 1rem">
-          <MdPreview
+    <el-main class="markdown-content">
+      <el-card
+        class="glass-effect"
+        style="margin-left: 5rem; margin-right: 1rem"
+      >
+        <MdPreview
+          :editorId="id"
+          :theme="theme"
+          v-model="markdownContent"
+          @onGetCatalog="onGetCatalog"
+        />
+      </el-card>
+    </el-main>
+    <el-aside class="catalog-container" width="250px">
+      <el-affix :offset="100">
+        <el-card
+          class="glass-effect"
+          style="width: 11rem; padding-right: 10px"
+          body-style="padding:10px"
+        >
+          <MdCatalog
             :editorId="id"
-            :theme="theme"
-            v-model="markdownContent"
-            @onGetCatalog="onGetCatalog"
+            style="font-size: 15px"
+            :scrollElement="scrollElement"
           />
         </el-card>
-      </el-main>
-      <el-aside class="catalog-container" width="250px">
-        <el-affix :offset="100">
-          <el-card
-            class="glass-effect"
-            style="width: 11rem;padding-right: 10px;"
-            body-style="padding:10px"
-          >
-            <MdCatalog :editorId="id" style="font-size: 15px;" :scrollElement="scrollElement" />
-          </el-card>
-        </el-affix>
-      </el-aside>
-    </el-container>
-    <el-footer class="footer">Footer Content</el-footer>
+      </el-affix>
+    </el-aside>
   </el-container>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import api from '@/services/api';
+import api from "@/services/api";
 import { MdPreview, MdCatalog } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
@@ -67,7 +71,7 @@ const fetchAndRenderContent = async () => {
     const postData = response.data;
     markdownContent.value = postData.content;
   } catch (error) {
-    ErrorMessage(error);
+    ErrorMessage(error.response.data);
   }
 };
 

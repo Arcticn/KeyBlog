@@ -169,7 +169,7 @@ const handleCategoryCreate = async (row) => {
     fetchData();
     SuccessMessage("新增成功", response.data.message);
   } catch (error) {
-    ErrorMessage(error);
+    ErrorMessage(error.response.data);
   }
 };
 
@@ -191,7 +191,7 @@ const handleCategoryEdit = async (row) => {
     fetchData();
     SuccessMessage("修改成功", response.data.message);
   } catch (error) {
-    ErrorMessage(error);
+    ErrorMessage(error.response.data);
   }
 };
 
@@ -218,9 +218,9 @@ const handleCategoryMove = async (row) => {
     });
     SuccessMessage("移动成功", response.data.message);
     // 在这里处理用户确认后的逻辑
-  } catch (err) {
+  } catch (error) {
     // 处理用户取消或关闭对话框的情况
-    ErrorMessage(err);
+    ErrorMessage(error.response.data);
   }
 };
 
@@ -241,7 +241,7 @@ const handleCategoryDelete = async (row) => {
         fetchData();
         SuccessMessage("删除成功", response.data.message);
       } catch (error) {
-        ErrorMessage(error);
+        ErrorMessage(error.response.data);
       }
     })
     .catch(() => {
@@ -277,7 +277,7 @@ const handlePostDelete = async (row) => {
         fetchPosts();
         SuccessMessage("删除成功", response.data.message);
       } catch (error) {
-        ErrorMessage(error);
+        ErrorMessage(error.response.data);
       }
     })
     .catch(() => {

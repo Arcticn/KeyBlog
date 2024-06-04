@@ -74,7 +74,7 @@ const fetchData = async (categoryId = 0, page = 1) => {
     searchQuery.value = "";
     //currentPage.value = page;
   } catch (error) {
-    ErrorMessage(error);
+    ErrorMessage(error.response.data);
   }
 };
 
