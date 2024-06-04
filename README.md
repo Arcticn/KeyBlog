@@ -4,4 +4,4 @@
 
 ## 项目架构
 ### 前端：Vue.js 3 + ElementPlus + md-editor-v3
-### 后端：ASP .Net Core 8 + FreeSQL + PostgreSQL
+### 后端：.Net 8 + ASP .Net Core + FreeSQL + PostgreSQL
