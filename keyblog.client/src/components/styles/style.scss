@@ -11,6 +11,10 @@
 }
 
 .card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
     font-size: 1.25rem;
     font-weight: bold;
     margin-top: 15px;

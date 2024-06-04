@@ -7,7 +7,7 @@
     >
       <el-input
         v-model="searchQuery"
-        style="margin-top: 6px; margin-left: 6px; padding-right: 10px; "
+        style="margin-top: 6px; margin-left: 6px; padding-right: 10px"
         placeholder="搜索...."
         @change="handleSearchChange"
         :prefix-icon="Search"
@@ -70,7 +70,13 @@
       class="mb-3 glass-effect"
     >
       <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
+        <h5 class="card-title">
+          <span>{{ post.title }}</span>
+          <span class="date"
+            ><el-icon class="clock-icon"><Clock /></el-icon>更新时间:
+            {{ formatDate(post.lastUpdateTime) }}</span
+          >
+        </h5>
         <p class="card-text">{{ post.summary }}</p>
         <el-button type="default" @click="viewPost(post.id)">
           查看全文
@@ -113,6 +119,12 @@ const props = defineProps({
     required: true,
   },
 });
+
+const formatDate = (cellValue) => {
+  if (!cellValue) return "";
+  const date = new Date(cellValue);
+  return date.toLocaleString(); // 自定义格式化方式
+};
 
 const sortBy = ref("LastUpdateTime");
 const sortType = ref("desc");
@@ -167,5 +179,16 @@ const viewPost = (postId) => {
   display: flex;
   align-items: center;
   white-space: nowrap;
+}
+
+.clock-icon{
+  top:2px;
+  padding-right: 3px;
+}
+
+.date {
+  font-size: 0.7em; /* 调整字体大小 */
+  color: #888; /* 调整字体颜色 */
+  font-weight: normal;
 }
 </style>

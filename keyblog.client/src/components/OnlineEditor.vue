@@ -53,7 +53,7 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="glass-effect">
+    <el-card class="glass-effect markdown-content">
       <MdEditor v-model="text" :theme="theme" class="editor" @onSave="onSave" />
     </el-card>
   </el-main>
@@ -77,7 +77,7 @@ import CategorySelector from "./CategorySelector.vue";
 const defaultDateTime = new Date();
 
 const blogId = ref(null);
-const text = ref("Hello Editor!");
+const text = ref("# Hello Editor!");
 const inputTitle = ref("");
 const publishState = ref(false);
 const selectedCategoryId = ref(null);
@@ -221,6 +221,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.markdown-content pre {
+  margin: 0 !important;
+}
+
 .input-container {
   display: flex;
   align-items: center;

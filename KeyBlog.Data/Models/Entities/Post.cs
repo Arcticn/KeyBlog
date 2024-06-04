@@ -63,8 +63,7 @@ public class Post
     /// <summary>
     /// 创建时间
     /// </summary>
-
-    public DateTime CreationTime {get; set;}
+    public DateTime CreationTime { get; set; }
 
     /// <summary>
     /// 上次更新时间
