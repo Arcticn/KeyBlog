@@ -4,6 +4,7 @@
       :default-active="currentCategoryId.toString()"
       class="el-menu-sidebar glass-effect"
       mode="vertical"
+      style="max-height: 33rem;"
       :data="categories"
       :props="defaultProps"
       :collapse-transition="false"

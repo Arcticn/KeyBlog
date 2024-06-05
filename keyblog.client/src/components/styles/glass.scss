@@ -1,7 +1,9 @@
 /* 适应深色模式的毛玻璃效果 */
 :root {
-    --glass-bg-light: rgba(255, 255, 255, 0.3);
-    --glass-bg-dark: rgba(0, 0, 0, 0.7);
+    --glass-bg-light: rgba(255, 255, 255, 0.5);
+    --glass-bg-dark: rgba(0, 0, 0, 0.65);
+    --glass-bg-light-hover:rgba(255, 255, 255, 0.9);
+    --glass-bg-dark-hover:rgba(0, 0, 0, 0.85);
     --glass-border-light: rgba(255, 255, 255, 0.4);
     --glass-border-dark: rgba(0, 0, 0, 0.1);
     --glass-increa-light: rgba(255, 255, 255, 0.2); //由于渲染会重叠，单独设置增量
@@ -20,7 +22,7 @@
 }
 
 .el-card.glass-effect:hover {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: var(--glass-bg-light-hover);
     /* 悬浮时的背景颜色 */
     box-shadow: var(--el-box-shadow-dark);
     /* 悬浮时的阴影效果 */
@@ -41,7 +43,7 @@
 }
 
 .el-table.glass-effect:hover {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: var(--glass-bg-light-hover);
     /* 悬浮时的背景颜色 */
     box-shadow: var(--el-box-shadow-dark);
     /* 悬浮时的阴影效果 */
@@ -59,7 +61,7 @@
 
 .el-menu.glass-effect:hover {
     box-shadow: var(--el-box-shadow-dark);
-    background-color: rgba(255, 255, 255, 0.7) !important;
+    background-color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .el-menu.glass-effect .el-menu-item {
@@ -96,7 +98,7 @@ html.dark {
     }
 
     .el-card.glass-effect:hover {
-        background-color: rgba(0, 0, 0, 0.85) !important;
+        background-color: var(--glass-bg-dark-hover) !important;
         box-shadow: var(--el-box-shadow);
     }
 
