@@ -16,6 +16,7 @@
           <el-input
             v-model="formData.pass"
             type="password"
+            show-password
             autocomplete="off"
           />
         </el-form-item>
@@ -23,6 +24,7 @@
           <el-form-item label="确认密码" prop="checkPass">
             <el-input
               v-model="formData.checkPass"
+              show-password
               type="password"
               autocomplete="off"
             />
@@ -173,6 +175,7 @@ onMounted(async () => {
   console.log(currentUser);
 
   if (currentUser.value) {
+    console.log(localStorage.getItem("token"));
     if (currentUser.value.IsAdmin) {
       try {
         await api.get("User/admin"); //令牌过期则退出

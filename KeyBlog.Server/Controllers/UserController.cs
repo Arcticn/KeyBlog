@@ -25,6 +25,12 @@ public class UserController : ControllerBase
         {
             return BadRequest("用户名或密码为空");
         }
+        var isExistUser = await _userJwtService.GetUser(newUser.Username);
+        if (isExistUser != null)
+        {
+            return BadRequest("用户名已被注册");
+        }
+
         User tempUser = new User
         {
             Username = newUser.Username,
