@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+KeyBlog.Server/appsettings.json
+keyblog.client/public/favicon.ico
+keyblog.client/src/assets/Wallpaper/
