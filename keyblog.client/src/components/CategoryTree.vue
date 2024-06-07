@@ -1,10 +1,11 @@
 <template>
   <div>
     <el-menu
+      v-loading="categories.length === 0"
       :default-active="currentCategoryId.toString()"
       class="el-menu-sidebar glass-effect"
       mode="vertical"
-      style="max-height: 33rem;"
+      style="max-height: 33rem;min-height: 5rem;"
       :data="categories"
       :props="defaultProps"
       :collapse-transition="false"

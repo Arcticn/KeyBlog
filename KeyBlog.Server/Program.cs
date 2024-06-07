@@ -2,6 +2,7 @@ using KeyBlog.Data.Extensions;
 using KeyBlog.Data.Services;
 using KeyBlog.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -27,6 +28,22 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
         builder.Services.AddEndpointsApiExplorer();
+        builder.WebHost.ConfigureKestrel(serverOptions =>
+        {
+            //转发nginx
+            serverOptions.ListenAnyIP(5179);
+            /*       // 配置 HTTP 端口
+                   serverOptions.ListenAnyIP(80);
+
+                   // 配置 HTTPS 端口
+                   serverOptions.ListenAnyIP(443, listenOptions =>
+                   {
+                       listenOptions.UseHttps("C:\\Certificates\\keyblog.eastasia.cloudapp.azure.com.pfx", "admin");
+                   });*/
+
+        });
+
+
         // 配置 Swagger
         builder.Services.AddSwaggerGen(c =>
         {
@@ -85,20 +102,14 @@ public class Program
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = issuer,
-                ValidAudience = audience,
+                ValidateIssuer = true,//是否验证Issuer
+                ValidateAudience = true,//是否验证Audience
+                ValidateLifetime = true,//是否验证失效时间
+                ValidateIssuerSigningKey = true,//是否验证SecurityKey
+                ValidIssuer = issuer,//发行人Issuer
+                ValidAudience = audience, //订阅人Audience
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key))
-                // ValidateIssuer = true, //是否验证Issuer
-                // ValidIssuer = issuer, //发行人Issuer
-                // ValidateAudience = true, //是否验证Audience
-                // ValidAudience = audience, //订阅人Audience
-                // ValidateIssuerSigningKey = true, //是否验证SecurityKey
-                // IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)), //SecurityKey
-                // ValidateLifetime = true, //是否验证失效时间
+
                 // ClockSkew = TimeSpan.FromSeconds(30), //过期时间容错值，解决服务器端时间不同步问题（秒）
                 // RequireExpirationTime = true //是否要求Token的Claims中必须包含Expires
             };
@@ -126,10 +137,15 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+
         app.UseDefaultFiles();
         app.UseStaticFiles();
         app.UseAuthentication();
-        app.UseAuthorization();
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -140,12 +156,15 @@ public class Program
         }
 
         // 注释以阻止HTTPS
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+        app.UseStaticFiles();
+
+        app.UseAuthorization();
 
         // 使用 CORS
         app.UseCors("AllowAllOrigins");
-
-        app.UseAuthorization();
 
         app.MapControllers();
 
@@ -153,4 +172,7 @@ public class Program
 
         app.Run();
     }
+
+
+
 }

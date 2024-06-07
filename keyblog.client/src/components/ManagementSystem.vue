@@ -8,6 +8,7 @@
     "
   >
     <el-table
+      v-loading="categoryNodes === null"
       class="glass-effect"
       ref="categoryTable"
       :data="categoryNodes"
@@ -54,11 +55,12 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- v-if="(posts && posts.length > 0) || loadPostStatus === false" -->
     <el-table
-      v-if="posts && posts.length > 0"
+      v-loading="loadPostStatus"
       class="glass-effect"
       :data="posts"
-      style="margin-bottom: 2rem; height: fit-content; width: fit-content"
+      style="margin-bottom: 2rem; height: fit-content; width: 692px"
       row-key="id"
     >
       <el-table-column prop="title" label="博客名称" width="260" sortable />
@@ -139,6 +141,7 @@ const newName = ref(null);
 const posts = ref(null);
 const router = useRouter();
 const categoryTable = ref(null);
+const loadPostStatus = ref(false);
 
 const formatDate1 = (row, column, cellValue) => {
   if (!cellValue) return "";
@@ -295,6 +298,7 @@ const updateRow = (row) => {
 };
 
 const fetchPosts = async () => {
+  loadPostStatus.value = true;
   console.log(categoryRow.value);
   try {
     const response = await api.get("Blog/lists", {
@@ -308,6 +312,8 @@ const fetchPosts = async () => {
     posts.value = response.data.posts.items;
   } catch (error) {
     console.error("Error fetching data:", error);
+  } finally {
+    loadPostStatus.value = false;
   }
 };
 

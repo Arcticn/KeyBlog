@@ -2,6 +2,7 @@
   <el-container style="display: flex; justify-content: center">
     <el-main style="margin-bottom: 5rem; max-width: 60rem">
       <PostList
+        :loadPostStatus="loadPostStatus"
         :posts="posts"
         :total="total"
         :currentPage="currentPage"
@@ -16,7 +17,7 @@
       <el-affix :offset="100">
         <UserCard />
         <CategoryTree
-          style="margin-top: 1rem"
+          style="margin-top: 1rem;"
           :categories="categoryNodes"
           :currentCategoryId="currentCategoryId"
           @node-click="handleNodeClick"
@@ -50,8 +51,10 @@ const sortBy = ref("LastUpdateTime");
 const sortType = ref("desc");
 const searchQuery = ref("");
 const postCount = ref(0);
+const loadPostStatus = ref(false);
 
 const fetchData = async (categoryId = 0, page = 1) => {
+  loadPostStatus.value = true;
   try {
     const response = await api.get("Blog/lists", {
       params: {
@@ -80,6 +83,9 @@ const fetchData = async (categoryId = 0, page = 1) => {
     //currentPage.value = page;
   } catch (error) {
     ErrorMessage(error.response.data);
+  }
+  finally {
+    loadPostStatus.value = false;
   }
 };
 

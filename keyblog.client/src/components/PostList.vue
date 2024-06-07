@@ -57,13 +57,15 @@
 
   <div>
     <el-card
-      v-if="posts.length === 0"
+      v-if="posts.length === 0 || loadPostStatus === true"
+      v-loading="loadPostStatus"
       shadow="always"
       class="mb-3 glass-effect"
     >
       <div class="card-body">没有文章</div>
     </el-card>
     <el-card
+      v-else
       v-for="post in posts"
       :key="post.id"
       shadow="always"
@@ -102,6 +104,10 @@ import "@/components/styles/glass.scss";
 
 // 定义组件的 props
 const props = defineProps({
+  loadPostStatus: {
+    type: Boolean,
+    required: true,
+  },
   posts: {
     type: Array,
     required: true,
@@ -181,8 +187,8 @@ const viewPost = (postId) => {
   white-space: nowrap;
 }
 
-.clock-icon{
-  top:2px;
+.clock-icon {
+  top: 2px;
   padding-right: 3px;
 }
 
