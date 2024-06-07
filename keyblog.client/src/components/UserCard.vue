@@ -1,5 +1,5 @@
 <template>
-  <el-card class="glass-effect" style="margin-left: 14px; width: 16.7rem">
+  <el-card class="glass-effect" style="margin-left: 14px; max-width: 16.7rem">
     <div v-if="!isLoggedin">
       <el-form
         ref="formDataRef"

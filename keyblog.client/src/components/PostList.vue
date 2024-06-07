@@ -59,6 +59,7 @@
     <el-card
       v-if="posts.length === 0 || loadPostStatus === true"
       v-loading="loadPostStatus"
+      style="min-height: 10rem;"
       shadow="always"
       class="mb-3 glass-effect"
     >

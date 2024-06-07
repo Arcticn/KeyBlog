@@ -1,6 +1,6 @@
 ﻿<template>
   <el-container style="display: flex; justify-content: center">
-    <el-main style="margin-bottom: 5rem; max-width: 60rem">
+    <el-main style="margin-bottom: 5rem; max-width: 60rem;min-width:10rem">
       <PostList
         :loadPostStatus="loadPostStatus"
         :posts="posts"

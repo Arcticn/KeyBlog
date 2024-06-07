@@ -45,7 +45,7 @@ const handleNodeClick = (node) => {
 
 <style scoped>
 .el-menu-sidebar {
-  width: auto;
+  max-width: 16.7rem;
   max-height: 600px; /* 设置最大高度 */
   overflow-y: auto; /* 超出高度时添加滚动条 */
   border: 1px solid #dcdfe6;

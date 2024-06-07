@@ -2,8 +2,9 @@
   <el-container>
     <el-main class="markdown-content">
       <el-card
+        v-loading="markdownContent === ''"
         class="glass-effect"
-        style="margin-left: 5rem; margin-right: 1rem"
+        style="margin-left: 5rem; margin-right: 1rem;min-height: 30rem"
       >
         <MdPreview
           :editorId="id"
@@ -16,9 +17,11 @@
     <el-aside class="catalog-container" width="250px">
       <el-affix :offset="100">
         <el-card
+          v-loading="markdownContent === ''"
           class="glass-effect"
-          style="width: 11rem; padding-right: 10px"
+          style="width: 11rem; padding-right: 10px;min-height: 10rem;"
           body-style="padding:10px"
+          
         >
           <MdCatalog
             :editorId="id"

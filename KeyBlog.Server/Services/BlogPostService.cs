@@ -48,10 +48,6 @@ public class BlogPostService : PostService
             querySet = querySet.OrderByPropertyName(orderByProperty, isAscending);
         }
 
-        if(!string.IsNullOrWhiteSpace(param.Search)){
-            querySet = querySet.Where(a => a.Title.Contains(param.Search));
-        }
-
         var totalCount = await querySet.CountAsync();
         var items = await querySet.Page(param.Page, param.PageSize).Include(a => a.Category).ToListAsync();
 
