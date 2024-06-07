@@ -35,6 +35,10 @@ public class CategoryService
 
         return string.Join(",", hierarchy);
     }
+    
+    /// <summary>
+    /// 生成文章分类树
+    /// </summary>
     public async Task<List<CategoryDto>?> GetNode(bool IsAdmin = false)
     {
         if (IsAdmin == true)
@@ -55,9 +59,6 @@ public class CategoryService
         }
     }
 
-    /// <summary>
-    /// 生成文章分类树
-    /// </summary>
     public static List<CategoryDto>? GetNodes(List<Category> categoryList, int parentId = 0)
     {
         var categories = categoryList
