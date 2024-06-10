@@ -1,6 +1,10 @@
 <template>
   <el-main style="padding: 3rem">
-    <el-card class="glass-effect" style="margin-bottom: 2rem">
+    <el-card
+      class="glass-effect"
+      v-loading="incomingLoadingState"
+      style="margin-bottom: 2rem"
+    >
       <el-row justify="space-between" style="margin-bottom: 0" v-if="isAdmin">
         <el-col :span="24">
           <div class="input-container">
@@ -9,7 +13,11 @@
               <el-radio-button :value="true" border>已发布</el-radio-button>
               <el-radio-button :value="false" border>未发布</el-radio-button>
             </el-radio-group>
-            <el-radio-group v-model="saveMethod" v-if="isAdmin" style="margin-left: auto">
+            <el-radio-group
+              v-model="saveMethod"
+              v-if="isAdmin"
+              style="margin-left: auto"
+            >
               <el-radio-button value="true" border>远程</el-radio-button>
               <el-radio-button value="false" border>本地</el-radio-button>
             </el-radio-group>
@@ -53,7 +61,10 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="glass-effect markdown-content">
+    <el-card
+      v-loading="incomingLoadingState"
+      class="glass-effect markdown-content"
+    >
       <MdEditor v-model="text" :theme="theme" class="editor" @onSave="onSave" />
     </el-card>
   </el-main>
@@ -87,6 +98,7 @@ const route = useRoute();
 
 const incomingId = ref(null);
 const incomingCategoryId = ref(null);
+const incomingLoadingState = ref(false);
 
 const { theme } = useDarkMode();
 
@@ -188,6 +200,7 @@ const fetchData = async () => {
 };
 
 const fetchPost = async () => {
+  incomingLoadingState.value = true;
   try {
     const response = await api.get(`Post/posts/${blogId.value}`);
     const postData = response.data;
@@ -199,6 +212,8 @@ const fetchPost = async () => {
     publishState.value = postData.isPublish;
   } catch (error) {
     console.error("Error fetching post data:", error);
+  } finally {
+    incomingLoadingState.value = false;
   }
 };
 
