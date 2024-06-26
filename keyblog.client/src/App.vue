@@ -23,7 +23,7 @@ export default {
     Arial,
     sans-serif;
   text-align: center;
-  background-image: url("@/assets/Wallpaper/123.jpg");
+  background-image: url("@/assets/Wallpaper/philia.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

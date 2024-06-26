@@ -65,15 +65,28 @@
       v-loading="incomingLoadingState"
       class="glass-effect markdown-content"
     >
-      <MdEditor v-model="text" :theme="theme" class="editor" @onSave="onSave" />
+      <MdEditor
+        v-model="text"
+        :theme="theme"
+        :previewTheme="previewTheme"
+        :codeTheme="codeTheme"
+        :toolbars="toolbars"
+        class="editor"
+        @onSave="onSave"
+      >
+        <template #defToolbars>
+          <ExportPDF :modelValue="text" />
+          <Emoji />
+        </template>
+      </MdEditor>
     </el-card>
   </el-main>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,inject } from "vue";
 import api from "@/services/api";
-import { MdEditor } from "md-editor-v3";
+import { MdEditor,allToolbar } from "md-editor-v3";
 import { useRoute } from "vue-router";
 import {
   WarningMessage,
@@ -82,11 +95,57 @@ import {
 } from "@/composables/PopupMessage.js";
 import "md-editor-v3/lib/style.css";
 import BaseHeader from "./layouts/BaseHeader.vue";
+import { codeTheme,previewTheme } from "@/composables/theme";
 import { useDarkMode } from "../composables/useDarkMode";
 import CategorySelector from "./CategorySelector.vue";
+import "md-editor-v3/lib/style.css";
+
+import { ExportPDF } from "@vavt/v3-extension";
+import { Emoji } from '@vavt/v3-extension';
+// All CSS for this extension library
+// import '@vavt/v3-extension/lib/asset/style.css';
+// Or individual style for Emoji
+import '@vavt/v3-extension/lib/asset/Emoji.css';
+import "@vavt/v3-extension/lib/asset/ExportPDF.css";
+
+const toolbars = [
+  'bold',
+  'underline',
+  'italic',
+  '-',
+  'title',
+  'strikeThrough',
+  'sub',
+  'sup',
+  'quote',
+  'unorderedList',
+  'orderedList',
+  'task',
+  1,
+  '-',
+  'codeRow',
+  'code',
+  'link',
+  'image',
+  'table',
+  'mermaid',
+  'katex',
+  '-',
+  'revoke',
+  'next',
+  'save',
+  0,
+  '=',
+  'pageFullscreen',
+  'fullscreen',
+  'preview',
+  'previewOnly',
+  'htmlPreview',
+  'catalog',
+  'github'
+];
 
 const defaultDateTime = new Date();
-
 const blogId = ref(null);
 const text = ref("# Hello Editor!");
 const inputTitle = ref("");
@@ -219,6 +278,7 @@ const fetchPost = async () => {
 
 const isAdmin = ref(true);
 onMounted(() => {
+  console.log(codeTheme);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (currentUser) {
     if (!currentUser.isAdmin) {

@@ -26,6 +26,26 @@
           inactive-text="亮"
         />
       </el-menu-item>
+      <el-menu-item h="full">
+        文章主题：
+        <el-select v-model="previewTheme" placeholder="Select" style="width: 120px">
+          <el-option
+            v-for="item in previewThemeOptions"
+            :key="item"
+            :value="item"
+          />
+        </el-select>
+      </el-menu-item>
+      <el-menu-item h="full">
+        代码主题：
+        <el-select v-model="codeTheme" placeholder="Select" style="width: 120px">
+          <el-option
+            v-for="item in codeThemeOptions"
+            :key="item"
+            :value="item"
+          />
+        </el-select>
+      </el-menu-item>
     </el-menu>
   </el-affix>
 </template>
@@ -33,6 +53,7 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
 import { onMounted, ref, watch } from "vue";
+import { codeTheme,previewTheme } from "@/composables/theme";
 import { useDarkMode } from "@/composables/useDarkMode";
 import "@/components/styles/glass.scss";
 
@@ -40,6 +61,25 @@ const route = useRoute();
 const activeIndex = ref(route.path);
 
 const { isDark } = useDarkMode();
+
+const previewThemeOptions = [
+  "default",
+  "github",
+  "vuepress",
+  "mk-cute",
+  "smart-blue",
+  "cyanosis",
+];
+const codeThemeOptions = [
+  "atom",
+  "a11y",
+  "github",
+  "gradient",
+  "kimbie",
+  "paraiso",
+  "qtcreator",
+  "stackoverflow",
+];
 
 // 获取路由实例并立即调用push方法
 const router = useRouter();
@@ -69,5 +109,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
