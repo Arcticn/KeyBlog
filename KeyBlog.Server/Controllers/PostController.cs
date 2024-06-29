@@ -67,15 +67,17 @@ public class PostController : ControllerBase
         if (newPost.Id == null)
         {
             await _blogPostService.InsetPost(tempPost);
+            return Ok(new { id = tempPost.Id });
         }
         else
         {
             tempPost.Id = newPost.Id;
             tempPost.LastUpdateTime = DateTime.Now;
             await _blogPostService.EditPost(tempPost);
+            return Ok(new { id = tempPost.Id });
         }
 
-        return Ok();
+        // return Ok();
     }
 
     [Authorize(Roles = "Admin")]

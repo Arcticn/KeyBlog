@@ -68,6 +68,7 @@
       <MdEditor
         v-model="text"
         :theme="theme"
+        style="height:45rem;"
         :previewTheme="previewTheme"
         :codeTheme="codeTheme"
         :toolbars="toolbars"
@@ -75,7 +76,7 @@
         @onSave="onSave"
       >
         <template #defToolbars>
-          <ExportPDF :modelValue="text" />
+          <ExportPDF :modelValue="text" :file-name="inputTitle"/>
           <Emoji />
         </template>
       </MdEditor>
@@ -84,9 +85,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted,inject } from "vue";
+import { ref, onMounted } from "vue";
 import api from "@/services/api";
-import { MdEditor,allToolbar } from "md-editor-v3";
+import { MdEditor } from "md-editor-v3";
 import { useRoute } from "vue-router";
 import {
   WarningMessage,
@@ -94,7 +95,7 @@ import {
   ErrorMessage,
 } from "@/composables/PopupMessage.js";
 import "md-editor-v3/lib/style.css";
-import BaseHeader from "./layouts/BaseHeader.vue";
+// import BaseHeader from "./layouts/BaseHeader.vue";
 import { codeTheme,previewTheme } from "@/composables/theme";
 import { useDarkMode } from "../composables/useDarkMode";
 import CategorySelector from "./CategorySelector.vue";
@@ -226,6 +227,7 @@ const onSave = async () => {
 const saveRemote = async (newPost) => {
   try {
     const response = await api.post("Post/savePost", newPost);
+    incomingId.value = response.data.id;
     SuccessMessage("Content saved successfully:", response.data);
   } catch (error) {
     ErrorMessage(error.response.data);
