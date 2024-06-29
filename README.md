@@ -1,7 +1,7 @@
 # KeyBlog
 ## 项目介绍
-### 通过学习 Deali-Axy 大佬的 [StarBlog](https://github.com/Deali-Axy/StarBlog) 而编写的博客项目
-### 集前台与后台管理于一体
+### 通过学习 Deali-Axy 大佬的 [StarBlog](https://github.com/Deali-Axy/StarBlog) 而编写的 Vue + .Net 博客项目
+### 集成了前端博客页面与简易的后台管理
 
 ## 项目展示
 ![图片](https://github.com/Arcticn/KeyBlog/assets/46252987/8a067d8b-e8cb-486c-afa2-8cbbdd20b95f)
