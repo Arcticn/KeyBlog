@@ -28,7 +28,12 @@
       </el-menu-item>
       <el-menu-item h="full">
         文章主题：
-        <el-select v-model="previewTheme" placeholder="Select" style="width: 120px">
+        <el-select
+          v-model="previewTheme"
+          @change="saveTheme"
+          placeholder="Select"
+          style="width: 120px"
+        >
           <el-option
             v-for="item in previewThemeOptions"
             :key="item"
@@ -38,7 +43,12 @@
       </el-menu-item>
       <el-menu-item h="full">
         代码主题：
-        <el-select v-model="codeTheme" placeholder="Select" style="width: 120px">
+        <el-select
+          v-model="codeTheme"
+          @change="saveTheme"
+          placeholder="Select"
+          style="width: 120px"
+        >
           <el-option
             v-for="item in codeThemeOptions"
             :key="item"
@@ -53,7 +63,7 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
 import { onMounted, ref, watch } from "vue";
-import { codeTheme,previewTheme } from "@/composables/theme";
+import { codeTheme, previewTheme } from "@/composables/theme";
 import { useDarkMode } from "@/composables/useDarkMode";
 import "@/components/styles/glass.scss";
 
@@ -69,6 +79,7 @@ const previewThemeOptions = [
   "mk-cute",
   "smart-blue",
   "cyanosis",
+  "arknights",
 ];
 const codeThemeOptions = [
   "atom",
@@ -86,6 +97,11 @@ const router = useRouter();
 
 const pushUrl = (url) => {
   router.push(url);
+};
+
+const saveTheme = () => {
+  localStorage.setItem("codeTheme", codeTheme.value);
+  localStorage.setItem("previewTheme", previewTheme.value);
 };
 
 // 当参数更改时获取用户信息

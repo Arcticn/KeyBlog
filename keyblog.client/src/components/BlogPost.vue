@@ -10,6 +10,7 @@
           :editorId="id"
           :theme="theme"
           :previewTheme="previewTheme"
+          :codeTheme="codeTheme"
           v-model="markdownContent"
           @onGetCatalog="onGetCatalog"
         />
@@ -40,12 +41,12 @@ import { ref, onMounted } from "vue";
 import api from "@/services/api";
 import { MdPreview, MdCatalog } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
-import { previewTheme } from "@/composables/theme";
+import { previewTheme,codeTheme } from "@/composables/theme";
 // import BaseHeader from "./layouts/BaseHeader.vue";
 import { useDarkMode } from "../composables/useDarkMode";
-// import anchor from "markdown-it-anchor";
-// import { config } from "md-editor-v3";
+
 import { ErrorMessage } from "@/composables/PopupMessage";
+import '@vavt/cm-extension/dist/previewTheme/arknights.css';
 
 // config({
 //   markdownItConfig(mdit) {

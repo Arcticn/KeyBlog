@@ -100,7 +100,7 @@ import { codeTheme,previewTheme } from "@/composables/theme";
 import { useDarkMode } from "../composables/useDarkMode";
 import CategorySelector from "./CategorySelector.vue";
 import "md-editor-v3/lib/style.css";
-
+import '@vavt/cm-extension/dist/previewTheme/arknights.css';
 import { ExportPDF } from "@vavt/v3-extension";
 import { Emoji } from '@vavt/v3-extension';
 // All CSS for this extension library
