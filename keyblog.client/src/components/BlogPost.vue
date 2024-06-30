@@ -20,7 +20,7 @@
         <el-card
           v-loading="markdownContent === ''"
           class="glass-effect"
-          style="width: 11rem; padding-right: 10px;min-height: 10rem;"
+          style="width: 11rem; padding-right: 10px;min-height: 10rem;max-height: 40rem;overflow-y: auto;"
           body-style="padding:10px"
           
         >
@@ -92,18 +92,15 @@ onMounted(() => {
 
 .catalog-container {
   overflow-y: auto;
-  max-height: calc(
-    100vh - 80px
-  ); /* 80px is the combined height of header and footer */
   padding: 20px;
   position: sticky;
   top: 10px; /* Adjust as needed to offset from the top */
 }
 
 /* Custom styles to fix code block line spacing */
-.markdown-content pre {
+/* .markdown-content pre {
   margin: 0 !important;
-}
+} */
 
 .md-editor {
   --md-bk-color: transparent; /* 使用网页的背景色 */

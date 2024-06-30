@@ -298,9 +298,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.markdown-content pre {
+/* .markdown-content pre {
   margin: 0 !important;
-}
+} */
 
 .input-container {
   display: flex;
