@@ -299,17 +299,7 @@ const isAdmin = ref(true);
 // const onUploadImg = async (files, callback) => {
 //   const completedCount = ref(0); // 计数器变量
 //   InfoMessage("正在初始化上传...");
-//   //随便访问一个检查JWT是否有效
-//   try {
-//     await axios.get(
-//       //此处填放你的 API 地址,
-        //Authorization: auth,
-//     );
-//   } catch (error) {
-//     getPicToken();
-//   }
-
-//   console.log(localStorage.getItem("picToken"));
+// 
 //   if (
 //     localStorage.getItem("picToken") === null ||
 //     localStorage.getItem("picToken") === "undefined"
@@ -415,10 +405,6 @@ onMounted(() => {
   if (blogId.value) {
     fetchPost();
   }
-
-  // 图床相关，记得开启
-  // const picToken = localStorage.getItem("picToken");
-  // if (picToken === null) getPicToken();
 
   mdEditor.value?.on("pageFullscreen", (status) =>
     handlePageFullscreen(status)
