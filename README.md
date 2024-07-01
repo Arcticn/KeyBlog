@@ -25,6 +25,7 @@ cd .\KeyBlog\
 dotnet publish "KeyBlog.Server" --configuration Release --output "KeyBlog.Server\publish"
 ```
 如果选择使用SQLite，在publish完成后，将数据库app.db复制进入publish文件夹下
+
 进入publish文件夹，点击KeyBlog.Server.exe，默认监听在[localhost:5179](localhost:5179)上
 
 ### 部署到Azure
