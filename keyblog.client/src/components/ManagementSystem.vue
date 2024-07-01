@@ -8,10 +8,10 @@
     "
   >
     <el-table
-      v-loading="categoryNodes === null"
+      v-loading="categoryNodesWithRoot === null"
       class="glass-effect"
       ref="categoryTable"
-      :data="categoryNodes"
+      :data="categoryNodesWithRoot"
       style="
         margin-bottom: 2rem;
         margin-right: 4rem;
@@ -122,16 +122,15 @@
 
 <script setup>
 import api from "@/services/api";
-import { nextTick, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { ElMessage, ElMessageBox, formatter } from "element-plus";
-import BaseHeader from "./layouts/BaseHeader.vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+// import BaseHeader from "./layouts/BaseHeader.vue";
 import {
   WarningMessage,
   SuccessMessage,
   ErrorMessage,
 } from "@/composables/PopupMessage.js";
-import { formatDate } from "@vueuse/core";
 
 const categoryRow = ref(null);
 const categoryNodes = ref(null);
@@ -177,6 +176,10 @@ const handleCategoryCreate = async (row) => {
 };
 
 const handleCategoryEdit = async (row) => {
+  if (row.id === 0) {
+    WarningMessage("根目录不可编辑", "根目录不可编辑");
+    return;
+  }
   editName.value = (
     await ElMessageBox.prompt("请输入新的类别名称", "修改", {
       confirmButtonText: "确认",
@@ -201,6 +204,10 @@ const handleCategoryEdit = async (row) => {
 const dialogTableVisible = ref(false);
 const categoryToMove = ref(null);
 const openCategoryMoveDialog = (row) => {
+  if (row.id === 0) {
+    WarningMessage("根目录不可移动", "根目录不可移动");
+    return;
+  }
   dialogTableVisible.value = true;
   categoryToMove.value = row;
 };
@@ -228,6 +235,10 @@ const handleCategoryMove = async (row) => {
 };
 
 const handleCategoryDelete = async (row) => {
+  if (row.id === 0) {
+    WarningMessage("根目录不可删除", "根目录不可删除");
+    return;
+  }
   ElMessageBox.confirm("该类别所有帖子都将被一起删除，是否继续？", "警告", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
@@ -292,6 +303,7 @@ const handlePostDelete = async (row) => {
 };
 
 const updateRow = (row) => {
+  // console.log(row);
   categoryTable.value.toggleRowExpansion(row);
   categoryRow.value = row;
   fetchPosts();
@@ -299,7 +311,7 @@ const updateRow = (row) => {
 
 const fetchPosts = async () => {
   loadPostStatus.value = true;
-  console.log(categoryRow.value);
+  // console.log(categoryRow.value);
   try {
     const response = await api.get("Blog/lists", {
       params: {
@@ -324,6 +336,13 @@ const fetchData = async () => {
     categoryNodes.value = data.categoryNodes;
     addRootNode();
     // console.log(categoryNodes);
+
+    if (categoryNodesWithRoot.value.length > 0) {
+      // 延迟以确保数据绑定到表格后再展开第一行
+      setTimeout(() => {
+        categoryTable.value.toggleRowExpansion(categoryNodesWithRoot.value[0], true);
+      }, 0);
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
   }

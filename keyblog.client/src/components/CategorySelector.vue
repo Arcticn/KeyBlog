@@ -25,7 +25,7 @@
             v-model="optionName"
             class="option-input"
             placeholder="输入分类名称"
-            style="margin-bottom: 0.6rem;"
+            style="margin-bottom: 0.6rem"
             size="small"
           />
           <el-button type="primary" size="small" @click="onConfirm">
@@ -82,8 +82,8 @@ const onAddOption = () => {
 
 const onConfirm = () => {
   if (optionName.value) {
-    const parentId =
-      props.categories.length > 0 ? props.categories[0].parentId : 0; // 从当前选择框中的第一个选项获取 parentId
+    const parentId = 
+      props.categories !== null ? props.categories[0].parentId : 0; // 从当前选择框中的第一个选项获取 parentId
     const newCategory = {
       name: optionName.value,
       parentId: parentId,

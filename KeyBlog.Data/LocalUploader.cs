@@ -27,13 +27,6 @@ public class LocalUploader
     {
         // 数据导入
         WalkDirectoryTree(new DirectoryInfo(_importDir));
-        // 复制数据库
-        var destFile = Path.GetFullPath("../../../../KeyBlog.Server/app.db");
-        if (File.Exists("app.db"))
-        {
-            Console.WriteLine($"复制数据库：{destFile}");
-            File.Copy("app.db", destFile, true);
-        }
 
     }
 
