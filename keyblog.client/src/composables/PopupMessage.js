@@ -18,6 +18,15 @@ export const WarningMessage = (newMessage) => {
   });
 };
 
+export const InfoMessage = (newMessage) => {
+  ElMessage({
+    message: newMessage,
+    duration: 1500,
+    showClose: true,
+    type: "info",
+  });
+};
+
 export const ErrorMessage = (newMessage) => {
   ElMessage({
     message: newMessage,

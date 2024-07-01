@@ -1,6 +1,7 @@
 <template>
   <el-main style="padding: 3rem">
     <el-card
+      v-if="!isFullscreen"
       class="glass-effect"
       v-loading="incomingLoadingState"
       style="margin-bottom: 2rem"
@@ -62,20 +63,24 @@
       </el-row>
     </el-card>
     <el-card
+      ref="editorCard"
       v-loading="incomingLoadingState"
       class="glass-effect markdown-content"
+      :class="{ fullscreen: isFullscreen }"
     >
       <MdEditor
+        ref="mdEditor"
         v-model="text"
-        :theme="theme"
         style="height: 45rem"
+        :theme="theme"
         :previewTheme="previewTheme"
         :codeTheme="codeTheme"
         :toolbars="toolbars"
+        :footers="['markdownTotal', '=', 0, 'scrollSwitch']"
         class="editor"
         @onSave="onSave"
+        @onUploadImg="onUploadImg"
         autoDetectCode
-        :footers="['markdownTotal', '=', 0, 'scrollSwitch']"
       >
         <template #defToolbars>
           <ExportPDF :modelValue="text" :file-name="inputTitle" />
@@ -90,13 +95,16 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import { ref, onMounted } from "vue";
 import api from "@/services/api";
 import { MdEditor } from "md-editor-v3";
 import { useRoute } from "vue-router";
+import { ElMessage } from "element-plus";
 import {
   WarningMessage,
   SuccessMessage,
+  InfoMessage,
   ErrorMessage,
 } from "@/composables/PopupMessage.js";
 import "md-editor-v3/lib/style.css";
@@ -172,12 +180,12 @@ const categories = ref(null);
 
 const updateCategoryId = async (newId) => {
   selectedCategoryId.value = newId;
-  console.log(selectedCategoryId.value);
+  // console.log(selectedCategoryId.value);
 };
 
 const updateCategories = async (newCategories) => {
   try {
-    console.log("newCategory:", newCategories);
+    // console.log("newCategory:", newCategories);
     const response = await api.post("Category/addCategory", newCategories);
     fetchData();
     SuccessMessage("成功添加分类", response.data);
@@ -187,8 +195,8 @@ const updateCategories = async (newCategories) => {
 };
 
 const onSave = async () => {
-  console.log(selectedCategoryId.value);
-  console.log(publishState.value);
+  // console.log(selectedCategoryId.value);
+  // console.log(publishState.value);
   if (inputTitle.value === "") {
     WarningMessage("请输入标题");
     return;
@@ -260,7 +268,7 @@ const fetchData = async () => {
     const response = await api.get("Category/getCategories");
     const data = response.data;
     categories.value = data.categoryNodes;
-    console.log(categories);
+    // console.log(categories);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -285,8 +293,115 @@ const fetchPost = async () => {
 };
 
 const isAdmin = ref(true);
+
+//图床部分-请填写相关api地址
+
+// const onUploadImg = async (files, callback) => {
+//   const completedCount = ref(0); // 计数器变量
+//   InfoMessage("正在初始化上传...");
+//   //随便访问一个检查JWT是否有效
+//   try {
+//     await axios.get(
+//       //此处填放你的 API 地址,
+        //Authorization: auth,
+//     );
+//   } catch (error) {
+//     getPicToken();
+//   }
+
+//   console.log(localStorage.getItem("picToken"));
+//   if (
+//     localStorage.getItem("picToken") === null ||
+//     localStorage.getItem("picToken") === "undefined"
+//   ) {
+//     await getPicToken();
+//   }
+//   const auth = "Bearer " + localStorage.getItem("picToken");
+//   console.log(auth);
+
+//   let messageInstance = null; // 保存消息实例
+//   const showUploadMessage = () => {
+//     if (messageInstance) {
+//       messageInstance.close();
+//     }
+
+//     messageInstance = ElMessage({
+//       message: "正在上传文件...",
+//       duration: 0,
+//       showClose: true,
+//       type: "info",
+//       plain:true
+//     });
+//   };
+
+//   showUploadMessage();
+
+//   const res = await Promise.all(
+//     files.map((file) => {
+//       return new Promise((rev, rej) => {
+//         const form = new FormData();
+//         form.append("file", file);
+//         axios
+//           .post(/*此处填放你的 API 地址*/, form, {
+//             headers: {
+//               "Content-Type": "multipart/form-data",
+//               Authorization: auth,
+//             },
+//           })
+//           .then((res) => {
+//             console.log("成功上传文件:", res);
+//             InfoMessage(`上传进度${++completedCount.value} / ${files.length}`);
+//             rev(res);
+//           })
+//           .catch((error) => rej(error));
+//       });
+//     })
+//   );
+
+//   callback(res.map((item) => item.data.data.links.url));
+//   if (messageInstance) {
+//     messageInstance.close();
+//   }
+//   SuccessMessage(`${completedCount.value}个文件上传成功`);
+// };
+
+// const getPicToken = async () => {
+//   try {
+//     const emailandpass = {
+//       //此处填放你自己的邮箱和密码
+//     };
+//     const response = await axios.post(
+//       //此处填放你的 API 地址,
+//       emailandpass
+//     );
+//     localStorage.setItem("picToken", response.data.data.token);
+//     console.log(response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// };
+
+//解决全屏显示问题
+const editorCard = ref(null);
+const mdEditor = ref(null);
+
+const isFullscreen = ref(false);
+const isPageFullscreen = ref(false);
+const handleFullscreen = (status) => {
+  isFullscreen.value = status;
+  if (status == false && isPageFullscreen.value == true) {
+    mdEditor.value?.togglePageFullscreen(false);
+  }
+};
+
+const handlePageFullscreen = (status) => {
+  handleFullscreen(status);
+  isPageFullscreen.value = status;
+};
+
 onMounted(() => {
-  console.log(codeTheme);
+  // console.log(codeTheme);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (currentUser) {
     if (!currentUser.isAdmin) {
@@ -300,6 +415,15 @@ onMounted(() => {
   if (blogId.value) {
     fetchPost();
   }
+
+  // 图床相关，记得开启
+  // const picToken = localStorage.getItem("picToken");
+  // if (picToken === null) getPicToken();
+
+  mdEditor.value?.on("pageFullscreen", (status) =>
+    handlePageFullscreen(status)
+  );
+  mdEditor.value?.on("fullscreen", (status) => handleFullscreen(status));
 });
 </script>
 
@@ -321,5 +445,15 @@ onMounted(() => {
 
 .el-row {
   margin-bottom: 20px;
+}
+
+.fullscreen {
+  position: fixed !important;
+  top: 61px !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  border-radius: 0 !important;
 }
 </style>
