@@ -26,6 +26,8 @@
           
         >
           <MdCatalog
+            scrollElementOffsetTop="65"
+            offsetTop="150"
             :editorId="id"
             style="font-size: 15px"
             :scrollElement="scrollElement"
@@ -47,6 +49,7 @@ import { useDarkMode } from "../composables/useDarkMode";
 
 import { ErrorMessage } from "@/composables/PopupMessage";
 import '@vavt/cm-extension/dist/previewTheme/arknights.css';
+
 
 // config({
 //   markdownItConfig(mdit) {
@@ -84,6 +87,7 @@ const fetchAndRenderContent = async () => {
 onMounted(() => {
   fetchAndRenderContent();
 });
+
 </script>
 
 <style>

@@ -21,7 +21,8 @@
 
 }
 
-.el-card.glass-effect:hover {
+.el-card.glass-effect:hover,
+.el-card.glass-effect:focus-within {
     background-color: var(--glass-bg-light-hover);
     /* 悬浮时的背景颜色 */
     box-shadow: var(--el-box-shadow-dark);
@@ -97,7 +98,8 @@ html.dark {
         border: 1px solid var(--glass-border-dark) !important;
     }
 
-    .el-card.glass-effect:hover {
+    .el-card.glass-effect:hover,
+    .el-card.glass-effect:focus-within {
         background-color: var(--glass-bg-dark-hover) !important;
         box-shadow: var(--el-box-shadow);
     }

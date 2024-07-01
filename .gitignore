@@ -364,3 +364,4 @@ FodyWeavers.xsd
 KeyBlog.Server/appsettings.json
 keyblog.client/public/favicon.ico
 
+KeyBlog.Server/app.db

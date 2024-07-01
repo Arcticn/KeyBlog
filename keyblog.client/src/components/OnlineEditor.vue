@@ -68,16 +68,21 @@
       <MdEditor
         v-model="text"
         :theme="theme"
-        style="height:45rem;"
+        style="height: 45rem"
         :previewTheme="previewTheme"
         :codeTheme="codeTheme"
         :toolbars="toolbars"
         class="editor"
         @onSave="onSave"
+        autoDetectCode
+        :footers="['markdownTotal', '=', 0, 'scrollSwitch']"
       >
         <template #defToolbars>
-          <ExportPDF :modelValue="text" :file-name="inputTitle"/>
+          <ExportPDF :modelValue="text" :file-name="inputTitle" />
           <Emoji />
+        </template>
+        <template #defFooters>
+          <TimeNow />
         </template>
       </MdEditor>
     </el-card>
@@ -96,54 +101,55 @@ import {
 } from "@/composables/PopupMessage.js";
 import "md-editor-v3/lib/style.css";
 // import BaseHeader from "./layouts/BaseHeader.vue";
-import { codeTheme,previewTheme } from "@/composables/theme";
+import { codeTheme, previewTheme } from "@/composables/theme";
 import { useDarkMode } from "../composables/useDarkMode";
 import CategorySelector from "./CategorySelector.vue";
 import "md-editor-v3/lib/style.css";
-import '@vavt/cm-extension/dist/previewTheme/arknights.css';
+import "@vavt/cm-extension/dist/previewTheme/arknights.css";
 import { ExportPDF } from "@vavt/v3-extension";
-import { Emoji } from '@vavt/v3-extension';
+import { Emoji } from "@vavt/v3-extension";
 // All CSS for this extension library
 // import '@vavt/v3-extension/lib/asset/style.css';
 // Or individual style for Emoji
-import '@vavt/v3-extension/lib/asset/Emoji.css';
+import "@vavt/v3-extension/lib/asset/Emoji.css";
 import "@vavt/v3-extension/lib/asset/ExportPDF.css";
+import TimeNow from "@/components/TimeNow/index.vue";
 
 const toolbars = [
-  'bold',
-  'underline',
-  'italic',
-  '-',
-  'title',
-  'strikeThrough',
-  'sub',
-  'sup',
-  'quote',
-  'unorderedList',
-  'orderedList',
-  'task',
+  "bold",
+  "underline",
+  "italic",
+  "-",
+  "title",
+  "strikeThrough",
+  "sub",
+  "sup",
+  "quote",
+  "unorderedList",
+  "orderedList",
+  "task",
   1,
-  '-',
-  'codeRow',
-  'code',
-  'link',
-  'image',
-  'table',
-  'mermaid',
-  'katex',
-  '-',
-  'revoke',
-  'next',
-  'save',
+  "-",
+  "codeRow",
+  "code",
+  "link",
+  "image",
+  "table",
+  "mermaid",
+  "katex",
+  "-",
+  "revoke",
+  "next",
+  "save",
   0,
-  '=',
-  'pageFullscreen',
-  'fullscreen',
-  'preview',
-  'previewOnly',
-  'htmlPreview',
-  'catalog',
-  'github'
+  "=",
+  "pageFullscreen",
+  "fullscreen",
+  "preview",
+  "previewOnly",
+  "htmlPreview",
+  "catalog",
+  "github",
 ];
 
 const defaultDateTime = new Date();
