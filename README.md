@@ -29,7 +29,7 @@ dotnet publish "KeyBlog.Server" --configuration Release --output "KeyBlog.Server
 进入publish文件夹，点击KeyBlog.Server.exe，默认监听在[localhost:5179](localhost:5179)上
 
 ### 部署到Azure
-如果您想要部署到Azure，建议使用Azure远程PostgreSQL服务并更改相关代码
+如果您想要部署到Azure，建议使用Azure远程PostgreSQL数据库服务并更改相关代码
 - 使用虚拟机服务直接部署publish文件夹。需要注意调整端口到80或443
 - 使用AppService应用服务。可以使用Github Action自动部署，无需调整端口，申请AppService可能花费较长时间（约几天）。
   - Action推送配置可以使用Visual Studio发布选项自动生成，建议跳过API管理部分
