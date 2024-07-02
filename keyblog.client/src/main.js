@@ -6,6 +6,7 @@ import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import "@/composables/markdown-it-config";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import { createPinia } from 'pinia';
 
 
 const app = createApp(App)
@@ -15,5 +16,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.use(router);
 app.use(ElementPlus);
+app.use(createPinia());
 app.mount('#app');
 

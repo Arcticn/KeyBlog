@@ -5,6 +5,8 @@ using KeyBlog.Server.Services;
 using KeyBlog.Data.Utils;
 using KeyBlog.Server.Services.QueryFilters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KeyBlog.Server.Controllers;
 
@@ -14,11 +16,13 @@ public class BlogController : ControllerBase
 {
     private readonly BlogPostService _blogPostService;
     private readonly CategoryService _categoryService;
+    private readonly IConfiguration _configuration;
 
-    public BlogController(BlogPostService blogPostService, CategoryService categoryService)
+    public BlogController(BlogPostService blogPostService, CategoryService categoryService, IConfiguration configuration)
     {
         _blogPostService = blogPostService;
         _categoryService = categoryService;
+        _configuration = configuration;
     }
 
     [HttpGet("lists")]
@@ -58,6 +62,15 @@ public class BlogController : ControllerBase
             SortBy = sortBy,
             Posts = posts
         });
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("picToken")]
+    public IActionResult GetPicToken()
+    {
+        var token = _configuration["Pic:token"];
+        var url = _configuration["Pic:url"];
+        return Ok(new { pictoken = token, picurl = url });
     }
 
 }

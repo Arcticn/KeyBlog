@@ -111,6 +111,7 @@ import "md-editor-v3/lib/style.css";
 // import BaseHeader from "./layouts/BaseHeader.vue";
 import { codeTheme, previewTheme } from "@/composables/theme";
 import { useDarkMode } from "../composables/useDarkMode";
+import { usePicTokenStore } from "./store/picTokenStore";
 import CategorySelector from "./CategorySelector.vue";
 import "md-editor-v3/lib/style.css";
 import "@vavt/cm-extension/dist/previewTheme/arknights.css";
@@ -174,6 +175,7 @@ const incomingId = ref(null);
 const incomingCategoryId = ref(null);
 const incomingLoadingState = ref(false);
 
+const picTokenStore = usePicTokenStore();
 const { theme } = useDarkMode();
 
 const categories = ref(null);
@@ -296,81 +298,88 @@ const isAdmin = ref(true);
 
 //图床部分-请填写相关api地址
 
-// const onUploadImg = async (files, callback) => {
-//   const completedCount = ref(0); // 计数器变量
-//   InfoMessage("正在初始化上传...");
-// 
-//   if (
-//     localStorage.getItem("picToken") === null ||
-//     localStorage.getItem("picToken") === "undefined"
-//   ) {
-//     await getPicToken();
-//   }
-//   const auth = "Bearer " + localStorage.getItem("picToken");
-//   console.log(auth);
+const onUploadImg = async (files, callback) => {
+  const completedCount = ref(0); // 计数器变量
 
-//   let messageInstance = null; // 保存消息实例
-//   const showUploadMessage = () => {
-//     if (messageInstance) {
-//       messageInstance.close();
-//     }
+  const picToken = picTokenStore.apiToken;
+  let picUrl = picTokenStore.apiURL;
 
-//     messageInstance = ElMessage({
-//       message: "正在上传文件...",
-//       duration: 0,
-//       showClose: true,
-//       type: "info",
-//       plain:true
-//     });
-//   };
+  if (!isAdmin.value || picToken === null || picToken === "undefined") {
+    picUrl = "https://picui.cn/api/v1/upload"; //注意更改免费图床
+  }
 
-//   showUploadMessage();
+  const auth = "Bearer " + picToken;
+  console.log(auth);
 
-//   const res = await Promise.all(
-//     files.map((file) => {
-//       return new Promise((rev, rej) => {
-//         const form = new FormData();
-//         form.append("file", file);
-//         axios
-//           .post(/*此处填放你的 API 地址*/, form, {
-//             headers: {
-//               "Content-Type": "multipart/form-data",
-//               Authorization: auth,
-//             },
-//           })
-//           .then((res) => {
-//             console.log("成功上传文件:", res);
-//             InfoMessage(`上传进度${++completedCount.value} / ${files.length}`);
-//             rev(res);
-//           })
-//           .catch((error) => rej(error));
-//       });
-//     })
-//   );
+  let messageInstance = null; // 保存消息实例
+  const showUploadMessage = () => {
+    if (messageInstance) {
+      messageInstance.close();
+    }
 
-//   callback(res.map((item) => item.data.data.links.url));
-//   if (messageInstance) {
-//     messageInstance.close();
-//   }
-//   SuccessMessage(`${completedCount.value}个文件上传成功`);
-// };
+    messageInstance = ElMessage({
+      message: "正在上传文件...",
+      duration: 0,
+      showClose: false,
+      type: "info",
+      plain: true,
+    });
+  };
 
-// const getPicToken = async () => {
-//   try {
-//     const emailandpass = {
-//       //此处填放你自己的邮箱和密码
-//     };
-//     const response = await axios.post(
-//       //此处填放你的 API 地址,
-//       emailandpass
-//     );
-//     localStorage.setItem("picToken", response.data.data.token);
-//     console.log(response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// };
+  showUploadMessage();
+
+  try {
+    const res = await Promise.all(
+      files.map((file) => {
+        return new Promise((resolve, reject) => {
+          if (file.size > 1024 * 1024 * 10) {
+            ErrorMessage("大小超过10MB限制，请压缩后再上传");
+            return reject("文件大小超过10MB限制");
+          }
+
+          const form = new FormData();
+          form.append("file", file);
+
+          let header = {
+            "Content-Type": "multipart/form-data",
+            Authorization: auth,
+          };
+          if (!isAdmin.value) {
+            header = {
+              "Content-Type": "multipart/form-data",
+            };
+            WarningMessage("普通用户使用免费图床，小心图片过期");
+          }
+
+          axios
+            .post(picUrl, form, {
+              headers: header,
+            })
+            .then((res) => {
+              console.log("成功上传文件:", res);
+              InfoMessage(
+                `上传进度${++completedCount.value} / ${files.length}`
+              );
+              resolve(res);
+            })
+            .catch((error) => {
+              ErrorMessage("上传失败，请尝试刷新后再上传");
+              reject(error);
+            });
+        });
+      })
+    );
+
+    callback(res.map((item) => item.data.data.links.url));
+    SuccessMessage(`${completedCount.value}个文件上传成功`);
+  } catch (error) {
+    //ErrorMessage("上传失败，请尝试刷新后再上传");
+  } finally {
+    if (messageInstance) {
+      messageInstance.close();
+    }
+  }
+};
 
 //解决全屏显示问题
 const editorCard = ref(null);
@@ -405,6 +414,13 @@ onMounted(() => {
   if (blogId.value) {
     fetchPost();
   }
+
+  // 异步获取 token
+  const fetchTokenAsync = async () => {
+    await picTokenStore.fetchToken();
+  };
+
+  fetchTokenAsync();
 
   mdEditor.value?.on("pageFullscreen", (status) =>
     handlePageFullscreen(status)
