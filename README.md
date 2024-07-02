@@ -4,7 +4,7 @@
 
 集成了前端博客页面与简易的后台管理
 
-进行了一定的部署优化，确保提供开箱即用的体验
+进行了一定的部署优化，确保提供开箱即用的体验，包括为所有用户提供了免费图床
 
 ## 🙂技术选型
 - 前端：Vue.js 3 + ElementPlus + md-editor-v3
@@ -40,14 +40,19 @@ dotnet publish "KeyBlog.Server" --configuration Release --output "KeyBlog.Server
 
 ## 📚项目展示
 ### 主页
-![图片](https://github.com/Arcticn/KeyBlog/assets/46252987/81f7d467-c266-4caf-87a8-158368686826)
+![主页](https://p.inari.site/usr/876/66840404dc567.png)
+
 ### 文章页面
-![图片](https://github.com/Arcticn/KeyBlog/assets/46252987/dd1a56d0-11bb-47e4-9119-5276cf01deb2)
+![文章页面](https://p.inari.site/usr/876/6684043da589d.png)
+
 ### 在线编辑（管理员）
-![图片](https://github.com/Arcticn/KeyBlog/assets/46252987/dd757176-5e58-4de5-b38f-230a56aa193e)
+![在线编辑](https://p.inari.site/usr/876/66840443cb8ce.png)
+
 ### 在线编辑（游客，仅提供md本地下载）
-![图片](https://github.com/Arcticn/KeyBlog/assets/46252987/5bfc1770-2d88-420d-bb70-9c1a4b309e7a)
+![在线编辑游客](https://p.inari.site/usr/876/668404493eb87.png)
+
 ### 管理页面（仅管理员）
-![图片](https://github.com/Arcticn/KeyBlog/assets/46252987/60687bb0-a465-45c0-85b2-f2cc8a9fef1f)
+![管理页面](https://p.inari.site/usr/876/66840453e9f9a.png)
+
 
 
