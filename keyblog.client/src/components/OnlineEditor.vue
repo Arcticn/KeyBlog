@@ -452,9 +452,10 @@ onMounted(() => {
 .fullscreen {
   position: fixed !important;
   top: 61px !important;
+  bottom: 0 !important;
   left: 0 !important;
   width: 100vw !important;
-  height: 100vh !important;
+  height: auto !important;
   z-index: 9999 !important;
   border-radius: 0 !important;
 }
