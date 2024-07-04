@@ -50,7 +50,7 @@
     </div>
     <div v-else>
       <p>欢迎回来, {{ currentUser.username }}</p>
-      <el-button type="warning" @click="handleLogOut" style="margin-bottom: 2%;">Logout</el-button>
+      <el-button type="warning" @click="handleLogOut" style="margin-bottom: 20px;">Logout</el-button>
     </div>
   </el-card>
 </template>
