@@ -61,6 +61,7 @@ public class PostController : ControllerBase
             IsPublish = newPost.IsPublish,
             Content = newPost.Content,
             CreationTime = newPost.CreationTime,
+            LastUpdateTime = newPost.LastUpdateTime,
             CategoryId = newPost.CategoryId
         };
 
@@ -72,7 +73,7 @@ public class PostController : ControllerBase
         else
         {
             tempPost.Id = newPost.Id;
-            tempPost.LastUpdateTime = DateTime.Now;
+            // tempPost.LastUpdateTime = newPost.LastUpdateTime;
             await _blogPostService.EditPost(tempPost);
             return Ok(new { id = tempPost.Id });
         }

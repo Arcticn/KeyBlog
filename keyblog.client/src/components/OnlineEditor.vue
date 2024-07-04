@@ -218,6 +218,12 @@ const onSave = async () => {
       return;
     }
 
+    const now = new Date();
+    const timezoneOffset = -now.getTimezoneOffset();
+    const timeDiff = timezoneOffset >= 0 ? "+" : "-";
+    const pad = (num) => String(num).padStart(2, "0");
+    const localDateTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}${timeDiff}${pad(Math.floor(Math.abs(timezoneOffset) / 60))}:${pad(Math.abs(timezoneOffset) % 60)}`;
+
     const newPost = {
       Id: null,
       Title: inputTitle.value,
@@ -225,6 +231,7 @@ const onSave = async () => {
       CategoryId: selectedCategoryId.value,
       Summary: null,
       CreationTime: time.value,
+      LastUpdateTime: localDateTime,
       IsPublish: publishState.value,
     };
     if (incomingId.value) {
