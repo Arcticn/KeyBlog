@@ -55,8 +55,10 @@ If you wish to deploy to Azure, it is recommended to use Azure's remote `Postgre
 
 Two ways:
 - Use virtual machine services ( **More flexible, while the free machine isn't reliable** )
+  
   Directly deploy the publish folder. Remember to change the port to 80 or 443.
 - Use AppService ( **Free for F1 and more convenient** ) 
+  
   You can automatically deploy using `Github Action` without changing the port. Note that applying for `AppService` may take a very long time (about a few days).
   - The push configuration for the Action can be auto-generated using Visual Studio's publishing option. Recommended to skip the API management part.
 
