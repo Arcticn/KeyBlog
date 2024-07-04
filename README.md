@@ -1,5 +1,5 @@
 # 🔑KeyBlog
-English | [中文](https://github.com/Arcticn/KeyBlog/README-CN.md)
+English | [中文](https://github.com/Arcticn/KeyBlog/blob/master/README-CN.md)
 
 ## 😊Project Introduction
 KeyBlog is a Vue.js + ASP .Net Core blogging project inspired by Deali-Axy's [StarBlog](https://github.com/Deali-Axy/StarBlog).
