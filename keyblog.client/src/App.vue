@@ -36,6 +36,11 @@ body {
     background-color 0.5s,
     color 0.5s;
   margin: 0px;
+  /* overflow-y: scroll; */
+}
+
+/*在body内应用滚动条导致header无法固定 */
+html {
   overflow-y: scroll;
 }
 </style>

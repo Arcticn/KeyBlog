@@ -389,12 +389,17 @@ const isFullscreen = ref(false);
 const isPageFullscreen = ref(false);
 const handleFullscreen = (status) => {
   isFullscreen.value = status;
+  if (status == true) document.documentElement.style.overflow = "hidden";
+  else document.documentElement.style.overflow = "scroll";
   if (status == false && isPageFullscreen.value == true) {
     mdEditor.value?.togglePageFullscreen(false);
+    document.documentElement.style.overflow = "scroll";
   }
 };
 
 const handlePageFullscreen = (status) => {
+  if (status == true) document.documentElement.style.overflow = "hidden";
+  else document.documentElement.style.overflow = "scroll";
   handleFullscreen(status);
   isPageFullscreen.value = status;
 };

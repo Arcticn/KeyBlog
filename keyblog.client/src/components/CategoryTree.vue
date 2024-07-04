@@ -5,7 +5,7 @@
       :default-active="currentCategoryId.toString()"
       class="el-menu-sidebar glass-effect"
       mode="vertical"
-      style="max-height: 33rem;min-height: 5rem;"
+      style="max-height: 31rem;min-height: 5rem;"
       :data="categories"
       :props="defaultProps"
       :collapse-transition="false"

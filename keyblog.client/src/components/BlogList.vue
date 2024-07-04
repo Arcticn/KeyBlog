@@ -1,6 +1,6 @@
 ﻿<template>
   <el-container style="display: flex; justify-content: center">
-    <el-main style="margin-bottom: 5rem; max-width: 60rem;min-width:10rem">
+    <el-main style="margin-bottom: 5rem; max-width: 60rem;min-width:10rem;padding-top: 10px;">
       <PostList
         :loadPostStatus="loadPostStatus"
         :posts="posts"
@@ -14,7 +14,7 @@
       />
     </el-main>
     <el-aside>
-      <el-affix :offset="100">
+      <el-affix :offset="85">
         <UserCard />
         <CategoryTree
           style="margin-top: 1rem;"

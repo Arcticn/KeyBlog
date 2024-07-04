@@ -1,5 +1,9 @@
 <template>
-  <el-card class="glass-effect" style="margin-left: 14px; max-width: 16.7rem">
+  <el-card
+    class="glass-effect"
+    style="margin-left: 14px; max-width: 16.7rem; padding-bottom: 10px"
+    body-style="padding-bottom:0px"
+  >
     <div v-if="!isLoggedin">
       <el-form
         ref="formDataRef"
@@ -46,7 +50,7 @@
     </div>
     <div v-else>
       <p>欢迎回来, {{ currentUser.username }}</p>
-      <el-button type="warning" @click="handleLogOut">Logout</el-button>
+      <el-button type="warning" @click="handleLogOut" style="margin-bottom: 2%;">Logout</el-button>
     </div>
   </el-card>
 </template>
