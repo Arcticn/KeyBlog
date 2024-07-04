@@ -59,7 +59,7 @@
     <el-card
       v-if="posts.length === 0 || loadPostStatus === true"
       v-loading="loadPostStatus"
-      style="min-height: 10rem;"
+      style="min-height: 10rem"
       shadow="always"
       class="mb-3 glass-effect"
     >
@@ -129,8 +129,13 @@ const props = defineProps({
 
 const formatDate = (cellValue) => {
   if (!cellValue) return "";
+  // 创建 UTC 时间的 Date 对象
   const date = new Date(cellValue);
-  return date.toLocaleString(); // 自定义格式化方式
+
+  // 将 UTC 时间转换为本地时间
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+  return localDate.toLocaleString();
 };
 
 const sortBy = ref("LastUpdateTime");

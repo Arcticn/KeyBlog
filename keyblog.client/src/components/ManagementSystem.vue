@@ -144,8 +144,13 @@ const loadPostStatus = ref(false);
 
 const formatDate1 = (row, column, cellValue) => {
   if (!cellValue) return "";
+  // 创建 UTC 时间的 Date 对象
   const date = new Date(cellValue);
-  return date.toLocaleString(); // 自定义格式化方式
+
+  // 将 UTC 时间转换为本地时间
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+  return localDate.toLocaleString();
 };
 
 const formatPublish = (row, column, cellValue) => {
@@ -340,7 +345,10 @@ const fetchData = async () => {
     if (categoryNodesWithRoot.value.length > 0) {
       // 延迟以确保数据绑定到表格后再展开第一行
       setTimeout(() => {
-        categoryTable.value.toggleRowExpansion(categoryNodesWithRoot.value[0], true);
+        categoryTable.value.toggleRowExpansion(
+          categoryNodesWithRoot.value[0],
+          true
+        );
       }, 0);
     }
   } catch (error) {
