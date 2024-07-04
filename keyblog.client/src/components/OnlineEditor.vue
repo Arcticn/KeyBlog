@@ -458,5 +458,6 @@ onMounted(() => {
   height: auto !important;
   z-index: 9999 !important;
   border-radius: 0 !important;
+  overflow-y: hidden !important;
 }
 </style>

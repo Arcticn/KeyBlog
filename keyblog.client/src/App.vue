@@ -36,8 +36,6 @@ body {
     background-color 0.5s,
     color 0.5s;
   margin: 0px;
-}
-html {
   overflow-y: scroll;
 }
 </style>
