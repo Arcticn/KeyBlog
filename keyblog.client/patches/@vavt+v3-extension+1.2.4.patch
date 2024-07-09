@@ -1,0 +1,226 @@
+diff --git a/node_modules/@vavt/v3-extension/lib/cjs/ExportPDF-c.cjs b/node_modules/@vavt/v3-extension/lib/cjs/ExportPDF-c.cjs
+index 3f9efcf..829d075 100644
+--- a/node_modules/@vavt/v3-extension/lib/cjs/ExportPDF-c.cjs
++++ b/node_modules/@vavt/v3-extension/lib/cjs/ExportPDF-c.cjs
+@@ -1 +1 @@
+-"use strict";const t=require("vue"),d=require("md-editor-v3"),h=require("html2pdf.js"),c=require("./chunks/props.cjs"),s="md-editor",u="Export as PDF",m="导出为PDF",v="Export",S="导出",E="export-pdf-preview",y=t.defineComponent({props:{...c.commomProps,width:{type:String,default:"870px"},height:{type:String,default:"600px"},modalTitle:{type:String,default:void 0},modelValue:{type:String,default:""},fileName:{type:String,default:"md"},exportBtnText:{type:String,default:void 0},style:{type:[Object,String],default:()=>({padding:"10mm"})},onStart:{type:Function},onSuccess:{type:Function},onError:{type:Function}},emits:["onStart","onSuccess","onError"],setup(e,o){const a=t.ref(),r=t.ref(),l=t.reactive({visible:!1}),f=(i,n,T)=>`pdf-ex-heading-${T}`,g=()=>{const i={filename:`${e.fileName}.pdf`,html2canvas:{scale:2,useCORS:!0},pagebreak:{mode:"avoid-all"}};e.onStart?e.onStart():o.emit("onStart"),h().set(i).from(a.value).save().then(()=>{e.onSuccess?e.onSuccess():o.emit("onSuccess")}).catch(n=>{e.onError?e.onError(n):o.emit("onError",n)}).finally(()=>{var n;(n=r.value)==null||n.rerender()})};return()=>{const i=c.getSlot({props:e,ctx:o},"trigger");return t.createVNode(d.ModalToolbar,{width:e.width,height:e.height,visible:l.visible,title:e.title||(e.language==="zh-CN"?m:u),modalTitle:e.modalTitle||(e.language==="zh-CN"?m:u),onClick:()=>{l.visible=!0},onClose:()=>{l.visible=!1},trigger:i||t.createVNode("span",{class:"mee-iconfont icon-mee-pdf"},null)},{default:()=>[t.createVNode("div",{class:"export-pdf-content",ref:a},[t.createVNode(d.MdPreview,{ref:r,editorId:E,theme:e.theme,previewTheme:e.previewTheme,language:e.language,modelValue:e.modelValue,mdHeadingId:f,style:e.style,codeFoldable:!1},null)]),t.createVNode("div",{class:`${s}-form-item`},[t.createVNode("button",{class:`${s}-btn`,type:"button",onClick:g},[e.exportBtnText||(e.language==="zh-CN"?S:v)])])]})}}});module.exports=y;
++"use strict";const t=require("vue"),d=require("md-editor-v3"),v=require("html3pdf"),s=require("./chunks/props.cjs"),c="md-editor",u="Export as PDF",g="导出为PDF",S="Export",E="导出",y="export-pdf-preview",N=t.defineComponent({props:{...s.commomProps,width:{type:String,default:"870px"},height:{type:String,default:"600px"},modalTitle:{type:String,default:void 0},modelValue:{type:String,default:""},fileName:{type:String,default:"md"},exportBtnText:{type:String,default:void 0},style:{type:[Object,String],default:()=>({padding:"10mm"})},onStart:{type:Function},onSuccess:{type:Function},onError:{type:Function},onProgress:{type:Function}},emits:["onStart","onSuccess","onError","onProgress"],setup(e,i){const l=t.ref(),r=t.ref(),a=t.reactive({visible:!1}),m=n=>{e.onProgress?e.onProgress(n):i.emit("onProgress",n)},f=(n,o,h)=>`pdf-ex-heading-${h}`,T=()=>{const n={filename:`${e.fileName}.pdf`,html2canvas:{scale:3,useCORS:!0},pagesPerCanvas:19,pagebreak:{mode:"avoid-all"}};e.onStart?e.onStart():i.emit("onStart"),v().set(n).from(l.value).save().then(()=>{e.onSuccess?e.onSuccess():i.emit("onSuccess")}).catch(o=>{e.onError?e.onError(o):i.emit("onError",o)}).finally(()=>{var o;(o=r.value)==null||o.rerender()}).listen(m)};return()=>{const n=s.getSlot({props:e,ctx:i},"trigger");return t.createVNode(d.ModalToolbar,{width:e.width,height:e.height,visible:a.visible,title:e.title||(e.language==="zh-CN"?g:u),modalTitle:e.modalTitle||(e.language==="zh-CN"?g:u),onClick:()=>{a.visible=!0},onClose:()=>{a.visible=!1},trigger:n||t.createVNode("span",{class:"mee-iconfont icon-mee-pdf"},null)},{default:()=>[t.createVNode("div",{class:"export-pdf-content",ref:l},[t.createVNode(d.MdPreview,{ref:r,editorId:y,theme:e.theme,previewTheme:e.previewTheme,language:e.language,modelValue:e.modelValue,mdHeadingId:f,style:e.style,codeFoldable:!1},null)]),t.createVNode("div",{class:`${c}-form-item`},[t.createVNode("button",{class:`${c}-btn`,type:"button",onClick:T},[e.exportBtnText||(e.language==="zh-CN"?E:S)])])]})}}});module.exports=N;
+diff --git a/node_modules/@vavt/v3-extension/lib/es/chunks/ExportPDF.mjs b/node_modules/@vavt/v3-extension/lib/es/chunks/ExportPDF.mjs
+index fb6508d..5300886 100644
+--- a/node_modules/@vavt/v3-extension/lib/es/chunks/ExportPDF.mjs
++++ b/node_modules/@vavt/v3-extension/lib/es/chunks/ExportPDF.mjs
+@@ -1,10 +1,10 @@
+-import { defineComponent as T, ref as d, reactive as h, createVNode as n } from "vue";
+-import { ModalToolbar as v, MdPreview as E } from "md-editor-v3";
+-import S from "html2pdf.js";
+-import { c as y, g as x } from "./props.mjs";
+-const c = "md-editor", m = "Export as PDF", s = "导出为PDF", b = "Export", C = "导出", _ = "export-pdf-preview", F = /* @__PURE__ */ T({
++import { defineComponent as h, ref as s, reactive as v, createVNode as o } from "vue";
++import { ModalToolbar as E, MdPreview as S } from "md-editor-v3";
++import y from "html3pdf";
++import { c as P, g as b } from "./props.mjs";
++const d = "md-editor", c = "Export as PDF", m = "导出为PDF", C = "Export", x = "导出", F = "export-pdf-preview", _ = /* @__PURE__ */ h({
+   props: {
+-    ...y,
++    ...P,
+     width: {
+       type: String,
+       default: "870px"
+@@ -44,21 +44,28 @@ const c = "md-editor", m = "Export as PDF", s = "导出为PDF", b = "Export", C
+     onError: {
+       // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       type: Function
++    },
++    onProgress: {
++      type: Function
+     }
+   },
+-  emits: ["onStart", "onSuccess", "onError"],
+-  setup(e, o) {
+-    const a = d(), r = d(), l = h({
++  emits: ["onStart", "onSuccess", "onError", "onProgress"],
++  setup(e, i) {
++    const a = s(), r = s(), l = v({
+       visible: !1
+-    }), u = (i, t, g) => `pdf-ex-heading-${g}`, f = () => {
+-      const i = {
++    }), g = (t) => {
++      e.onProgress ? e.onProgress(t) : i.emit("onProgress", t);
++    }, u = (t, n, T) => `pdf-ex-heading-${T}`, f = () => {
++      const t = {
+         // margin: 10,
+         filename: `${e.fileName}.pdf`,
+         // https://html2canvas.hertzen.com/configuration
+         html2canvas: {
+-          scale: 2,
++          scale: 3,
+           useCORS: !0
+         },
++        //Firefox max 9 pages, Chromium max 19 pages
++        pagesPerCanvas: 19,
+         // 智能分页，防止图片被截断
+         pagebreak: {
+           mode: "avoid-all"
+@@ -66,42 +73,42 @@ const c = "md-editor", m = "Export as PDF", s = "导出为PDF", b = "Export", C
+         // 支持文本中放链接，可点击跳转，默认true
+         // enableLinks: true
+       };
+-      e.onStart ? e.onStart() : o.emit("onStart"), S().set(i).from(a.value).save().then(() => {
+-        e.onSuccess ? e.onSuccess() : o.emit("onSuccess");
+-      }).catch((t) => {
+-        e.onError ? e.onError(t) : o.emit("onError", t);
++      e.onStart ? e.onStart() : i.emit("onStart"), y().set(t).from(a.value).save().then(() => {
++        e.onSuccess ? e.onSuccess() : i.emit("onSuccess");
++      }).catch((n) => {
++        e.onError ? e.onError(n) : i.emit("onError", n);
+       }).finally(() => {
+-        var t;
+-        (t = r.value) == null || t.rerender();
+-      });
++        var n;
++        (n = r.value) == null || n.rerender();
++      }).listen(g);
+     };
+     return () => {
+-      const i = x({
++      const t = b({
+         props: e,
+-        ctx: o
++        ctx: i
+       }, "trigger");
+-      return n(v, {
++      return o(E, {
+         width: e.width,
+         height: e.height,
+         visible: l.visible,
+-        title: e.title || (e.language === "zh-CN" ? s : m),
+-        modalTitle: e.modalTitle || (e.language === "zh-CN" ? s : m),
++        title: e.title || (e.language === "zh-CN" ? m : c),
++        modalTitle: e.modalTitle || (e.language === "zh-CN" ? m : c),
+         onClick: () => {
+           l.visible = !0;
+         },
+         onClose: () => {
+           l.visible = !1;
+         },
+-        trigger: i || n("span", {
++        trigger: t || o("span", {
+           class: "mee-iconfont icon-mee-pdf"
+         }, null)
+       }, {
+-        default: () => [n("div", {
++        default: () => [o("div", {
+           class: "export-pdf-content",
+           ref: a
+-        }, [n(E, {
++        }, [o(S, {
+           ref: r,
+-          editorId: _,
++          editorId: F,
+           theme: e.theme,
+           previewTheme: e.previewTheme,
+           language: e.language,
+@@ -109,17 +116,17 @@ const c = "md-editor", m = "Export as PDF", s = "导出为PDF", b = "Export", C
+           mdHeadingId: u,
+           style: e.style,
+           codeFoldable: !1
+-        }, null)]), n("div", {
+-          class: `${c}-form-item`
+-        }, [n("button", {
+-          class: `${c}-btn`,
++        }, null)]), o("div", {
++          class: `${d}-form-item`
++        }, [o("button", {
++          class: `${d}-btn`,
+           type: "button",
+           onClick: f
+-        }, [e.exportBtnText || (e.language === "zh-CN" ? C : b)])])]
++        }, [e.exportBtnText || (e.language === "zh-CN" ? x : C)])])]
+       });
+     };
+   }
+-}), I = F;
++}), k = _;
+ export {
+-  I as E
++  k as E
+ };
+diff --git a/node_modules/@vavt/v3-extension/lib/types/components/Emoji/Emoji.d.ts b/node_modules/@vavt/v3-extension/lib/types/components/Emoji/Emoji.d.ts
+index bf95863..927c0de 100644
+--- a/node_modules/@vavt/v3-extension/lib/types/components/Emoji/Emoji.d.ts
++++ b/node_modules/@vavt/v3-extension/lib/types/components/Emoji/Emoji.d.ts
+@@ -26,9 +26,7 @@ declare const Emoji: import('vue').DefineComponent<{
+         type: PropType<string>;
+     };
+     language: {
+-        type: PropType<string>; /**
+-         * 可选的表情
+-         */
++        type: PropType<string>;
+         default: string;
+     };
+     title: {
+@@ -67,9 +65,7 @@ declare const Emoji: import('vue').DefineComponent<{
+         type: PropType<string>;
+     };
+     language: {
+-        type: PropType<string>; /**
+-         * 可选的表情
+-         */
++        type: PropType<string>;
+         default: string;
+     };
+     title: {
+diff --git a/node_modules/@vavt/v3-extension/lib/types/components/ExportPDF/ExportPDF.d.ts b/node_modules/@vavt/v3-extension/lib/types/components/ExportPDF/ExportPDF.d.ts
+index 613bb3a..938e34e 100644
+--- a/node_modules/@vavt/v3-extension/lib/types/components/ExportPDF/ExportPDF.d.ts
++++ b/node_modules/@vavt/v3-extension/lib/types/components/ExportPDF/ExportPDF.d.ts
+@@ -40,6 +40,15 @@ declare const ExportPDF: import('vue').DefineComponent<{
+     onError: {
+         type: PropType<(err: unknown) => void>;
+     };
++    onProgress: {
++        type: PropType<(progress: {
++            val: number;
++            state: string;
++            n: number;
++            stack: string[];
++            ratio: number;
++        }) => void>;
++    };
+     insert: {
+         type: PropType<import('md-editor-v3').Insert>;
+         default: () => null;
+@@ -64,7 +73,7 @@ declare const ExportPDF: import('vue').DefineComponent<{
+         }>>;
+         default: string;
+     };
+-}, () => import("vue/jsx-runtime").JSX.Element, unknown, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, ("onError" | "onStart" | "onSuccess")[], "onError" | "onStart" | "onSuccess", import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
++}, () => import("vue/jsx-runtime").JSX.Element, unknown, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, ("onError" | "onProgress" | "onStart" | "onSuccess")[], "onError" | "onProgress" | "onStart" | "onSuccess", import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+     width: {
+         type: PropType<string>;
+         default: string;
+@@ -104,6 +113,15 @@ declare const ExportPDF: import('vue').DefineComponent<{
+     onError: {
+         type: PropType<(err: unknown) => void>;
+     };
++    onProgress: {
++        type: PropType<(progress: {
++            val: number;
++            state: string;
++            n: number;
++            stack: string[];
++            ratio: number;
++        }) => void>;
++    };
+     insert: {
+         type: PropType<import('md-editor-v3').Insert>;
+         default: () => null;
+@@ -130,6 +148,7 @@ declare const ExportPDF: import('vue').DefineComponent<{
+     };
+ }>> & {
+     onOnError?: ((...args: any[]) => any) | undefined;
++    onOnProgress?: ((...args: any[]) => any) | undefined;
+     onOnStart?: ((...args: any[]) => any) | undefined;
+     onOnSuccess?: ((...args: any[]) => any) | undefined;
+ }, {

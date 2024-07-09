@@ -22,13 +22,17 @@
 }
 
 .card-text {
-    text-indent:2em;
+    text-indent: 2em;
     margin-bottom: 1rem;
     margin-left: 2rem;
     margin-right: 2rem;
     text-align: left;
 }
 
+.el-message {
+    z-index: 99999 !important;
+}
+
 .export-pdf-content .md-editor-preview .md-editor-code pre code .md-editor-code-block {
     text-wrap: wrap;
-  }
+}

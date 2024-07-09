@@ -83,7 +83,14 @@
         autoDetectCode
       >
         <template #defToolbars>
-          <ExportPDF :modelValue="text" :file-name="inputTitle" />
+          <ExportPDF
+            :modelValue="text"
+            :file-name="inputTitle"
+            @onStart="handleStart"
+            @onProgress="handleProgress"
+            @onSuccess="handleSuccess"
+            @onError="handleError"
+          />
           <Emoji />
         </template>
         <template #defFooters>
@@ -96,7 +103,7 @@
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, h, reactive } from "vue";
 import api from "@/services/api";
 import { MdEditor } from "md-editor-v3";
 import { useRoute } from "vue-router";
@@ -379,6 +386,52 @@ const onUploadImg = async (files, callback) => {
     if (messageInstance) {
       messageInstance.close();
     }
+  }
+};
+
+let messagePdfInstance = null;
+
+const messageContent = reactive({
+  text: "Starting export...",
+});
+
+const handleSuccess = () => {
+  if (messagePdfInstance) {
+    messagePdfInstance.close();
+  }
+  ElMessage({
+    message: "PDF导出成功!",
+    type: "success",
+    duration: 3000,
+  });
+};
+
+const handleError = (err) => {
+  console.error("Export failed", err);
+  if (messagePdfInstance) {
+    messagePdfInstance.close();
+  }
+  ElMessage({
+    message: "PDF导出失败！",
+    type: "error",
+    duration: 3000,
+  });
+};
+
+const handleProgress = (progress) => {
+  console.log("Export progress", progress.ratio);
+  messageContent.text = `正在导出中:${progress.ratio * 100}%...预计0-30秒，请保持浏览器在前台 `;
+
+  if (messagePdfInstance) {
+    messagePdfInstance.message = () => h("span", messageContent.text);
+  } else {
+    messagePdfInstance = ElMessage({
+      message: () => h("span", messageContent.text),
+      type: "info",
+      duration: 0, // Make the message persistent
+      showClose: false,
+      plain: true,
+    });
   }
 };
 
